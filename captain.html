@@ -1,89 +1,1939 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#FF5A00"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow">
-  <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png"><link rel="icon" href="icons/icon-192.png">
-  <title>Talabat Captains Hub</title>
-  <link rel="stylesheet" href="styles/pwa.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ff5a00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Talabat Captains">
+<meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+<title>Talabat Captains Hub</title>
+<style>
+:root{--or:#ff5a00;--or2:#ff7a2e;--bg:#f4f5f7;--card:#fff;--card2:#eef0f3;--tx:#1b1c1f;--mut:#6b6f78;--bd:#dfe2e7;--ok:#0f9d58;--bad:#d93025;--warn:#c77700;--blue:#2563eb;--sh:0 2px 10px rgba(0,0,0,.08)}
+@media (prefers-color-scheme:dark){:root{--bg:#111214;--card:#1b1c1f;--card2:#242529;--tx:#f1f1f2;--mut:#9a9ca3;--bd:#2f3035;--ok:#1fbf6b;--bad:#ff4d4f;--warn:#f5a524;--blue:#3b82f6;--sh:0 2px 10px rgba(0,0,0,.4)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:400 15px/1.55 "Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;min-height:100vh;min-height:100dvh;padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+.ltr{direction:ltr;unicode-bidi:embed;display:inline-block}
+
+/* ---------- Header ---------- */
+header{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:3px solid var(--or);padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{display:flex;align-items:center;gap:8px;min-width:0}
+.logo{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:var(--or);color:#fff;font-weight:800;font-size:21px;line-height:1}
+.brand b{font-size:15px;white-space:nowrap}
+.brand small{display:block;color:var(--mut);font-size:11px;line-height:1.2}
+.hact{display:flex;gap:6px}
+.ib{background:var(--card2);color:var(--tx);border:1px solid var(--bd);border-radius:10px;width:38px;height:38px;font-size:17px;cursor:pointer}
+.ib:active{background:var(--or);color:#fff}
+
+/* ---------- Layout ---------- */
+main{padding:10px;max-width:760px;margin:0 auto}
+.view{display:none}.view.on{display:block}
+.sbar{position:sticky;top:calc(56px + env(safe-area-inset-top,0px));z-index:15;background:var(--bg);padding:6px 0 8px;display:flex;gap:6px}
+.sbar input{flex:1;min-width:0;background:var(--card);color:var(--tx);border:2px solid var(--bd);border-radius:12px;padding:12px;font:inherit;font-size:16px;outline:none}
+.sbar input:focus{border-color:var(--or)}
+.btn{background:var(--or);color:#fff;border:0;border-radius:12px;padding:0 16px;font-weight:700;font-size:14px;font-family:inherit;cursor:pointer;min-height:44px}
+.btn:active{background:var(--or2)}
+.btn.ghost{background:var(--card2);color:var(--tx);border:1px solid var(--bd)}
+.btn.sm{min-height:38px;padding:0 12px;font-size:13px;border-radius:10px}
+.btn.ok{background:var(--ok)}
+.btn.blue{background:var(--blue)}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.hint{color:var(--mut);font-size:12.5px}
+.banner{border-radius:12px;padding:10px 12px;margin:6px 0 10px;border:1px solid;font-size:13.5px}
+.banner.warn{background:rgba(245,165,36,.13);border-color:var(--warn)}
+.banner.bad{background:rgba(255,77,79,.12);border-color:var(--bad)}
+.empty{text-align:center;color:var(--mut);padding:36px 12px}
+.empty .big{font-size:42px}
+
+/* ---------- Cards ---------- */
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;margin-bottom:12px;box-shadow:var(--sh)}
+.rh{display:flex;gap:12px}
+.ph{flex:none;display:flex;flex-direction:column;gap:6px;align-items:center}
+.pic{width:104px;height:132px;border-radius:12px;border:2px solid var(--or);background:var(--card2);display:grid;place-items:center;font-size:40px;overflow:hidden;cursor:zoom-in}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.pic.none{cursor:default;font-size:34px;color:var(--mut)}
+.ri{flex:1;min-width:0}
+.ri h3{margin:0 0 6px;font-size:17px;line-height:1.3;word-break:break-word}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+.b{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:12.5px;font-weight:700;border:1px solid var(--bd);background:var(--card2)}
+.b.ok{color:var(--ok);border-color:var(--ok);background:rgba(31,191,107,.1)}
+.b.bad{color:var(--bad);border-color:var(--bad);background:rgba(255,77,79,.1)}
+.b.warn{color:var(--warn);border-color:var(--warn);background:rgba(245,165,36,.1)}
+.b.mut{color:var(--mut)}
+.fields{margin:8px 0 0;display:grid;gap:4px}
+.f{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--card2);border-radius:10px;padding:7px 10px;cursor:pointer}
+.f:active{outline:2px solid var(--or)}
+.f .k{color:var(--mut);font-size:12.5px;flex:none}
+.f .v{font-weight:700;word-break:break-word;text-align:end;direction:ltr;unicode-bidi:plaintext;flex:1}
+.f .cp{flex:none;color:var(--or);font-size:14px}
+.suspnote{margin-top:6px;font-size:13px;color:var(--bad);font-weight:600}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.acts .btn{flex:1 1 40%}
+
+/* ---------- Orders ---------- */
+.ohead{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.ohead h2{margin:0;font-size:17px}
+.role{margin:10px 0 6px;padding:7px 10px;border-radius:10px;font-weight:800;font-size:14px;border-inline-start:5px solid var(--or);background:rgba(255,90,0,.1)}
+.role.partner{border-color:var(--blue);background:rgba(37,99,235,.1)}
+.rider-box{border:1px dashed var(--bd);border-radius:14px;padding:10px;margin-bottom:8px}
+.rider-box .card{box-shadow:none;margin:0;border:0;padding:0;background:transparent}
+.ostat{font-size:12.5px;color:var(--mut);margin-top:4px}
+.osum{margin-top:8px;font-size:14px;display:grid;gap:3px;background:var(--card2);border-radius:10px;padding:8px 10px}
+
+/* ---------- Bottom nav ---------- */
+nav{position:fixed;inset-inline:0;bottom:0;z-index:25;background:var(--card);border-top:2px solid var(--or);display:flex;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;background:none;border:0;color:var(--mut);padding:9px 4px 8px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}
+nav button span{display:block;font-size:21px;line-height:1.1}
+nav button.on{color:var(--or)}
+
+/* ---------- Gate screens ---------- */
+.gate{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px}
+.gbox{width:min(380px,100%);background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:24px 18px;text-align:center;box-shadow:var(--sh)}
+.gbox .logo{width:60px;height:60px;font-size:40px;border-radius:16px;margin:0 auto 10px}
+.gbox h1{font-size:19px;margin:6px 0}
+.gbox p{color:var(--mut);margin:6px 0 14px;font-size:14px}
+.gbox input{width:100%;background:var(--card2);color:var(--tx);border:2px solid var(--bd);border-radius:12px;padding:12px;font:inherit;direction:ltr;margin-bottom:10px}
+#gsiBtn{display:flex;justify-content:center;min-height:44px;margin:8px 0}
+.err{color:var(--bad);font-weight:700;font-size:14px;margin-top:8px}
+
+/* ---------- Lightbox & toast ---------- */
+#lb{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px}
+#lb img{max-width:100%;max-height:68vh;border-radius:14px;border:3px solid var(--or);background:#000;-webkit-touch-callout:default;user-select:auto}
+#lb .row{display:flex;gap:8px}
+#toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:rgba(0,0,0,.85);color:#fff;padding:9px 18px;border-radius:22px;opacity:0;transition:.2s;z-index:80;pointer-events:none;max-width:90vw;text-align:center;font-size:14px}
+#toast.on{opacity:1;transform:translateX(-50%)}
+.spin{display:inline-block;width:22px;height:22px;border:3px solid var(--bd);border-top-color:var(--or);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* ===== v63: SVG mask icons (zero-emoji) ===== */
+.ic{display:inline-block;width:1.2em;height:1.2em;vertical-align:-.22em;background-color:currentColor;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;flex:none}
+.ic-alert{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203%202.5%2020h19z%27%2F%3E%3Cpath%20d%3D%27M12%2010v5M12%2018h.01%27%2F%3E%3C%2Fsvg%3E")}
+.ic-box{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M21%208%2012%203%203%208l9%205%209-5z%27%2F%3E%3Cpath%20d%3D%27M3%208v8l9%205%209-5V8%27%2F%3E%3Cpath%20d%3D%27M12%2013v8%27%2F%3E%3C%2Fsvg%3E")}
+.ic-camera{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%208h3l2-3h6l2%203h3v12H4z%27%2F%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2714%27%20r%3D%273.5%27%2F%3E%3C%2Fsvg%3E")}
+.ic-close{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M5%205l14%2014M19%205%205%2019%27%2F%3E%3C%2Fsvg%3E")}
+.ic-cmd{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%209h6v6H9z%27%2F%3E%3Cpath%20d%3D%27M9%209V6a3%203%200%201%200-3%203zM15%209V6a3%203%200%201%201%203%203zM9%2015v3a3%203%200%201%201-3-3zM15%2015v3a3%203%200%201%200%203-3z%27%2F%3E%3C%2Fsvg%3E")}
+.ic-copy{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%279%27%20y%3D%279%27%20width%3D%2711%27%20height%3D%2711%27%20rx%3D%272%27%2F%3E%3Cpath%20d%3D%27M5%2015V6a2%202%200%200%201%202-2h9%27%2F%3E%3C%2Fsvg%3E")}
+.ic-dfull{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%274%27%20y%3D%274%27%20width%3D%2716%27%20height%3D%2716%27%20rx%3D%272%27%2F%3E%3C%2Fsvg%3E")}
+.ic-dhalf{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%274%27%20y%3D%274%27%20width%3D%2716%27%20height%3D%2716%27%20rx%3D%272%27%2F%3E%3Cpath%20d%3D%27M4%2013h16%27%2F%3E%3C%2Fsvg%3E")}
+.ic-dmin{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M5%2019h14%27%2F%3E%3C%2Fsvg%3E")}
+.ic-expand{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M14%204h6v6M10%2020H4v-6M20%204l-7%207M4%2020l7-7%27%2F%3E%3C%2Fsvg%3E")}
+.ic-eye{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2%2012s4-7%2010-7%2010%207%2010%207-4%207-10%207S2%2012%202%2012z%27%2F%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%273%27%2F%3E%3C%2Fsvg%3E")}
+.ic-hash{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M5%209h14M5%2015h14M10%203%208%2021M16%203l-2%2018%27%2F%3E%3C%2Fsvg%3E")}
+.ic-image{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%273%27%20y%3D%274%27%20width%3D%2718%27%20height%3D%2716%27%20rx%3D%272%27%2F%3E%3Ccircle%20cx%3D%279%27%20cy%3D%2710%27%20r%3D%272%27%2F%3E%3Cpath%20d%3D%27m21%2017-5-5-9%208%27%2F%3E%3C%2Fsvg%3E")}
+.ic-inbox{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M22%2012h-6l-2%203h-4l-2-3H2%27%2F%3E%3Cpath%20d%3D%27M5.5%205h13l3.5%207v6a2%202%200%200%201-2%202H4a2%202%200%200%201-2-2v-6z%27%2F%3E%3C%2Fsvg%3E")}
+.ic-list{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M8%206h13M8%2012h13M8%2018h13M3%206h.01M3%2012h.01M3%2018h.01%27%2F%3E%3C%2Fsvg%3E")}
+.ic-moon{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M20%2014.5A8%208%200%201%201%209.5%204a6.5%206.5%200%200%200%2010.5%2010.5z%27%2F%3E%3C%2Fsvg%3E")}
+.ic-power{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203v9%27%2F%3E%3Cpath%20d%3D%27M6.3%206.8a8%208%200%201%200%2011.4%200%27%2F%3E%3C%2Fsvg%3E")}
+.ic-refresh{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M21%2012a9%209%200%201%201-3-6.7%27%2F%3E%3Cpath%20d%3D%27M21%204v5h-5%27%2F%3E%3C%2Fsvg%3E")}
+.ic-rider{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%275.5%27%20cy%3D%2717%27%20r%3D%273%27%2F%3E%3Ccircle%20cx%3D%2718.5%27%20cy%3D%2717%27%20r%3D%273%27%2F%3E%3Cpath%20d%3D%27M8.5%2017H14l3-7h-4%27%2F%3E%3Cpath%20d%3D%27M12%2010%2010%207H7%27%2F%3E%3C%2Fsvg%3E")}
+.ic-search{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2711%27%20cy%3D%2711%27%20r%3D%277%27%2F%3E%3Cpath%20d%3D%27m21%2021-4.3-4.3%27%2F%3E%3C%2Fsvg%3E")}
+.ic-sun{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%274%27%2F%3E%3Cpath%20d%3D%27M12%202v2M12%2020v2M4.9%204.9l1.4%201.4M17.7%2017.7l1.4%201.4M2%2012h2M20%2012h2M4.9%2019.1l1.4-1.4M17.7%206.3l1.4-1.4%27%2F%3E%3C%2Fsvg%3E")}
+.ic-user{--m:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%278%27%20r%3D%274%27%2F%3E%3Cpath%20d%3D%27M4%2021a8%208%200%200%201%2016%200%27%2F%3E%3C%2Fsvg%3E")}
+
+/* ===== v63: signature, monogram, request form ===== */
+.sig{text-align:center;color:var(--mut);font-weight:300;font-size:11.5px;letter-spacing:.3px;padding:14px 0 6px;opacity:.85}
+html[lang="ar"] .sig .sig-en,html[lang="en"] .sig .sig-ar{display:none}
+.gate .sig{position:fixed;left:0;right:0;bottom:calc(8px + env(safe-area-inset-bottom,0px));padding:0}
+.ib .ic{width:20px;height:20px;vertical-align:middle}
+nav button .ic{display:block;width:24px;height:24px;margin:0 auto 2px}
+.empty .big .ic{width:46px;height:46px;opacity:.5}
+.pic.none .ic{width:46%;height:46%}
+.mono{display:grid;place-items:center;width:100%;height:100%;font-weight:800;font-size:34px;letter-spacing:1px;color:#fff;background:hsl(var(--h,20) 55% 40%)}
+.f .cp .ic{width:16px;height:16px}
+.rq h2{margin:0 0 4px;font-size:17px}
+.fl{display:block;margin:12px 0 0}
+.fl>span{display:block;color:var(--mut);font-size:12.5px;margin-bottom:5px;font-weight:600}
+.fl input,.fl select,.fl textarea{width:100%;background:var(--card2);color:var(--tx);border:2px solid var(--bd);border-radius:12px;padding:11px;font:inherit;font-size:16px;outline:none}
+.fl input:focus,.fl select:focus,.fl textarea:focus{border-color:var(--or)}
+.fl textarea{resize:vertical;min-height:92px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--card2);color:var(--tx);border:1px solid var(--bd);border-radius:20px;padding:8px 13px;font:600 13px inherit;font-family:inherit;cursor:pointer;min-height:38px}
+.chip.on{background:var(--or);border-color:var(--or);color:#fff}
+.urg{display:flex;align-items:center;gap:8px;width:100%;margin-top:12px;background:var(--card2);color:var(--tx);border:2px solid var(--bd);border-radius:12px;padding:11px 12px;font:700 14px inherit;font-family:inherit;cursor:pointer;text-align:start}
+.urg .ic{color:var(--bad)}
+.urg.on{background:rgba(255,77,79,.14);border-color:var(--bad);color:var(--bad)}
+.rqph{display:flex;gap:8px;flex-wrap:wrap}
+.rqph .btn{flex:1 1 44%;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.rqprev{display:flex;gap:10px;align-items:center;margin-top:10px;background:var(--card2);border:1px solid var(--bd);border-radius:12px;padding:8px}
+.rqprev img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:2px solid var(--or);background:#000}
+.rqprev .meta{flex:1;min-width:0;display:grid;gap:6px;font-size:12.5px}
+.rqi{padding:9px 0;border-bottom:1px solid var(--bd)}
+.rqi:last-child{border-bottom:0}
+.rqi.queued .hint{color:var(--warn)}
+.rqi.failed .hint{color:var(--bad)}
+.rqi.sent .hint{color:var(--ok)}
+
+/* ===== v64: my requests, no-show, zones, pull-to-refresh ===== */
+nav button{font-size:12px;padding:9px 2px 8px}
+.b.blue{color:var(--blue);border-color:var(--blue);background:rgba(37,99,235,.1)}
+.nbadge{position:absolute;top:3px;inset-inline-end:calc(50% - 22px);min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;line-height:18px;text-align:center}
+nav button{position:relative}
+.zrow{margin:0 0 6px}
+.zrow select,.g2m select{width:100%;background:var(--card);color:var(--tx);border:2px solid var(--bd);border-radius:12px;padding:10px;font:inherit;font-size:15px}
+.g2m{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.mycard.okc{border-inline-start:5px solid var(--ok)}
+.mycard.badc{border-inline-start:5px solid var(--bad)}
+.mycard dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:8px 0 0}
+.mycard dt{color:var(--mut)}.mycard dd{margin:0}
+.pwbox{display:flex;align-items:center;gap:8px;margin-top:8px;background:var(--card2);border-radius:12px;padding:8px 10px}
+.pwmask{flex:1;font:700 17px Consolas,monospace;direction:ltr;text-align:start;letter-spacing:1px;word-break:break-all}
+.nsrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 10px;margin-bottom:6px}
+.nsrow .nm{font-weight:700;flex:1 1 140px}
+.nsrow .pt{color:var(--mut);font-size:12.5px}
+.nsrow input{width:20px;height:20px;accent-color:var(--or)}
+.ptr{position:fixed;top:calc(62px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,-56px);z-index:40;background:var(--card);border:2px solid var(--or);color:var(--mut);padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700;box-shadow:var(--sh)}
+.ptr.go{background:var(--or);color:#fff}
+.ib.spinning .ic{animation:sp .8s linear infinite}
+@media (prefers-reduced-motion:reduce){.ib.spinning .ic{animation:none}}
+</style>
 </head>
-<body class="light">
-  <div id="appleToastHost"></div>
-  <section id="gateScreen" class="workspace" style="max-width:460px;margin:24px auto">
-    <div class="card" style="text-align:center">
-      <div class="brand-badge" style="width:52px;height:52px;border-radius:14px;margin:0 auto 10px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M9.5 4.5V16.8M5 16.8H19M9.5 13.5C11.2 10.8 14 9.5 16.2 10.6C18.2 11.6 18.8 14.3 18.5 16.8" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <h2 style="margin:0 0 4px">Talabat Captains Hub</h2>
-      <div class="hint" style="margin-bottom:10px">Enter Access Key or Bridge credentials to unlock field operations.</div>
-      <label class="field"><span>Access Key</span><input id="inAccessKey" dir="ltr" placeholder="Access Key"></label>
-      <label class="field"><span>Apps Script Bridge URL</span><input id="inBridgeUrl" dir="ltr" placeholder="https://script.google.com/macros/s/.../exec"></label>
-      <label class="field"><span>Bridge Secret</span><input id="inBridgeSecret" type="password" dir="ltr" placeholder="Secret"></label>
-      <label class="field"><span>Captain Name / Email</span><input id="inCaptainId" placeholder="Captain Name"></label>
-      <button type="button" class="btn" id="btnUnlockHub" style="width:100%">Continue</button>
-    </div>
-  </section>
-  <div id="appShell" hidden style="display:flex;flex-direction:column;min-height:100vh">
-    <header class="app-header">
-      <div class="brand">
-        <div class="brand-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9.5 4.5V16.8M5 16.8H19M9.5 13.5C11.2 10.8 14 9.5 16.2 10.6C18.2 11.6 18.8 14.3 18.5 16.8" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div><span class="brand-title">Talabat Captains Hub</span><span class="brand-sub" data-i18n="captainSub">تطبيق الكباتن الموحد</span></div>
-      </div>
-      <div class="header-actions">
-        <select id="hdrZoneSwitch" style="width:auto;padding:4px 8px;font-size:11.5px;font-weight:700"><option value="Rehab">Rehab</option><option value="Tagmoa North">Tagmoa North</option><option value="Tagmoa South">Tagmoa South</option><option value="Golden Square">Golden Square</option></select>
-        <button type="button" class="icon-btn" id="btnPwaLang">EN</button>
-        <button type="button" class="icon-btn" id="btnPwaTheme" title="Theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
-        <button type="button" class="icon-btn" id="btnPwaSync">Sync</button>
-      </div>
-    </header>
-    <nav class="main-nav" id="pwaNav">
-      <button type="button" data-ptab="search" class="on" data-i18n="tabSearch">البحث الشامل</button>
-      <button type="button" data-ptab="delays"><span data-i18n="tabDelays">الأوردرات المتأخرة</span> <span class="pill-cnt" id="pCntDelays">0</span></button>
-      <button type="button" data-ptab="noshow"><span data-i18n="tabNoshow">غائبي اليوم</span> <span class="pill-cnt" id="pCntNoshow">0</span></button>
-      <button type="button" data-ptab="submit" data-i18n="tabSubmit">رفع طلب</button>
-      <button type="button" data-ptab="myreq"><span data-i18n="tabMyReq">طلباتي</span> <span class="pill-cnt" id="pCntMyReq">0</span></button>
-    </nav>
-    <main class="workspace" style="max-width:860px;margin:0 auto;width:100%">
-      <div id="zoneStartCard" class="card zone-gate" hidden>
-        <h3 class="card-title" data-i18n="selectZone">اختر زون العمل للشيفت</h3>
-        <div class="zone-pill-grid"><button type="button" class="zone-pill" data-zpick="Rehab">Rehab</button><button type="button" class="zone-pill" data-zpick="Tagmoa North">Tagmoa North</button><button type="button" class="zone-pill" data-zpick="Tagmoa South">Tagmoa South</button><button type="button" class="zone-pill" data-zpick="Golden Square">Golden Square</button></div>
-      </div>
-      <section id="pview-search" class="view on">
-        <div class="search-row"><input id="pwaSearchIn" data-i18n-ph="searchPh"><button type="button" class="btn" id="btnPwaSearch" data-i18n="searchBtn">بحث</button></div>
-        <div id="pwaSearchOut"></div>
-      </section>
-      <section id="pview-delays" class="view"><div id="pwaDelaysOut"></div></section>
-      <section id="pview-noshow" class="view">
-        <div class="seg-tabs" id="pwaNsTabs"><button type="button" data-pnskind="all" class="on" data-i18n="filterAll">الكل</button><button type="button" data-pnskind="regular" data-i18n="filterRegular">عادي</button><button type="button" data-pnskind="hybrid" data-i18n="filterHybrid">Hybrid</button></div>
-        <div class="grid2" style="margin-bottom:8px"><select id="pwaMartFilter" hidden><option value="">All Marts</option></select><select id="pwaContractFilter"><option value="">All Contracts / Agencies</option></select></div>
-        <div class="card" style="padding:8px 10px"><div class="row" style="margin-top:0;justify-content:space-between"><label class="chk-inline"><input type="checkbox" id="pwaNsSelAll"> <span data-i18n="selectAll">تحديد الكل</span></label><button type="button" class="btn sm ok" id="btnPwaCopyNs" data-i18n="copyOfficeWa">نسخ لجروب المكتب (WhatsApp)</button></div></div>
-        <div class="card" id="pwaNoshowOut" style="padding:4px 8px"></div>
-      </section>
-      <section id="pview-submit" class="view">
-        <div class="card">
-          <div class="seg-tabs" id="reqTypeTabs"><button type="button" data-reqtype="suspend" class="on" data-i18n="reqTypeSusp">طلب إيقاف</button><button type="button" data-reqtype="unsuspend" data-i18n="reqTypeUnsusp">طلب فك إيقاف</button><button type="button" data-reqtype="password" data-i18n="reqTypePw">طلب تغيير باسورد</button></div>
-          <div class="grid2"><label class="field"><span>Rider ID</span><input id="reqRiderId" inputmode="numeric" dir="ltr"></label><label class="field"><span>Rider Name</span><input id="reqRiderName"></label></div>
-          <div id="suspFields">
-            <div class="hint" style="font-weight:700;margin-bottom:4px">Duration</div>
-            <div class="tag-row" id="durTags"><button type="button" class="tag-btn on" data-dur="24h" data-i18n="dur24h">24 ساعة</button><button type="button" class="tag-btn" data-dur="3d" data-i18n="dur3d">3 أيام</button><button type="button" class="tag-btn" data-dur="1w" data-i18n="dur1w">أسبوع</button><button type="button" class="tag-btn" data-dur="1y" data-i18n="dur1y">سنة</button><button type="button" class="tag-btn" data-dur="investigation" data-i18n="durInv">إيقاف لحين التحقيق</button></div>
-            <div class="hint" style="font-weight:700;margin:8px 0 4px">Issue Tag</div>
-            <div class="tag-row" id="issueTags"><button type="button" class="tag-btn on" data-tag="تأخير استلام" data-i18n="tagDelay">تأخير استلام</button><button type="button" class="tag-btn" data-tag="سلوك غير لائق" data-i18n="tagBehavior">سلوك غير لائق</button><button type="button" class="tag-btn" data-tag="مخالفة ركنة" data-i18n="tagParking">مخالفة ركنة</button></div>
-            <label class="field" style="margin-top:8px"><span data-i18n="uploadProof">رفع صورة إثبات</span><input id="reqProofFile" type="file" accept="image/*" capture="environment"></label>
-            <div id="proofPreviewBox" class="hint" hidden><img id="proofPreviewImg" alt="Preview" style="max-height:140px;border-radius:10px;border:1px solid var(--border);display:block;margin-bottom:4px"><span id="proofSizeBadge" class="badge ok"></span></div>
-          </div>
-          <div id="pwFields" hidden><label class="field"><span>New Password</span><input id="reqNewPw" dir="ltr" value="Ot1@talabat"></label></div>
-          <label class="field" style="margin-top:6px"><span data-i18n="customNote">ملاحظة إضافية</span><textarea id="reqCustomNote" rows="2"></textarea></label>
-          <button type="button" class="btn" id="btnSubmitReq" style="width:100%" data-i18n="submitReq">إرسال الطلب للمشرف</button>
-        </div>
-      </section>
-      <section id="pview-myreq" class="view">
-        <div class="row" style="margin:0 0 8px;justify-content:space-between">
-          <div class="row" style="margin:0"><span class="badge warn">Pending: <b id="mrPend">0</b></span><span class="badge ok">Approved: <b id="mrApp">0</b></span><span class="badge bad">Rejected: <b id="mrRej">0</b></span></div>
-          <button type="button" class="btn sm ghost" id="btnRefreshMyReq">Refresh</button>
-        </div>
-        <div id="myReqOut"></div>
-      </section>
-    </main>
-    <footer class="app-footer" data-i18n="signature">تطوير: Mustafa ElMohsen</footer>
+<body>
+
+<!-- ============ شاشة التحميل / الدخول / الرفض ============ -->
+<div id="gate" class="gate">
+  <div class="gbox" id="gbox">
+    <div class="logo">t</div>
+    <h1>Talabat Captains Hub</h1>
+    <p><span class="spin"></span></p>
   </div>
-  <script src="scripts/i18n.js"></script><script src="scripts/idb.js"></script><script src="scripts/hub-core.js"></script><script src="scripts/ui.js"></script><script src="scripts/crypto-sync.js"></script><script src="scripts/app.js"></script>
+  <footer class="sig"><span class="sig-en">Developed by Mustafa ElMohsen</span><span class="sig-ar">تطوير: Mustafa ElMohsen</span></footer>
+</div>
+
+<!-- ============ التطبيق ============ -->
+<div id="app" hidden>
+  <header>
+    <div class="brand">
+      <span class="logo">t</span>
+      <div><b>Captains Hub</b><small id="updInfo">—</small></div>
+    </div>
+    <div class="hact">
+      <button class="ib" id="refreshBtn" title="تحديث البيانات"><i class="ic ic-refresh"></i></button>
+      <button class="ib" id="logoutBtn" title="تسجيل الخروج"><i class="ic ic-power"></i></button>
+    </div>
+  </header>
+
+  <main>
+    <div id="staleBanner" class="banner warn" hidden></div>
+    <div id="pendBanner" class="banner warn" hidden></div>
+
+    <!-- ===== المناديب ===== -->
+    <section id="v-riders" class="view on">
+      <div class="sbar">
+        <input id="rq" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false"
+               placeholder="نمرة المكنة / الاسم / الموبايل / الكود / القومي / كود الأوردر">
+        <button class="btn" id="rGo">بحث</button>
+      </div>
+      <div class="zrow" id="zoneRow" hidden><select id="zoneSel" aria-label="الزون"><option value="">جميع الزونات</option></select></div>
+      <div id="rInfo" class="hint" style="margin:0 2px 8px"></div>
+      <div id="rOut"><div class="empty"><div class="big"><i class="ic ic-rider"></i></div>اكتب نمرة المكنة أو الاسم أو الموبايل أو الكود أو الرقم القومي</div></div>
+    </section>
+
+    <!-- ===== الأوردرات ===== -->
+    <section id="v-orders" class="view">
+      <div class="sbar">
+        <input id="oq" type="search" inputmode="numeric" enterkeyhint="search" autocomplete="off" placeholder="كود الأوردر (مثال: 4702417071 أو HF_EG4702417071)">
+        <button class="btn" id="oGo">بحث</button>
+      </div>
+      <div id="oInfo" class="hint" style="margin:0 2px 8px"></div>
+      <div id="oOut"><div class="empty"><div class="big"><i class="ic ic-box"></i></div>اكتب كود الأوردر لعرض المناديب المرتبطين به</div></div>
+    </section>
+
+    <!-- ===== طلب إيقاف ===== -->
+    <section id="v-req" class="view">
+      <div class="card rq">
+        <h2>طلب إيقاف مندوب</h2>
+        <div class="hint">الطلب يصل مشفّراً للمنسق للمراجعة. لا يتم الإيقاف إلا بعد موافقته.</div>
+
+        <label class="fl"><span>كود المندوب</span><input id="rqRid" inputmode="numeric" dir="ltr" autocomplete="off" placeholder="كود المندوب (ID)"></label>
+        <div id="rqWho" class="hint" style="margin-top:4px"></div>
+
+        <label class="fl"><span>رقم الأوردر المرتبط (اختياري)</span><input id="rqOrd" inputmode="numeric" dir="ltr" autocomplete="off" placeholder="مثال: 4702417071 أو HF_EG4702417071"></label>
+
+        <label class="fl"><span>المدة المقترحة</span>
+          <select id="rqDur">
+            <option value="24h">24 ساعة</option>
+            <option value="3d">3 أيام</option>
+            <option value="7d">أسبوع</option>
+            <option value="365d">سنة</option>
+            <option value="inv">إيقاف لحين التحقيق</option>
+          </select>
+        </label>
+
+        <div class="fl"><span>نوع المخالفة</span>
+          <div class="chips" id="rqTags">
+            <button type="button" class="chip" data-tag="تأخير استلام">تأخير استلام</button>
+            <button type="button" class="chip" data-tag="سلوك غير لائق">سلوك غير لائق</button>
+            <button type="button" class="chip" data-tag="مخالفة ركنة">مخالفة ركنة</button>
+          </div>
+        </div>
+
+        <button type="button" class="urg" id="rqUrg" aria-pressed="false"><i class="ic ic-alert"></i><span>حالة طارئة / مشاجرة</span></button>
+
+        <div class="fl"><span>إضافة سريعة للتفاصيل</span>
+          <div class="chips" id="rqInc">
+            <button type="button" class="chip" data-inc="مشاجرة مع مطعم">مشاجرة مع مطعم</button>
+            <button type="button" class="chip" data-inc="مشاجرة مع عميل">مشاجرة مع عميل</button>
+            <button type="button" class="chip" data-inc="سلوك غير لائق">سلوك غير لائق</button>
+            <button type="button" class="chip" data-inc="رفض استلام أوردر">رفض استلام أوردر</button>
+          </div>
+        </div>
+
+        <label class="fl"><span>تعليق / تفاصيل المخالفة</span><textarea id="rqTxt" rows="4" placeholder="اشرح ما حدث بالتفصيل"></textarea></label>
+
+        <div class="fl"><span>إثبات بالصورة (اختياري - يُضغط تلقائياً أقل من 80KB)</span>
+          <div class="rqph">
+            <button type="button" class="btn ghost" id="rqCam"><i class="ic ic-camera"></i>تصوير مباشر</button>
+            <button type="button" class="btn ghost" id="rqGal"><i class="ic ic-image"></i>رفع من المعرض</button>
+          </div>
+          <input type="file" id="rqFileCam" accept="image/*" capture="environment" hidden>
+          <input type="file" id="rqFileGal" accept="image/*" hidden>
+          <div id="rqPrev" class="rqprev" hidden>
+            <img id="rqImg" alt="">
+            <div class="meta"><div id="rqImgInfo"></div><button type="button" class="btn sm ghost" id="rqImgDel">إزالة الصورة</button></div>
+          </div>
+        </div>
+
+        <button type="button" class="btn" id="rqSend" style="width:100%;margin-top:16px">إرسال الطلب</button>
+        <div id="rqState" class="hint" style="margin-top:6px"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 6px;font-size:15px">طلباتي الأخيرة</h3>
+        <div id="rqList"></div>
+      </div>
+    </section>
+
+    <!-- ===== غائبي اليوم ===== -->
+    <section id="v-noshow" class="view">
+      <div class="card">
+        <div class="ohead"><h2>غائبي اليوم</h2><span class="b" id="nsCount">0</span></div>
+        <div class="hint">مناديب الهيدكاونت النشطون في الزون المختار الذين لم يظهروا على أي أوردر اليوم (حسب بيانات الأوردرات الحالية).</div>
+        <div class="chips" id="nsFleet" style="margin-top:8px">
+          <button type="button" class="chip on" data-fleet="all">الكل</button>
+          <button type="button" class="chip" data-fleet="regular">عادي</button>
+          <button type="button" class="chip" data-fleet="hybrid">Hybrid</button>
+        </div>
+        <div class="g2m"><select id="nsMart" aria-label="Hybrid Mart"></select><select id="nsCt" aria-label="Contract"></select></div>
+        <div class="acts"><button type="button" class="btn sm ghost" id="nsAll">تحديد الكل</button><button type="button" class="btn" id="nsCopy">نسخ لجروب المكتب (WhatsApp)</button></div>
+      </div>
+      <div id="nsList"></div>
+    </section>
+
+    <!-- ===== طلباتي ===== -->
+    <section id="v-my" class="view">
+      <div class="card" id="capCard"></div>
+      <div id="myList"></div>
+    </section>
+  </main>
+  <div id="ptr" class="ptr" hidden>اسحب للتحديث</div>
+  <footer class="sig"><span class="sig-en">Developed by Mustafa ElMohsen</span><span class="sig-ar">تطوير: Mustafa ElMohsen</span></footer>
+
+  <nav>
+    <button class="on" data-v="riders"><i class="ic ic-rider"></i>المناديب</button>
+    <button data-v="orders"><i class="ic ic-box"></i>الأوردرات</button>
+    <button data-v="noshow" id="navNo" hidden><i class="ic ic-list"></i>غائبي اليوم</button>
+    <button data-v="req" id="navReq" hidden><i class="ic ic-alert"></i>طلب إيقاف</button>
+    <button data-v="my" id="navMy" hidden><i class="ic ic-inbox"></i>طلباتي</button>
+  </nav>
+</div>
+
+<div id="lb" hidden></div>
+<div id="toast"></div>
+
+<script type="text/plain" id="libSrc">
+// ------------------------- أدوات النصوص والأرقام -------------------------
+const AR_D = '٠١٢٣٤٥٦٧٨٩', FA_D = '۰۱۲۳۴۵۶۷۸۹';
+const latin = (s) => String(s == null ? '' : s).replace(/[٠-٩]/g, (d) => AR_D.indexOf(d)).replace(/[۰-۹]/g, (d) => FA_D.indexOf(d));
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const normKey = (s) => latin(s).toLowerCase().replace(/[\s\-_.\/\\|،,]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه');
+const normName = (s) => latin(s).toLowerCase().replace(/[\u064B-\u0652\u0640]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
+const digitsOf = (s) => latin(s).replace(/\D/g, '');
+
+/** رقم الموبايل بصيغة دولية بدون + (مصر) */
+function intlPhone(p) {
+  let d = digitsOf(p);
+  if (!d) return '';
+  if (d.startsWith('0020')) d = d.slice(2);
+  if (d.startsWith('20') && d.length >= 12) return d;
+  if (d.startsWith('0') && d.length === 11) return '20' + d.slice(1);
+  if (d.length === 10 && d[0] === '1') return '20' + d;
+  return d;
+}
+/** آخر 10 أرقام للمقارنة */
+const phoneCore = (p) => { const d = digitsOf(p); return d.length > 10 ? d.slice(-10) : d.replace(/^0/, ''); };
+
+// ------------------------- النمر -------------------------
+function plateParts(plate) {
+  const k = normKey(plate);
+  const d = (k.match(/\d/g) || []).join('');
+  const l = k.replace(/\d/g, '').split('').sort().join('');
+  return { k, d, l, sk: d + '|' + l };
+}
+const hasAll = (full, part) => {
+  const f = full.split('');
+  for (const ch of part) { const i = f.indexOf(ch); if (i < 0) return false; f.splice(i, 1); }
+  return true;
+};
+
+// ------------------------- فهرس البحث -------------------------
+function buildIndex(riders) {
+  const byId = new Map();
+  riders.forEach((r) => {
+    r._id = String(r.i);
+    r._name = normName(r.n);
+    r._ph = phoneCore(r.p);
+    r._nid = digitsOf(r.d);
+    r._pp = plateParts(r.l || '');
+    byId.set(r._id, r);
+  });
+  return byId;
+}
+
+/** بحث موحّد: كود / موبايل / قومي / نمرة (بأي ترتيب أو مسافات أو أرقام عربية) / اسم */
+function searchRiders(riders, q, limit) {
+  limit = limit || 40;
+  const raw = String(q || '').trim();
+  if (!raw) return [];
+  const flat = latin(raw).replace(/[\s\-_.\/\\|،,]/g, '');
+  const out = [], seen = new Set();
+  const push = (r) => { if (r && !seen.has(r._id) && out.length < limit) { seen.add(r._id); out.push(r); } };
+  const scan = (fn) => { for (const r of riders) { if (out.length >= limit) break; if (fn(r)) push(r); } };
+
+  if (/^\+?\d+$/.test(flat)) {
+    const d = flat.replace(/^\+/, '');
+    // --- تطابق تام أولاً: القومي / الكود / الموبايل / أرقام النمرة ---
+    if (d.length === 14) scan((r) => r._nid === d);
+    if (d.length >= 4 && d.length <= 9) scan((r) => r._id === d);
+    const core = phoneCore(d);
+    if (core.length >= 9) scan((r) => r._ph && r._ph === core.slice(-10));
+    if (d.length >= 3 && d.length <= 7) scan((r) => r._pp.d === d);
+    if (out.length) return out;          // وُجد تطابق تام: لا نزعج الكابتن بنتائج جزئية
+    // --- تطابق جزئي ---
+    if (d.length >= 3 && d.length <= 7) scan((r) => r._pp.d && r._pp.d.includes(d));
+    if (d.length >= 6) { scan((r) => r._nid && r._nid.includes(d)); scan((r) => r._ph && r._ph.includes(d)); }
+    if (d.length >= 4 && d.length <= 9) scan((r) => r._id.startsWith(d));
+    return out;
+  }
+
+  const qp = plateParts(raw);
+  const hasDigit = /\d/.test(latin(raw));
+  const nameQ = normName(raw);
+  const toks = nameQ.split(' ').filter(Boolean);
+  const nameScan = () => { if (toks.length) scan((r) => toks.every((t) => r._name.includes(t))); };
+
+  if (hasDigit) {      // مزيج حروف + أرقام => نمرة
+    scan((r) => r._pp.k && r._pp.k === qp.k);
+    scan((r) => r._pp.sk && r._pp.sk === qp.sk);
+    if (qp.d.length >= 3) scan((r) => r._pp.d === qp.d && hasAll(r._pp.l, qp.l));
+    nameScan();
+  } else {
+    nameScan();
+    if (!out.length && qp.l) scan((r) => r._pp.k && r._pp.k.includes(qp.k));
+  }
+  return out;
+}
+
+// ------------------------- الإيقاف -------------------------
+/** يرجع { cur: {s,e}|null, next: {s,e}|null } بالمللي ثانية */
+function suspState(r, now) {
+  now = now || Date.now();
+  let cur = null, next = null;
+  (r.u || []).forEach((u) => {
+    const s = Date.parse(u[0]), e = Date.parse(u[1]);
+    if (isNaN(s) || isNaN(e)) return;
+    if (s <= now && now <= e) { if (!cur || e > cur.e) cur = { s, e }; }
+    else if (s > now) { if (!next || s < next.s) next = { s, e }; }
+  });
+  return { cur, next };
+}
+
+// ------------------------- التشفير (متوافق مع sync.js) -------------------------
+const dec = new TextDecoder();
+const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+async function deriveAesKey(accessKey, saltB64, iter) {
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(accessKey), 'PBKDF2', false, ['deriveBits']);
+  const bits = new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: b64(saltB64), iterations: iter, hash: 'SHA-256' }, base, 512));
+  return crypto.subtle.importKey('raw', bits.slice(0, 32), 'AES-GCM', false, ['decrypt']);
+}
+/** الصيغة: [12 بايت IV][بيانات مشفرة AES-GCM] */
+async function decryptBytes(key, buf) {
+  const u = new Uint8Array(buf);
+  if (u.length < 29) throw new Error('bad-file');
+  return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: u.slice(0, 12) }, key, u.slice(12)));
+}
+async function gunzip(u8) {
+  const ds = new DecompressionStream('gzip');
+  const w = ds.writable.getWriter();
+  w.write(u8); w.close();
+  return new Uint8Array(await new Response(ds.readable).arrayBuffer());
+}
+async function decryptJson(key, buf) {
+  return JSON.parse(dec.decode(await gunzip(await decryptBytes(key, buf))));
+}
+/** حاوية الصور: [u32 عدد] ثم لكل صورة [u32 id][u32 طول][JPEG] => Map(id -> Uint8Array) */
+function parsePhotoPack(u8) {
+  const dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
+  const map = new Map();
+  let o = 0;
+  const n = dv.getUint32(o); o += 4;
+  for (let k = 0; k < n; k++) {
+    const id = dv.getUint32(o); o += 4;
+    const len = dv.getUint32(o); o += 4;
+    map.set(String(id), u8.subarray(o, o + len));
+    o += len;
+  }
+  return map;
+}
+</script>
+<script type="text/plain" id="idxSrc">/* hubIndex - O(1) multi-field search index. Runs inside a Web Worker (LIB helpers are prepended at runtime):
+ * byId / byPhone / byNid / byPlate / byOrder are Map lookups; names use a normalized substring scan with early exit. */
+const hubIndex = (() => {
+  let I = null;
+  const add = (m, k, v) => { if (!k) return; const a = m.get(k); if (a) a.push(v); else m.set(k, [v]); };
+
+  function build(riders, orders) {
+    const byId = new Set(), byPhone = new Map(), byNid = new Map(), byPk = new Map(), bySk = new Map(), byPd = new Map();
+    const rows = [], plate = new Map(), zone = new Map();
+    for (const r of riders || []) {
+      const id = String(r.i), pp = plateParts(r.l || '');
+      byId.add(id);
+      add(byPhone, phoneCore(r.p), id);
+      add(byNid, digitsOf(r.d), id);
+      if (pp.k) { add(byPk, pp.k, id); add(bySk, pp.sk, id); add(byPd, pp.d, id); }
+      plate.set(id, pp);
+      zone.set(id, r.z || '');
+      rows.push({ id, nm: normName(r.n), nid: digitsOf(r.d), ph: phoneCore(r.p), pd: pp.d, pk: pp.k });
+    }
+    I = { byId, byPhone, byNid, byPk, bySk, byPd, rows, plate, zone, orders: new Set(orders || []) };
+    return rows.length;
+  }
+
+  function search(q, zoneFilter, limit) {
+    const out = [], orders = [], seen = new Set();
+    limit = limit || 600;
+    const raw = String(q || '').trim();
+    if (!I || !raw) return { ids: out, orders };
+    const okZ = (id) => !zoneFilter || I.zone.get(id) === zoneFilter;
+    const push = (id) => { if (!seen.has(id) && okZ(id) && out.length < limit) { seen.add(id); out.push(id); } };
+    const pushAll = (a) => { (a || []).forEach(push); };
+    const scan = (fn) => { for (const r of I.rows) { if (out.length >= limit) break; if (fn(r)) push(r.id); } };
+
+    const cleaned = latin(raw).replace(/^\s*HF[_\s-]?EG/i, '');
+    const flat = cleaned.replace(/[\s\-_.\/\\|،,]/g, '');
+    if (/^\+?\d+$/.test(flat)) {
+      const d = flat.replace(/^\+/, '');
+      if (d.length >= 6 && d.length <= 14 && I.orders.has(d)) orders.push(d);              // order id: O(1)
+      if (d.length === 14) pushAll(I.byNid.get(d));                                          // national id: O(1)
+      if (d.length >= 4 && d.length <= 9 && I.byId.has(d)) push(d);                          // rider id: O(1)
+      const core = phoneCore(d);
+      if (core.length >= 9) pushAll(I.byPhone.get(core.slice(-10)));                         // mobile: O(1)
+      if (d.length >= 3 && d.length <= 7) pushAll(I.byPd.get(d));                            // plate digits: O(1)
+      if (out.length || orders.length) return { ids: out, orders };
+      if (d.length >= 3 && d.length <= 7) scan((r) => r.pd && r.pd.includes(d));
+      if (d.length >= 6) { scan((r) => r.nid && r.nid.includes(d)); scan((r) => r.ph && r.ph.includes(d)); }
+      if (d.length >= 4 && d.length <= 9) scan((r) => r.id.startsWith(d));
+      return { ids: out, orders };
+    }
+    const qp = plateParts(raw), hasDigit = /\d/.test(latin(raw));
+    const toks = normName(raw).split(' ').filter(Boolean);
+    const nameScan = () => { if (toks.length) scan((r) => toks.every((t) => r.nm.includes(t))); };
+    if (hasDigit) {
+      pushAll(I.byPk.get(qp.k));
+      pushAll(I.bySk.get(qp.sk));
+      if (qp.d.length >= 3) (I.byPd.get(qp.d) || []).forEach((id) => { const pp = I.plate.get(id); if (pp && hasAll(pp.l, qp.l)) push(id); });
+      nameScan();
+    } else {
+      nameScan();
+      if (!out.length && qp.l) scan((r) => r.pk && r.pk.includes(qp.k));
+    }
+    return { ids: out, orders };
+  }
+  return { build, search };
+})();
+</script>
+<script>
+'use strict';
+/* =====================================================================
+ * Talabat Captains Hub — captain.html  (عرض ونسخ فقط — بدون أي أكشن)
+ *
+ * التدفق: meta.json -> مفتاح الوصول -> Google Sign-In -> فك auth.bin والتحقق من الإيميل
+ *         -> فك riders.bin + orders.bin (+ orders-archive.bin أرشيف الأيام السابقة) -> البحث والعرض والنسخ.
+ * مفتاح الوصول: يُحفظ في localStorage للأبد عند أول فتح للرابط #k=... ولا يُمسح إلا لو فشل فك التشفير فعلياً
+ *               (أخطاء الشبكة/الخادم لا تمسحه). الرابط النظيف بدون مفتاح يعمل على الجهاز الذي حُفظ فيه المفتاح.
+ * الصور تُحمَّل عند الحاجة من حزم مشفرة data/photos/p<N>.bin.
+ * لا توجد هنا أي بيانات أو مفاتيح مكتوبة ثابتة: كل شيء يأتي من data/meta.json ومفتاح الرابط.
+ * ===================================================================== */
+
+/*LIB_START*/
+// ------------------------- أدوات النصوص والأرقام -------------------------
+const AR_D = '٠١٢٣٤٥٦٧٨٩', FA_D = '۰۱۲۳۴۵۶۷۸۹';
+const latin = (s) => String(s == null ? '' : s).replace(/[٠-٩]/g, (d) => AR_D.indexOf(d)).replace(/[۰-۹]/g, (d) => FA_D.indexOf(d));
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const normKey = (s) => latin(s).toLowerCase().replace(/[\s\-_.\/\\|،,]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه');
+const normName = (s) => latin(s).toLowerCase().replace(/[\u064B-\u0652\u0640]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
+const digitsOf = (s) => latin(s).replace(/\D/g, '');
+
+/** رقم الموبايل بصيغة دولية بدون + (مصر) */
+function intlPhone(p) {
+  let d = digitsOf(p);
+  if (!d) return '';
+  if (d.startsWith('0020')) d = d.slice(2);
+  if (d.startsWith('20') && d.length >= 12) return d;
+  if (d.startsWith('0') && d.length === 11) return '20' + d.slice(1);
+  if (d.length === 10 && d[0] === '1') return '20' + d;
+  return d;
+}
+/** آخر 10 أرقام للمقارنة */
+const phoneCore = (p) => { const d = digitsOf(p); return d.length > 10 ? d.slice(-10) : d.replace(/^0/, ''); };
+
+// ------------------------- النمر -------------------------
+function plateParts(plate) {
+  const k = normKey(plate);
+  const d = (k.match(/\d/g) || []).join('');
+  const l = k.replace(/\d/g, '').split('').sort().join('');
+  return { k, d, l, sk: d + '|' + l };
+}
+const hasAll = (full, part) => {
+  const f = full.split('');
+  for (const ch of part) { const i = f.indexOf(ch); if (i < 0) return false; f.splice(i, 1); }
+  return true;
+};
+
+// ------------------------- فهرس البحث -------------------------
+function buildIndex(riders) {
+  const byId = new Map();
+  riders.forEach((r) => {
+    r._id = String(r.i);
+    r._name = normName(r.n);
+    r._ph = phoneCore(r.p);
+    r._nid = digitsOf(r.d);
+    r._pp = plateParts(r.l || '');
+    byId.set(r._id, r);
+  });
+  return byId;
+}
+
+/** بحث موحّد: كود / موبايل / قومي / نمرة (بأي ترتيب أو مسافات أو أرقام عربية) / اسم */
+function searchRiders(riders, q, limit) {
+  limit = limit || 40;
+  const raw = String(q || '').trim();
+  if (!raw) return [];
+  const flat = latin(raw).replace(/[\s\-_.\/\\|،,]/g, '');
+  const out = [], seen = new Set();
+  const push = (r) => { if (r && !seen.has(r._id) && out.length < limit) { seen.add(r._id); out.push(r); } };
+  const scan = (fn) => { for (const r of riders) { if (out.length >= limit) break; if (fn(r)) push(r); } };
+
+  if (/^\+?\d+$/.test(flat)) {
+    const d = flat.replace(/^\+/, '');
+    // --- تطابق تام أولاً: القومي / الكود / الموبايل / أرقام النمرة ---
+    if (d.length === 14) scan((r) => r._nid === d);
+    if (d.length >= 4 && d.length <= 9) scan((r) => r._id === d);
+    const core = phoneCore(d);
+    if (core.length >= 9) scan((r) => r._ph && r._ph === core.slice(-10));
+    if (d.length >= 3 && d.length <= 7) scan((r) => r._pp.d === d);
+    if (out.length) return out;          // وُجد تطابق تام: لا نزعج الكابتن بنتائج جزئية
+    // --- تطابق جزئي ---
+    if (d.length >= 3 && d.length <= 7) scan((r) => r._pp.d && r._pp.d.includes(d));
+    if (d.length >= 6) { scan((r) => r._nid && r._nid.includes(d)); scan((r) => r._ph && r._ph.includes(d)); }
+    if (d.length >= 4 && d.length <= 9) scan((r) => r._id.startsWith(d));
+    return out;
+  }
+
+  const qp = plateParts(raw);
+  const hasDigit = /\d/.test(latin(raw));
+  const nameQ = normName(raw);
+  const toks = nameQ.split(' ').filter(Boolean);
+  const nameScan = () => { if (toks.length) scan((r) => toks.every((t) => r._name.includes(t))); };
+
+  if (hasDigit) {      // مزيج حروف + أرقام => نمرة
+    scan((r) => r._pp.k && r._pp.k === qp.k);
+    scan((r) => r._pp.sk && r._pp.sk === qp.sk);
+    if (qp.d.length >= 3) scan((r) => r._pp.d === qp.d && hasAll(r._pp.l, qp.l));
+    nameScan();
+  } else {
+    nameScan();
+    if (!out.length && qp.l) scan((r) => r._pp.k && r._pp.k.includes(qp.k));
+  }
+  return out;
+}
+
+// ------------------------- الإيقاف -------------------------
+/** يرجع { cur: {s,e}|null, next: {s,e}|null } بالمللي ثانية */
+function suspState(r, now) {
+  now = now || Date.now();
+  let cur = null, next = null;
+  (r.u || []).forEach((u) => {
+    const s = Date.parse(u[0]), e = Date.parse(u[1]);
+    if (isNaN(s) || isNaN(e)) return;
+    if (s <= now && now <= e) { if (!cur || e > cur.e) cur = { s, e }; }
+    else if (s > now) { if (!next || s < next.s) next = { s, e }; }
+  });
+  return { cur, next };
+}
+
+// ------------------------- التشفير (متوافق مع sync.js) -------------------------
+const dec = new TextDecoder();
+const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+async function deriveAesKey(accessKey, saltB64, iter) {
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(accessKey), 'PBKDF2', false, ['deriveBits']);
+  const bits = new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: b64(saltB64), iterations: iter, hash: 'SHA-256' }, base, 512));
+  return crypto.subtle.importKey('raw', bits.slice(0, 32), 'AES-GCM', false, ['decrypt']);
+}
+/** الصيغة: [12 بايت IV][بيانات مشفرة AES-GCM] */
+async function decryptBytes(key, buf) {
+  const u = new Uint8Array(buf);
+  if (u.length < 29) throw new Error('bad-file');
+  return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: u.slice(0, 12) }, key, u.slice(12)));
+}
+async function gunzip(u8) {
+  const ds = new DecompressionStream('gzip');
+  const w = ds.writable.getWriter();
+  w.write(u8); w.close();
+  return new Uint8Array(await new Response(ds.readable).arrayBuffer());
+}
+async function decryptJson(key, buf) {
+  return JSON.parse(dec.decode(await gunzip(await decryptBytes(key, buf))));
+}
+/** حاوية الصور: [u32 عدد] ثم لكل صورة [u32 id][u32 طول][JPEG] => Map(id -> Uint8Array) */
+function parsePhotoPack(u8) {
+  const dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
+  const map = new Map();
+  let o = 0;
+  const n = dv.getUint32(o); o += 4;
+  for (let k = 0; k < n; k++) {
+    const id = dv.getUint32(o); o += 4;
+    const len = dv.getUint32(o); o += 4;
+    map.set(String(id), u8.subarray(o, o + len));
+    o += len;
+  }
+  return map;
+}
+/*LIB_END*/
+
+// ============================ حالة التطبيق ============================
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const TZ = 'Africa/Cairo';
+const SESSION_MS = 24 * 3600 * 1000;
+const S = { meta: null, cryptoKey: null, email: '', riders: [], byId: new Map(), orders: new Map(), packs: new Map(), urls: new Map() };
+
+const fmtDT = (v) => {
+  const d = typeof v === 'number' ? new Date(v) : new Date(v);
+  return isNaN(d) ? '—' : d.toLocaleString('ar-EG', { timeZone: TZ, hour12: true, day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+};
+function toast(m) {
+  const e = $('#toast');
+  e.textContent = m; e.classList.add('on');
+  clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('on'), 2200);
+}
+async function copyText(s) {
+  try { await navigator.clipboard.writeText(s); }
+  catch (_) {
+    const a = document.createElement('textarea');
+    a.value = s; a.setAttribute('readonly', ''); a.style.cssText = 'position:fixed;top:0;opacity:0';
+    document.body.append(a); a.select(); a.setSelectionRange(0, 99999);
+    try { document.execCommand('copy'); } catch (_) {}
+    a.remove();
+  }
+  toast('تم النسخ');
+}
+const bust = () => '?t=' + Math.floor(Date.now() / 30000);
+async function fetchBin(path) {
+  const r = await fetch(path + bust(), { cache: 'no-store' });
+  if (!r.ok) { const e = new Error('HTTP ' + r.status); e.status = r.status; throw e; }
+  return r.arrayBuffer();
+}
+
+// ============================ شاشات الدخول ============================
+function gate(html) {
+  $('#app').hidden = true;
+  $('#gate').hidden = false;
+  $('#gbox').innerHTML = '<div class="logo">t</div><h1>Talabat Captains Hub</h1>' + html;
+}
+const gateErr = (m, extra) => gate(`<p class="err">${m}</p>${extra || ''}`);
+
+// ---------- مفتاح الوصول: يُحفظ للأبد ولا يُمسح إلا لو فشل فك التشفير فعلياً ----------
+const KEY_LS = 'cap_key';
+let MEM_KEY = '';   // نسخة في الذاكرة لو التخزين غير متاح (مثل التصفح الخاص) فلا يضيع المفتاح أثناء الجلسة
+function storeKey(k) {
+  let ok = false;
+  try { localStorage.setItem(KEY_LS, k); ok = localStorage.getItem(KEY_LS) === k; } catch (_) { ok = false; }
+  if (ok) { try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (_) {} }   // نطلب تخزيناً دائماً (لا يمسحه المتصفح عند ضيق المساحة)
+  return ok;
+}
+function forgetKey() { MEM_KEY = ''; try { localStorage.removeItem(KEY_LS); } catch (_) {} }
+/** يقبل المفتاح نفسه أو الرابط الكامل الذي يحتوي #k=... */
+function extractKey(v) {
+  const s = String(v || '').trim();
+  const m = /[#&?]k=([^&\s]+)/.exec(s);
+  if (m) { try { return decodeURIComponent(m[1]).trim(); } catch (_) { return m[1].trim(); } }
+  return s;
+}
+function getKey() {
+  const m = /[#&]k=([^&]+)/.exec(location.hash || '');
+  if (m) {   // فتح الرابط بالمفتاح: نحفظه فوراً للأبد
+    const k = extractKey('#k=' + m[1]);
+    if (k) {
+      MEM_KEY = k;
+      // نخفي المفتاح من شريط العنوان فقط بعد التأكد أنه حُفظ فعلاً؛ وإلا نتركه في الرابط حتى لا يضيع عند إعادة التحميل
+      if (storeKey(k)) history.replaceState(null, '', location.pathname + location.search);
+    }
+  }
+  if (MEM_KEY) return MEM_KEY;
+  try { return localStorage.getItem(KEY_LS) || ''; } catch (_) { return ''; }
+}
+function askKey(msg) {
+  gate(`<p>${msg || 'أدخل مفتاح الوصول الذي أرسله لك المشرف (أو افتح الرابط الكامل الذي وصلك).'}</p>
+    <input id="keyIn" placeholder="Access Key أو الرابط الكامل" autocomplete="off">
+    <button class="btn" id="keyGo" style="width:100%">متابعة</button>`);
+  $('#keyGo').onclick = () => {
+    const v = extractKey($('#keyIn').value);
+    if (!v) return;
+    MEM_KEY = v;
+    storeKey(v);
+    boot();
+  };
+}
+
+function loadSession() {
+  try {
+    const s = JSON.parse(localStorage.getItem('cap_sess') || 'null');
+    if (s && s.email && s.exp > Date.now()) return s;
+  } catch (_) {}
+  return null;
+}
+function saveSession(email) { try { localStorage.setItem('cap_sess', JSON.stringify({ email, exp: Date.now() + SESSION_MS })); } catch (_) {} }
+function clearSession() { try { localStorage.removeItem('cap_sess'); } catch (_) {} }
+
+function jwtPayload(tok) {
+  const p = tok.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+  return JSON.parse(decodeURIComponent(escape(atob(p + '='.repeat((4 - p.length % 4) % 4)))));
+}
+
+function loadGsi() {
+  return new Promise((res, rej) => {
+    if (window.google && google.accounts && google.accounts.id) return res();
+    const s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client';
+    s.async = true; s.defer = true;
+    s.onload = () => res(); s.onerror = () => rej(new Error('gsi'));
+    document.head.append(s);
+  });
+}
+
+async function showSignIn() {
+  const cid = S.meta.clientId;
+  if (!cid) return gateErr('لم يتم ضبط Google Client ID بعد — تواصل مع المشرف.');
+  gate('<p>سجّل الدخول بحساب Google المسموح له بالدخول.</p><div id="gsiBtn"><span class="spin"></span></div><div id="gsiErr" class="err"></div>');
+  try { await loadGsi(); } catch (_) { return gateErr('تعذر تحميل خدمة تسجيل الدخول من Google — تحقق من الإنترنت.'); }
+  google.accounts.id.initialize({ client_id: cid, callback: onCredential, auto_select: true, cancel_on_tap_outside: false, use_fedcm_for_prompt: true });
+  $('#gsiBtn').innerHTML = '';
+  google.accounts.id.renderButton($('#gsiBtn'), { theme: 'filled_blue', size: 'large', text: 'signin_with', shape: 'pill', locale: 'ar', width: 280 });
+  try { google.accounts.id.prompt(); } catch (_) {}
+}
+
+async function onCredential(resp) {
+  try {
+    const p = jwtPayload(resp.credential);
+    let info = p;
+    try {   // تحقق إضافي من Google (لو فشل الاتصال نكتفي بالفحص المحلي)
+      const r = await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(resp.credential));
+      if (r.ok) info = await r.json();
+      else if (r.status === 400) throw new Error('invalid');
+    } catch (e) { if (String(e.message) === 'invalid') throw e; }
+    const okAud = info.aud === S.meta.clientId;
+    const verified = String(info.email_verified) === 'true' || info.email_verified === true;
+    const notExpired = Number(info.exp || p.exp) * 1000 > Date.now() - 60000;
+    if (!okAud || !verified || !notExpired || !info.email) throw new Error('invalid');
+    S.email = String(info.email).toLowerCase();
+    saveSession(S.email);
+    boot();
+  } catch (_) {
+    const e = $('#gsiErr');
+    if (e) e.textContent = 'تعذر التحقق من تسجيل الدخول — حاول مرة أخرى.';
+  }
+}
+
+function denied(email) {
+  gate(`<p class="err">هذا الحساب غير مسموح له بالدخول (أو لم يُنشر إيميله بعد)</p><p dir="ltr">${esc(email)}</p>
+    <p>لو المشرف أضاف إيميلك الآن فانتظر دقيقة أو اثنتين (تحديث الموقع يتأخر قليلاً) ثم اضغط إعادة المحاولة. أو سجّل الدخول بحساب آخر.</p>
+    <button class="btn" id="retryAcc" style="width:100%;margin-bottom:8px">إعادة المحاولة</button>
+    <button class="btn ghost" id="swAcc" style="width:100%">تغيير الحساب</button>`);
+  $('#retryAcc').onclick = () => boot();
+  $('#swAcc').onclick = logout;
+}
+function logout() {
+  clearSession();
+  try { if (window.google && google.accounts) google.accounts.id.disableAutoSelect(); } catch (_) {}
+  location.reload();
+}
+
+// ============================ تحميل البيانات ============================
+async function loadData() {
+  // أرشيف الأيام السابقة (محتواه ثابت): يُحمَّل برابط مرتبط ببصمته فيُخزَّن في كاش المتصفح ولا يُنزَّل كل مرة
+  const am = S.meta && S.meta.archive;
+  const wantArch = !!(am && am.n > 0);
+  const arch = wantArch
+    ? fetch('data/orders-archive.bin?v=' + encodeURIComponent(am.h || Date.now())).then((r) => (r.ok ? r.arrayBuffer() : null)).catch(() => null)
+    : Promise.resolve(null);
+  const [rb, ob, ab] = await Promise.all([fetchBin('data/riders.bin'), fetchBin('data/orders.bin').catch(() => null), arch]);
+  const rj = await decryptJson(S.cryptoKey, rb);
+  S.riders = rj.r || [];
+  S.byId = buildIndex(S.riders);
+  S.orders = new Map();
+  S.archiveMissing = false;
+  if (ab) { try { const aj = await decryptJson(S.cryptoKey, ab); (aj.o || []).forEach((o) => S.orders.set(String(o.c), o)); } catch (_) { S.archiveMissing = true; } }
+  else if (wantArch) S.archiveMissing = true;
+  if (ob) { const oj = await decryptJson(S.cryptoKey, ob); (oj.o || []).forEach((o) => S.orders.set(String(o.c), o)); }   // الحديث يتغلب على الأرشيف
+  S.packs.clear();
+  S.urls.forEach((u) => { try { URL.revokeObjectURL(u); } catch (_) {} });
+  S.urls.clear();
+  try { S.hub = await decryptJson(S.cryptoKey, await fetchBin('data/hub.bin')); } catch (_) { S.hub = null; }
+  hubAfterLoad();
+  renderOrdersInfo();
+}
+function renderOrdersInfo() {
+  const e = $('#oInfo');
+  if (!e) return;
+  e.textContent = S.archiveMissing
+    ? `تنبيه: تعذر تحميل أرشيف الأيام السابقة — المتاح الآن ${S.orders.size.toLocaleString('en')} أوردر فقط. حدّث الصفحة.`
+    : `الأرشيف المحلي: ${S.orders.size.toLocaleString('en')} أوردر (حي / مكتمل / ملغي)${liveEnabled() ? ' · الأقدم يُجلب لحظياً' : ''}`;
+}
+
+function renderMeta() {
+  const m = S.meta;
+  const rt = m.riders && m.riders.t, ot = m.orders && m.orders.t;
+  $('#updInfo').textContent = `مناديب: ${fmtDT(rt)}${ot ? ' · أوردرات: ' + fmtDT(ot) : ''}`;
+  const stale = rt && Date.now() - Date.parse(rt) > 48 * 3600 * 1000;
+  const b = $('#staleBanner');
+  b.hidden = !stale;
+  if (stale) b.textContent = 'تنبيه: البيانات لم تُحدَّث منذ أكثر من 48 ساعة — قد لا تكون حالة الإيقاف دقيقة.';
+  const pend = (m.riders && m.riders.p) || 0, pb = $('#pendBanner');
+  pb.hidden = !pend;
+  if (pend) pb.textContent = `جاري استكمال تحميل بيانات ${Number(pend).toLocaleString('en')} مندوب (القومي ونقاط البداية والصور) — حدّث الصفحة بعد قليل.`;
+}
+
+/** فشل فك التشفير فعلياً (مفتاح خاطئ/تم تغييره) — وليس خطأ شبكة أو خادم */
+const isWrongKey = (e) => !!e && e.name === 'OperationError';
+async function fetchFresh(path) {
+  const r = await fetch(path + '?t=' + Date.now() + Math.random().toString(36).slice(2, 6), { cache: 'no-store' });
+  if (!r.ok) { const e = new Error('HTTP ' + r.status); e.status = r.status; throw e; }
+  return r.arrayBuffer();
+}
+async function openWithKey(key, fresh) {
+  if (fresh) { const r = await fetch('data/meta.json?t=' + Date.now(), { cache: 'no-store' }); if (r.ok) S.meta = await r.json(); }
+  S.cryptoKey = await deriveAesKey(key, S.meta.salt, S.meta.iter || 150000);
+  return decryptJson(S.cryptoKey, fresh ? await fetchFresh('data/auth.bin') : await fetchBin('data/auth.bin'));
+}
+function failGate(msg) {   // خطأ مؤقت (شبكة/خادم): لا نمسح المفتاح ونعرض إعادة المحاولة
+  gateErr(msg, '<button class="btn" id="retryBoot" style="width:100%">إعادة المحاولة</button>');
+  const b = $('#retryBoot'); if (b) b.onclick = () => boot();
+}
+
+async function boot() {
+  gate('<p><span class="spin"></span></p>');
+  try {
+    const r = await fetch('data/meta.json' + bust(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('nometa');
+    S.meta = await r.json();
+  } catch (_) { return gateErr('التطبيق لم يتم تفعيله بعد — لا توجد بيانات منشورة. تواصل مع المشرف.'); }
+
+  if (!(window.crypto && crypto.subtle)) return gateErr('يجب فتح التطبيق عبر رابط آمن (https) — افتح الرابط من GitHub Pages مباشرة.');
+  const key = getKey();
+  if (!key) return askKey();
+
+  const sess = loadSession();
+  if (!sess) return showSignIn();
+  S.email = sess.email;
+
+  let auth = null;
+  try { auth = await openWithKey(key, false); }
+  catch (e) {
+    let err = e;
+    if (isWrongKey(e)) {   // قبل الحكم بأن المفتاح خاطئ: محاولة واحدة بملفات طازجة (قد يكون السبب كاشاً قديماً)
+      try { auth = await openWithKey(key, true); err = null; } catch (e2) { err = e2; }
+    }
+    if (!auth) {
+      console.warn('captain: decrypt/auth failed', err);
+      if (isWrongKey(err)) { forgetKey(); return askKey('تنبيه: مفتاح الوصول غير صحيح أو تم تغييره. أدخل المفتاح الجديد.'); }   // الحالة الوحيدة التي يُمسح فيها المفتاح
+      if (err && err.status) return failGate('تعذر تحميل البيانات (' + err.status + ') — حاول لاحقاً.');
+      return failGate('تعذر الاتصال بالخادم أو قراءة البيانات — تحقق من الإنترنت ثم أعد المحاولة. (مفتاحك محفوظ)');
+    }
+  }
+  if (!(auth.e || []).includes(S.email)) return denied(S.email);
+  S.bridgeSecret = auth.b || '';   // سر جسر البحث اللحظي (يأتي مشفّراً داخل auth.bin)
+  try { await loadData(); }
+  catch (_) { return failGate('تعذر قراءة البيانات — حاول التحديث بعد قليل.'); }
+
+  $('#gate').hidden = true;
+  $('#app').hidden = false;
+  renderMeta();
+  S.sig = metaSig(S.meta);
+  rqInit();
+  hubInitCaptain();
+  if ($('#rq').value) doRiderSearch(); 
+  if ($('#oq').value) doOrderSearch();
+}
+
+// ============================ الصور ============================
+function getPack(b) {
+  if (!S.packs.has(b)) {
+    S.packs.set(b, (async () => {
+      try {
+        const u8 = await decryptBytes(S.cryptoKey, await fetchBin(`data/photos/p${b}.bin`));
+        const out = new Map();
+        parsePhotoPack(u8).forEach((bytes, id) => out.set(id, new Blob([bytes], { type: 'image/jpeg' })));
+        return out;
+      } catch (_) { return new Map(); }
+    })());
+  }
+  return S.packs.get(b);
+}
+async function getPhotoBlob(id) {
+  const b = Number(id) % (S.meta.buckets || 64);
+  const pack = await getPack(b);
+  return pack.get(String(id)) || null;
+}
+async function getPhotoUrl(id) {
+  const k = String(id);
+  if (S.urls.has(k)) return S.urls.get(k);
+  const blob = await getPhotoBlob(k);
+  if (!blob) return null;
+  const u = URL.createObjectURL(blob);
+  S.urls.set(k, u);
+  return u;
+}
+const io = 'IntersectionObserver' in window ? new IntersectionObserver((ents) => {
+  ents.forEach(async (en) => {
+    if (!en.isIntersecting) return;
+    io.unobserve(en.target);
+    const el = en.target, id = el.dataset.pid;
+    const u = await getPhotoUrl(id);
+    if (u && el.isConnected) { el.innerHTML = `<img alt="" src="${u}">`; el.classList.remove('none'); }
+    else if (el.isConnected) { el.classList.add('none'); el.innerHTML = monogram(el.dataset.nm); el.dataset.pid = ''; }
+  });
+}, { rootMargin: '300px' }) : null;
+function hydratePhotos(root) {
+  $$('.pic[data-pid]', root).forEach((el) => {
+    if (!el.dataset.pid) return;
+    if (io) io.observe(el);
+    else getPhotoUrl(el.dataset.pid).then((u) => { if (u) el.innerHTML = `<img alt="" src="${u}">`; });
+  });
+  // v54: مندوب بلا صورة/تفاصيل (!r.h || r.g) ← طلب لحظي R:<id> تلقائياً (حتى 3 بطاقات؛ وغير ذلك بزر على كل بطاقة)
+  if (liveEnabled()) {
+    const need = $$('.card.rider[data-live]', root);
+    if (need.length && need.length <= 3) need.forEach((el) => triggerLiveRider(el.dataset.rid));
+  }
+}
+async function copyPhoto(id) {
+  const blob = await getPhotoBlob(id);
+  if (!blob) return toast('لا توجد صورة لهذا المندوب');
+  try {
+    const bmp = await createImageBitmap(blob);
+    const c = document.createElement('canvas');
+    c.width = bmp.width; c.height = bmp.height;
+    c.getContext('2d').drawImage(bmp, 0, 0);
+    const png = await new Promise((r) => c.toBlob(r, 'image/png'));
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': png })]);
+    toast('تم نسخ الصورة');
+  } catch (_) {
+    openLightbox(id, 'تعذر النسخ التلقائي على هذا المتصفح — اضغط مطولاً على الصورة ثم اختر "نسخ" أو "حفظ".');
+  }
+}
+async function openLightbox(id, note) {
+  const u = await getPhotoUrl(id);
+  if (!u) return;
+  const lb = $('#lb');
+  lb.innerHTML = `<img alt="" src="${u}"><div class="hint" style="color:#ddd;text-align:center">${esc(note || 'اضغط مطولاً على الصورة للنسخ أو الحفظ')}</div>
+    <div class="row"><button class="btn" data-lb="copy">نسخ الصورة</button><button class="btn ghost" data-lb="close">إغلاق</button></div>`;
+  lb.hidden = false;
+  lb.dataset.pid = id;
+}
+
+// ============================ بطاقة المندوب ============================
+function statusBadges(r) {
+  const { cur, next } = suspState(r);
+  const sp = Array.isArray(r.s) && r.s.length;
+  const parts = [];
+  if (cur) parts.push(`<span class="b bad">موقوف</span>`);
+  else if (r.a) parts.push(`<span class="b ok">نشط وشغال</span>`);
+  else parts.push(`<span class="b mut">غير نشط</span>`);
+  if (r.g && !sp) parts.push(`<span class="b mut">SP قيد التحميل</span>`);
+  else parts.push(sp ? `<span class="b ok">WITH SP</span>` : `<span class="b warn">تنبيه: WITHOUT SP</span>`);
+  if (r.x) parts.push(`<span class="b mut">خارج الزونات المختارة</span>`);
+  let note = '';
+  if (cur) note = `الإيقاف ينتهي: <span class="ltr">${esc(fmtDT(cur.e))}</span> (بدأ ${esc(fmtDT(cur.s))})`;
+  else if (next) note = `إيقاف مجدول يبدأ: <span class="ltr">${esc(fmtDT(next.s))}</span> ← ${esc(fmtDT(next.e))}`;
+  return { badges: parts.join(''), note };
+}
+
+function riderText(r) {
+  const { cur, next } = suspState(r);
+  const sp = Array.isArray(r.s) && r.s.length;
+  const phone = r.p ? '+' + intlPhone(r.p) : '—';
+  let work = r.a ? 'نشط وشغال' : 'غير نشط';
+  if (cur) work = `موقوف حتى ${fmtDT(cur.e)}`;
+  else if (next) work += ` (إيقاف مجدول يبدأ ${fmtDT(next.s)})`;
+  return [
+    `الاسم: ${r.n || '—'}`,
+    `الكود: ${r.i}`,
+    `الموبايل: ${phone}`,
+    `الرقم القومي: ${r.d || '—'}`,
+    `نمرة المكنة: ${r.l || '—'}`,
+    `نقطة البداية: ${(r.g && !sp) ? 'قيد التحميل' : (sp ? 'WITH SP (' + r.s.join('، ') + ')' : 'WITHOUT SP')}`,
+    `الحالة: ${work}`
+  ].join('\n');
+}
+
+function fieldRow(label, val) {
+  if (val == null || val === '') return '';
+  return `<div class="f" data-copy="${esc(val)}"><span class="k">${esc(label)}</span><span class="v">${esc(val)}</span><span class="cp"><i class="ic ic-copy"></i></span></div>`;
+}
+
+/** بطاقة مندوب كاملة. extra = HTML إضافي يوضع أسفل الحقول */
+function riderCard(r, extra) {
+  const id = String(r.i);
+  const sb = statusBadges(r);
+  const phone = r.p ? '+' + intlPhone(r.p) : '';
+  const wa = r.p ? `https://wa.me/${intlPhone(r.p)}` : '';
+  const sp = Array.isArray(r.s) && r.s.length ? r.s.join('، ') : '';
+  const canLive = liveEnabled() && (!r.h || r.g);          // صورته أو تفاصيله غير محمّلة
+  const autoLive = canLive && !r._live;
+  return `<div class="card rider" data-rid="${esc(id)}"${autoLive ? ' data-live="1"' : ''}>
+    <div class="rh">
+      <div class="ph">
+        <div class="pic ${r.h ? '' : 'none'}" data-nm="${esc(r.n || '')}" data-pid="${r.h ? esc(id) : ''}" ${r.h ? 'data-zoom="' + esc(id) + '"' : ''}>${r.h ? '<span class="spin"></span>' : monogram(r.n)}</div>
+      </div>
+      <div class="ri">
+        <h3>${esc(r.n || '—')}</h3>
+        <div class="badges">${sb.badges}${hubBadges(r)}</div>
+        ${sb.note ? `<div class="suspnote">${sb.note}</div>` : ''}
+      </div>
+    </div>
+    <div class="fields">
+      ${fieldRow('الكود (ID)', id)}
+      ${fieldRow('الموبايل', phone)}
+      ${fieldRow('الرقم القومي', r.d)}
+      ${fieldRow('نمرة المكنة', r.l)}
+      ${fieldRow('نقطة البداية', (r.g && !sp) ? 'قيد التحميل' : (sp || 'WITHOUT SP'))}
+      ${r.g && !r.d ? fieldRow('الرقم القومي', 'قيد التحميل') : ''}
+      ${fieldRow('الشركة', r.c)}
+    </div>
+    ${extra || ''}
+    <div class="acts">
+      <button class="btn" data-act="copyRider" data-id="${esc(id)}">نسخ البيانات</button>
+      ${liveEnabled() ? `<button class="btn ghost" data-act="reqSusp" data-id="${esc(id)}">طلب إيقاف</button>` : ''}
+      ${canLive ? `<button class="btn ghost" data-act="liveRider" data-id="${esc(id)}">تحميل الصورة والتفاصيل</button>` : ''}
+      ${r.h ? `<button class="btn ghost" data-act="copyPhoto" data-id="${esc(id)}">نسخ الصورة</button>` : ''}
+      ${phone ? `<a class="btn ok" href="tel:${esc(phone)}">اتصال</a><a class="btn blue" href="${esc(wa)}" target="_blank" rel="noopener">واتساب</a>` : ''}
+    </div>
+  </div>`;
+}
+
+// ============================ بحث المناديب ============================
+
+// ============================ بحث الأوردرات ============================
+const STATES = {
+  created: 'تم إنشاؤه', dispatched: 'تم الإسناد', accepted: 'قبل الأوردر', near_pickup: 'قرب من المطعم', arrived_at_pickup: 'وصل المطعم',
+  picked_up: 'استلم الأوردر', left_pickup: 'غادر المطعم', near_dropoff: 'قرب من العميل', arrived_at_dropoff: 'وصل للعميل',
+  completed: 'أنهى التوصيل', delivered: 'تم التوصيل', cancelled: 'ملغي خطأ: ', returned: 'مرتجع', ended: 'انتهى (لم تُحسم حالته بعد)'
+};
+const stateAr = (s) => (s && (STATES[String(s).toLowerCase()] || s)) || '';
+
+/** يستخرج أكواد الأوردرات من نص حر: أرقام عربية/فارسية ← إنجليزية، حذف HF_EG وأي رموز أو مسافات، ويدعم أكثر من كود */
+function parseOrderCodes(raw) {
+  const s = latin(raw).replace(/HF[\s_\-]*EG/gi, ' ');
+  const toks = s.split(/[\s,;،\n\r\t]+/).map((t) => t.replace(/\D/g, '')).filter((t) => t.length >= 6);
+  if (toks.length) return [...new Set(toks)].slice(0, 10);
+  const all = s.replace(/\D/g, '');   // كود مكتوب بمسافات/شرطات بين أجزائه
+  return all.length >= 6 ? [all] : [];
+}
+const entryRider = (x) => (x && x.i != null ? S.byId.get(String(x.i)) : null);
+const entryName = (x) => { const r = entryRider(x); return (r && r.n) || (x && x.n) || (x && x.i != null ? 'كود ' + x.i : 'مندوب غير معروف'); };
+
+/** كارت أوردر: ملخص الأساسي/الشريك ثم بطاقة كاملة لكل مندوب (الأساسي أولاً ثم الشريك/البديل زمنياً) */
+function orderCardHtml(o) {
+  const riders = (o.r || []).slice().sort((a, b) => (a.role === 'partner' ? 1 : 0) - (b.role === 'partner' ? 1 : 0));   // ترتيب ثابت: الأساسي أولاً
+  const prim = riders.filter((x) => x.role !== 'partner'), part = riders.filter((x) => x.role === 'partner');
+  const copyAll = riders.length ? `<button class="btn" data-act="copyOrder" data-code="${esc(o.c)}">نسخ بيانات كل المناديب</button>` : '';
+  const summary = riders.length
+    ? `<div class="osum"><div>الأساسي: <b>${esc(prim.map(entryName).join('، ') || '—')}</b></div>
+       <div>الشريك / البديل: <b>${esc(part.map(entryName).join('، ') || 'لا يوجد مسجل في الأرشيف')}</b></div></div>` : '';
+  let html = `<div class="card"><div class="ohead"><h2>أوردر <span class="ltr">${esc(o.c)}</span></h2>${o.s ? `<span class="b">${esc(stateAr(o.s))}</span>` : ''}</div>
+    <div class="hint">${o.t ? 'وقت الأوردر: <span class="ltr">' + esc(fmtDT(o.t)) + '</span> · ' : ''}عدد المناديب على الأوردر: <b>${riders.length}</b></div>${summary}${copyAll ? `<div class="acts">${copyAll}</div>` : ''}</div>`;
+  if (!riders.length) html += '<div class="banner warn">لا يوجد مندوب مسجل على هذا الأوردر.</div>';
+  let pn = 0;
+  riders.forEach((x) => {
+    const partner = x.role === 'partner';
+    if (partner) pn++;
+    const lab = partner ? `المندوب الشريك / البديل${part.length > 1 ? ' #' + pn : ''} (Partner / Re-assigned)` : 'المندوب الأساسي (Primary / First)';
+    const r = entryRider(x);
+    const prog = `<div class="ostat">${x.ls ? 'آخر حالة على الأوردر: <b>' + esc(stateAr(x.ls)) + '</b>' : ''}${x.fa ? ' · أول ظهور: <span class="ltr">' + esc(fmtDT(x.fa)) + '</span>' : ''}</div>`;
+    html += `<div class="role ${partner ? 'partner' : ''}">${lab}</div><div class="rider-box">`;
+    if (r) html += riderCard(r, prog);
+    else {   // مندوب غير موجود في القاعدة: نعرض ما سجله الأوردر
+      const phone = x.p ? '+' + intlPhone(x.p) : '';
+      html += `<div class="card"><div class="ri"><h3>${esc(x.n || 'مندوب غير معروف')}</h3></div>
+        <div class="fields">${fieldRow('الكود (ID)', x.i != null ? String(x.i) : '')}${fieldRow('الموبايل', phone)}</div>${prog}
+        <div class="hint" style="margin-top:6px">بيانات هذا المندوب الكاملة غير متاحة في آخر مزامنة.</div>
+        ${phone ? `<div class="acts"><a class="btn ok" href="tel:${esc(phone)}">اتصال</a><a class="btn blue" href="https://wa.me/${esc(intlPhone(x.p))}" target="_blank" rel="noopener">واتساب</a></div>` : ''}</div>`;
+    }
+    html += '</div>';
+  });
+  return html;
+}
+
+
+// ============================ البحث اللحظي عن الأوردرات القديمة (جسر Google Apps Script) ============================
+const LIVE = { jobs: new Map(), fail: new Map() };
+const sleepMs = (ms) => new Promise((r) => setTimeout(r, ms));
+const liveEnabled = () => !!(S.meta && S.meta.bridge && S.bridgeSecret);
+async function bridgeCall(params) {
+  const u = new URL(S.meta.bridge);
+  Object.entries({ ...params, secret: S.bridgeSecret }).forEach(([k, v]) => u.searchParams.set(k, v));
+  const r = await fetch(u.toString(), { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const j = await r.json();
+  if (!j || j.ok === false) throw new Error((j && j.error) || 'bad-response');
+  return j;
+}
+/** يطلب كوداً من الجسر (أوردر قديم أو R:<id> لمندوب) ثم يستعلم كل ثانيتين حتى 20 ثانية.
+ *  يرجع الحمولة المفكوكة (مشفّرة بمفتاح الوصول) أو 'timeout' | 'error' */
+async function liveRaw(code) {
+  try {
+    let res = await bridgeCall({ action: 'request', code });
+    for (let i = 0; i < 10 && res.status !== 'ready'; i++) {
+      await sleepMs(2000);
+      res = await bridgeCall({ action: 'result', code });
+      if (res.status === 'none') res = await bridgeCall({ action: 'request', code });   // انتهى الطلب من الطابور: أعد إرساله
+    }
+    if (res.status !== 'ready') return 'timeout';
+    return await decryptJson(S.cryptoKey, Uint8Array.from(atob(res.data), (c) => c.charCodeAt(0)));
+  } catch (e) { console.warn('live lookup failed', e); return 'error'; }
+}
+const b64Blob = (b) => new Blob([Uint8Array.from(atob(b), (c) => c.charCodeAt(0))], { type: 'image/jpeg' });
+/** أوردر غير موجود محلياً: يرجع 'ok' | 'nf' | 'timeout' | 'error' */
+function liveLookup(code) {
+  if (LIVE.jobs.has(code)) return LIVE.jobs.get(code);
+  const job = (async () => {
+    const p = await liveRaw(code);
+    if (typeof p === 'string') return p;
+    if (p.nf || !p.o) return 'nf';
+    (p.r || []).forEach((r) => { if (r.i != null && p.ph && p.ph[String(r.i)]) r.h = 1; r.g = 0; });
+    buildIndex(p.r || []).forEach((v, k) => S.byId.set(k, v));
+    Object.entries(p.ph || {}).forEach(([id, b]) => { try { S.urls.set(String(id), URL.createObjectURL(b64Blob(b))); } catch (_) {} });   // الصور تُعرض مباشرة
+    S.orders.set(String(p.o.c), p.o);
+    return 'ok';
+  })();
+  LIVE.jobs.set(code, job);
+  job.finally(() => LIVE.jobs.delete(code));
+  return job;
+}
+/** مندوب بلا صورة/تفاصيل: كود R:<id> → تفاصيله الكاملة وصورته من Rooster عبر الإضافة */
+function liveRider(id) {
+  id = String(id);
+  const key = 'R:' + id;
+  if (LIVE.jobs.has(key)) return LIVE.jobs.get(key);
+  const job = (async () => {
+    const p = await liveRaw(key);
+    const r = S.byId.get(id);
+    if (r) r._live = 1;                               // لا إعادة محاولة تلقائية (الزر اليدوي يعيدها)
+    if (typeof p === 'string') return p;
+    if (p.nf || !p.r) return 'nf';
+    const got = p.ph && p.ph[id];
+    if (!got) delete p.r.h;                           // لا نمسح صورة موجودة من الحزم
+    if (r) Object.assign(r, p.r, { g: 0, _live: 1 });
+    if (got) { try { S.urls.set(id, URL.createObjectURL(b64Blob(got))); } catch (_) {} if (r) r.h = 1; }
+    return 'ok';
+  })();
+  LIVE.jobs.set(key, job);
+  job.finally(() => LIVE.jobs.delete(key));
+  return job;
+}
+let rerT = null;
+function rerenderSoon() {
+  clearTimeout(rerT);
+  rerT = setTimeout(() => { if ($('#v-orders').classList.contains('on')) doOrderSearch(); else doRiderSearch(); }, 150);
+}
+function triggerLiveRider(id) { liveRider(id).then(rerenderSoon); }
+const LIVE_MSG = {
+  nf: 'الأوردر غير موجود في النظام (تأكد من الكود).',
+  timeout: 'لم يصل رد خلال 20 ثانية — قد يكون جهاز المشرف مغلقاً أو الإضافة غير شغالة. حاول بعد قليل.',
+  error: 'تعذر الاتصال بجسر البحث اللحظي — حاول لاحقاً.'
+};
+
+function doOrderSearch() {
+  const out = $('#oOut');
+  const raw = $('#oq').value;
+  if (!raw.trim()) { out.innerHTML = '<div class="empty"><div class="big"><i class="ic ic-box"></i></div>اكتب كود الأوردر لعرض المناديب المرتبطين به</div>'; return; }
+  const codes = parseOrderCodes(raw);   // تنظيف: أرقام عربية ← إنجليزية، حذف HF_EG والرموز، قبل البحث في S.orders
+  if (!codes.length) { out.innerHTML = '<div class="empty"><div class="big"><i class="ic ic-hash"></i></div>كود الأوردر 6 أرقام على الأقل.</div>'; return; }
+  out.innerHTML = codes.map((code) => {
+    const o = S.orders.get(code);
+    if (o) return orderCardHtml(o);
+    if (liveEnabled()) {   // أوردر أقدم من الأرشيف المحلي: بحث لحظي عبر الجسر
+      const f = LIVE.fail.get(code);
+      if (f) return `<div class="empty"><div class="big"><i class="ic ic-search"></i></div>الأوردر <b class="ltr">${esc(code)}</b>: ${esc(LIVE_MSG[f] || LIVE_MSG.error)}<br><button class="btn sm" style="margin-top:8px" data-act="liveRetry" data-code="${esc(code)}">إعادة المحاولة</button></div>`;
+      liveLookup(code).then((st) => {
+        if (st !== 'ok') LIVE.fail.set(code, st);
+        if (parseOrderCodes($('#oq').value).includes(code)) doOrderSearch();
+      });
+      return `<div class="empty"><span class="spin"></span><br>جاري جلب الأوردر القديم <b class="ltr">${esc(code)}</b> من النظام… <span class="hint">(حتى 20 ثانية)</span></div>`;
+    }
+    return `<div class="empty"><div class="big"><i class="ic ic-search"></i></div>الأوردر <b class="ltr">${esc(code)}</b> غير موجود في الأرشيف المحلي.<br><span class="hint">تأكد من الكود، أو اطلب من المشرف تحديث البيانات.</span></div>`;
+  }).join('');
+  hydratePhotos(out);
+}
+function orderText(o) {
+  const lines = [`أوردر: ${o.c}${o.s ? ' (' + stateAr(o.s) + ')' : ''}`];
+  (o.r || []).forEach((x) => {
+    const r = x.i != null ? S.byId.get(String(x.i)) : null;
+    lines.push('', x.role === 'partner' ? 'المندوب الشريك / البديل' : 'المندوب الأساسي');
+    lines.push(r ? riderText(r) : `الاسم: ${x.n || '—'}\nالكود: ${x.i != null ? x.i : '—'}\nالموبايل: ${x.p ? '+' + intlPhone(x.p) : '—'}`);
+  });
+  return lines.join('\n');
+}
+
+// ============================ الأحداث ============================
+document.addEventListener('click', (e) => {
+  const lbBtn = e.target.closest('[data-lb]');
+  if (lbBtn) {
+    if (lbBtn.dataset.lb === 'copy') copyPhoto($('#lb').dataset.pid);
+    else $('#lb').hidden = true;
+    return;
+  }
+  if (e.target.id === 'lb') { $('#lb').hidden = true; return; }
+
+  const z = e.target.closest('[data-zoom]');
+  if (z) { openLightbox(z.dataset.zoom); return; }
+
+  const act = e.target.closest('[data-act]');
+  if (act) {
+    const a = act.dataset.act;
+    if (a === 'copyRider') { const r = S.byId.get(act.dataset.id); if (r) copyText(riderText(r)); }
+    else if (a === 'copyPhoto') copyPhoto(act.dataset.id);
+    else if (a === 'liveRider') { const rr = S.byId.get(act.dataset.id); if (rr) rr._live = 0; toast('جاري تحميل بيانات المندوب…'); triggerLiveRider(act.dataset.id); }
+    else if (a === 'liveRetry') { LIVE.fail.delete(act.dataset.code); doOrderSearch(); }
+    else if (a === 'reqSusp') openReq(act.dataset.id);
+    else if (a === 'copyOrder') { const o = S.orders.get(act.dataset.code); if (o) copyText(orderText(o)); }
+    return;
+  }
+  const f = e.target.closest('[data-copy]');
+  if (f) { copyText(f.dataset.copy); return; }
+
+  const nav = e.target.closest('nav button');
+  if (nav) {
+    $$('nav button').forEach((b) => b.classList.toggle('on', b === nav));
+    $$('.view').forEach((v) => v.classList.toggle('on', v.id === 'v-' + nav.dataset.v));
+    window.scrollTo({ top: 0 });
+  }
+});
+$('#rGo').onclick = doRiderSearch;
+$('#oGo').onclick = doOrderSearch;
+$('#rq').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doRiderSearch(); $('#rq').blur(); } });
+$('#oq').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doOrderSearch(); $('#oq').blur(); } });
+let rT = null;
+$('#rq').addEventListener('input', () => { clearTimeout(rT); rT = setTimeout(doRiderSearch, 120); });
+let oT = null;
+$('#oq').addEventListener('input', () => { clearTimeout(oT); oT = setTimeout(() => { const v = $('#oq').value; if (!v.trim() || parseOrderCodes(v).length) doOrderSearch(); }, 400); });
+$('#logoutBtn').onclick = logout;
+// ============================ تحديث تلقائي (بدون Ctrl+Shift+R) ============================
+const hashStr = (s) => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return String(h); };
+const metaSig = (m) => JSON.stringify([m && m.riders && m.riders.t, m && m.orders && m.orders.t, m && m.archive && m.archive.h, m && m.bridge, m && m.salt]);
+async function refreshData(silent) {
+  if (!silent) toast('جاري تحديث البيانات…');
+  try {
+    const r = await fetch('data/meta.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) S.meta = await r.json();
+    await loadData();
+    renderMeta(); S.sig = metaSig(S.meta); doRiderSearch(); doOrderSearch();
+    if (!silent) toast('تم التحديث');
+  } catch (_) { if (!silent) toast('تعذر التحديث — حاول لاحقاً'); }
+}
+$('#refreshBtn').onclick = () => refreshData(false);
+
+let APP_HASH = null, checking = false;
+/** يقارن كود الصفحة الحالي بآخر نسخة على GitHub: لو اختلف يعيد التحميل تلقائياً. ويحدّث البيانات بصمت لو تغيّر meta.json */
+async function checkUpdates() {
+  if (checking || document.hidden) return;
+  checking = true;
+  try {
+    const r = await fetch(location.pathname + '?v=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const h = hashStr(await r.text());
+      if (APP_HASH === null) APP_HASH = h;
+      else if (h !== APP_HASH) { toast('تحديث جديد للتطبيق — جاري التحميل…'); setTimeout(() => location.reload(), 800); return; }
+    }
+    if (!$('#app').hidden) {
+      const m = await fetch('data/meta.json?t=' + Date.now(), { cache: 'no-store' });
+      if (m.ok) { const mj = await m.json(); if (metaSig(mj) !== S.sig) { S.meta = mj; await refreshData(true); } }
+    }
+  } catch (_) { /* لا اتصال: نحاول لاحقاً */ } finally { checking = false; }
+}
+setTimeout(checkUpdates, 1500);
+setInterval(checkUpdates, 5 * 60 * 1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdates(); });
+window.addEventListener('online', checkUpdates);
+
+if ('serviceWorker' in navigator) {   // sw.js: Network-First — أي تحديث على GitHub يصل للكباتن تلقائياً
+  const hadCtl = !!navigator.serviceWorker.controller;
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadCtl && !reloading) { reloading = true; toast('تحديث جديد للتطبيق - جاري إعادة التحميل...'); setTimeout(() => location.reload(), 1200); } });
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' })
+    .then((reg) => { reg.update().catch(() => {}); setInterval(() => reg.update().catch(() => {}), 5 * 60 * 1000); })
+    .catch(() => {});
+}
+
+// ============================ v63: طلب إيقاف مندوب (كاميرا / معرض / طارئ / Outbox) ============================
+const IC = (n) => '<i class="ic ic-' + n + '"></i>';
+function monogram(name) {
+  const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+  const ini = (parts[0] ? Array.from(parts[0])[0] : '') + (parts[1] ? Array.from(parts[1])[0] : '');
+  if (!ini) return IC('user');
+  let h = 0;
+  for (const c of String(name)) h = (h * 31 + c.codePointAt(0)) % 360;
+  return '<span class="mono" style="--h:' + h + '">' + esc(ini.toUpperCase()) + '</span>';
+}
+
+const RQ = { photo: null, busy: false, urgent: false };
+const RQ_LS = 'cap_reqs', RQ_OUT = 'cap_outbox', RQ_CD = 'cap_rq_cd';
+const RQ_COOLDOWN_MS = 10 * 60 * 1000;
+const RQ_PHOTO_MAX = 80000;
+const RQ_ST = { sent: 'تم الإرسال للمنسق', queued: 'بانتظار الاتصال - سيُرسل تلقائياً', failed: 'فشل الإرسال' };
+const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (_) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (_) { return false; } };
+
+function showView(v) {
+  $$('nav button').forEach((b) => b.classList.toggle('on', b.dataset.v === v));
+  $$('.view').forEach((x) => x.classList.toggle('on', x.id === 'v-' + v));
+  window.scrollTo({ top: 0 });
+}
+
+// ---- ضغط الصورة: WebP (أو JPEG لو المتصفح لا يدعم ترميز WebP) أقل من 80KB ----
+function loadImg(file) {
+  return new Promise((res, rej) => {
+    const u = URL.createObjectURL(file);
+    const im = new Image();
+    im.onload = () => { URL.revokeObjectURL(u); res(im); };
+    im.onerror = () => { URL.revokeObjectURL(u); rej(new Error('bad-image')); };
+    im.src = u;
+  });
+}
+const cvBlob = (cv, type, q) => new Promise((res) => cv.toBlob(res, type, q));
+async function compressImage(file) {
+  const im = await loadImg(file);
+  const w0 = im.naturalWidth || im.width, h0 = im.naturalHeight || im.height;
+  if (!w0 || !h0) throw new Error('bad-image');
+  let maxSide = 1280, type = 'image/webp';
+  for (let step = 0; step < 6; step++) {
+    const sc = Math.min(1, maxSide / Math.max(w0, h0));
+    const cv = document.createElement('canvas');
+    cv.width = Math.max(1, Math.round(w0 * sc));
+    cv.height = Math.max(1, Math.round(h0 * sc));
+    cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
+    for (let q = 0.8; q >= 0.3; q -= 0.1) {
+      let b = await cvBlob(cv, type, q);
+      if (b && type === 'image/webp' && b.type !== 'image/webp') { type = 'image/jpeg'; b = await cvBlob(cv, type, q); }
+      if (b && b.size <= RQ_PHOTO_MAX) return { blob: b, w: cv.width, h: cv.height };
+    }
+    maxSide = Math.round(maxSide * 0.75);
+  }
+  throw new Error('too-big');
+}
+function rqClearPhoto() {
+  if (RQ.photo && RQ.photo.url) { try { URL.revokeObjectURL(RQ.photo.url); } catch (_) {} }
+  RQ.photo = null;
+  $('#rqPrev').hidden = true;
+  $('#rqImg').removeAttribute('src');
+}
+async function rqAttach(file, src) {
+  if (!file) return;
+  toast('جاري تجهيز الصورة...');
+  try {
+    const out = await compressImage(file);
+    rqClearPhoto();
+    const url = URL.createObjectURL(out.blob);
+    RQ.photo = { blob: out.blob, url, src, capAt: src === 'camera' ? Date.now() : (file.lastModified || Date.now()) };
+    $('#rqImg').src = url;
+    $('#rqPrev').hidden = false;
+    $('#rqImgInfo').textContent = (src === 'camera' ? 'تصوير مباشر' : 'من المعرض') + ' - ' + Math.round(out.blob.size / 1024) + ' KB - ' + (out.blob.type === 'image/webp' ? 'WebP' : 'JPEG');
+  } catch (_) { toast('تعذر تجهيز الصورة - جرّب صورة أخرى'); }
+}
+
+// ---- التشفير بمفتاح الوصول (AES-GCM) — نفس اشتقاق المفتاح المستخدم لباقي الملفات ----
+let REQ_KEY = null;
+async function reqKey() {
+  if (REQ_KEY) return REQ_KEY;
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(getKey()), 'PBKDF2', false, ['deriveBits']);
+  const bits = new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: b64(S.meta.salt), iterations: S.meta.iter || 150000, hash: 'SHA-256' }, base, 512));
+  REQ_KEY = await crypto.subtle.importKey('raw', bits.slice(0, 32), 'AES-GCM', false, ['encrypt', 'decrypt']);
+  return REQ_KEY;
+}
+async function gzipBytes(u8) {
+  if (typeof CompressionStream === 'undefined') return u8;
+  const cs = new CompressionStream('gzip');
+  const w = cs.writable.getWriter();
+  w.write(u8); w.close();
+  return new Uint8Array(await new Response(cs.readable).arrayBuffer());
+}
+async function sealBytes(u8) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await reqKey(), u8));
+  const out = new Uint8Array(12 + ct.length);
+  out.set(iv); out.set(ct, 12);
+  return out;
+}
+const toB64 = (u8) => { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
+
+// ---- الإرسال للجسر ----
+async function postReq(p) {
+  const r = await fetch(S.meta.bridge, {
+    method: 'POST', cache: 'no-store',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'sreq', secret: S.bridgeSecret, id: p.id, data: p.data, ph: p.ph || '' })
+  });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const j = await r.json();
+  if (!j || j.ok === false) { const e = new Error((j && j.error) || 'bad-response'); e.fatal = true; throw e; }
+  return j;
+}
+const RQ_ERR = { 'queue-full': 'قائمة الطلبات ممتلئة حالياً - حاول بعد قليل', 'bad-data-size': 'نص الطلب طويل جداً - اختصر التفاصيل', 'bad-photo-size': 'الصورة كبيرة - اختر صورة أخرى', unauthorized: 'غير مصرح - تواصل مع المشرف' };
+
+function rqHistory(entry) {
+  const list = lsGet(RQ_LS, []).filter((x) => x.id !== entry.id);
+  list.unshift(entry);
+  lsSet(RQ_LS, list.slice(0, 20));
+}
+function rqSetStatus(id, st) {
+  const list = lsGet(RQ_LS, []);
+  const x = list.find((y) => y.id === id);
+  if (x) { x.st = st; lsSet(RQ_LS, list); }
+}
+function rqRenderList() {
+  const box = $('#rqList');
+  const list = lsGet(RQ_LS, []);
+  if (!list.length) { box.innerHTML = '<div class="hint">لا توجد طلبات مرسلة من هذا الجهاز بعد.</div>'; return; }
+  box.innerHTML = list.map((x) => `<div class="rqi ${esc(x.st)}"><div><b>${esc(x.rn || 'مندوب')}</b> <span class="ltr">${esc(x.rid)}</span>${x.urgent ? ' <span class="b bad">طارئ</span>' : ''}</div><div class="hint">${esc(fmtDT(x.at))} - ${esc(RQ_ST[x.st] || x.st)}${x.ord ? ' - أوردر <span class="ltr">' + esc(x.ord) + '</span>' : ''}</div></div>`).join('');
+}
+
+let FLUSHING = false;
+async function flushOutbox() {
+  if (FLUSHING || !navigator.onLine || !liveEnabled()) return;
+  FLUSHING = true;
+  try {
+    const q = lsGet(RQ_OUT, []);
+    while (q.length) {
+      const it = q[0];
+      try { await postReq(it); rqSetStatus(it.id, 'sent'); q.shift(); lsSet(RQ_OUT, q); }
+      catch (e) {
+        if (e && e.fatal) { rqSetStatus(it.id, 'failed'); q.shift(); lsSet(RQ_OUT, q); }
+        else break;
+      }
+    }
+  } finally { FLUSHING = false; rqRenderList(); }
+}
+
+function rqReset() {
+  ['#rqRid', '#rqOrd', '#rqTxt'].forEach((s) => { $(s).value = ''; });
+  $('#rqDur').value = '24h';
+  $$('#rqTags .chip').forEach((b) => b.classList.remove('on'));
+  RQ.urgent = false;
+  $('#rqUrg').classList.remove('on');
+  $('#rqUrg').setAttribute('aria-pressed', 'false');
+  $('#rqWho').textContent = '';
+  rqClearPhoto();
+}
+
+async function rqSubmit() {
+  if (RQ.busy) return;
+  if (!liveEnabled()) return toast('خدمة إرسال الطلبات غير مفعّلة - تواصل مع المشرف');
+  const rid = digitsOf($('#rqRid').value);
+  if (!/^\d{5,9}$/.test(rid)) return toast('اكتب كود المندوب (من 5 إلى 9 أرقام)');
+  const rawOrd = latin($('#rqOrd').value).trim();
+  const ord = rawOrd ? digitsOf(rawOrd.replace(/^HF[_\s-]?EG/i, '')) : '';
+  if (rawOrd && !/^\d{6,14}$/.test(ord)) return toast('رقم الأوردر غير صحيح - اتركه فارغاً أو اكتب 6 إلى 14 رقماً');
+  const txt = $('#rqTxt').value.trim();
+  const tags = $$('#rqTags .chip.on').map((b) => b.dataset.tag);
+  if (!txt && !tags.length && !RQ.urgent) return toast('اكتب التفاصيل أو اختر نوع المخالفة');
+  const cd = lsGet(RQ_CD, {});
+  const left = (cd[rid] || 0) + RQ_COOLDOWN_MS - Date.now();
+  if (left > 0) return toast('تم إرسال طلب لنفس المندوب منذ قليل - انتظر ' + Math.ceil(left / 60000) + ' دقيقة');
+
+  RQ.busy = true;
+  const btn = $('#rqSend');
+  btn.disabled = true; btn.textContent = 'جاري الإرسال...';
+  try {
+    const r = S.byId.get(rid);
+    const id = 'q' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const meta = {
+      v: 1, id, rid, rn: (r && r.n) || '', ord,
+      dur: $('#rqDur').value, tags, urgent: RQ.urgent, txt,
+      zone: r && Array.isArray(r.s) ? r.s.join(', ') : '',
+      by: S.email, ts: Date.now(),
+      ph: RQ.photo ? { src: RQ.photo.src, type: RQ.photo.blob.type, capAt: RQ.photo.capAt, size: RQ.photo.blob.size } : null
+    };
+    const data = toB64(await sealBytes(await gzipBytes(new TextEncoder().encode(JSON.stringify(meta)))));
+    const ph = RQ.photo ? toB64(await sealBytes(new Uint8Array(await RQ.photo.blob.arrayBuffer()))) : '';
+    const item = { id, data, ph };
+    const entry = { id, rid, rn: meta.rn, ord, urgent: RQ.urgent, at: meta.ts, st: 'sent' };
+    let queued = false;
+    if (!navigator.onLine) queued = true;
+    else {
+      try { await postReq(item); }
+      catch (e) {
+        if (e && e.fatal) { toast(RQ_ERR[e.message] || 'تعذر إرسال الطلب: ' + e.message); return; }
+        queued = true;
+      }
+    }
+    if (queued) {
+      const q = lsGet(RQ_OUT, []);
+      q.push(item);
+      if (!lsSet(RQ_OUT, q.slice(-12))) { toast('تعذر حفظ الطلب على الجهاز - تحقق من المساحة وحاول مجدداً'); return; }
+      entry.st = 'queued';
+    }
+    rqHistory(entry);
+    cd[rid] = Date.now();
+    lsSet(RQ_CD, cd);
+    rqReset();
+    rqRenderList();
+    $('#rqState').textContent = queued ? 'لا يوجد اتصال: تم حفظ الطلب وسيُرسل تلقائياً عند عودة الإنترنت.' : 'تم إرسال الطلب للمنسق.';
+    toast(queued ? 'تم الحفظ - سيُرسل عند عودة الاتصال' : 'تم إرسال الطلب');
+  } catch (e) {
+    toast('تعذر تجهيز الطلب: ' + ((e && e.message) || e));
+  } finally {
+    RQ.busy = false; btn.disabled = false; btn.textContent = 'إرسال الطلب';
+  }
+}
+
+function openReq(id) {
+  $('#rqRid').value = id || '';
+  rqWho();
+  showView('req');
+}
+function rqWho() {
+  const rid = digitsOf($('#rqRid').value);
+  const r = rid ? S.byId.get(rid) : null;
+  $('#rqWho').textContent = r ? (r.n || '') + (Array.isArray(r.s) && r.s.length ? ' - ' + r.s.join(', ') : '') : '';
+}
+function rqInit() {
+  $('#navReq').hidden = !liveEnabled();
+  if ($('#navMy')) $('#navMy').hidden = !liveEnabled();
+  rqRenderList();
+  flushOutbox();
+}
+
+$('#rqCam').onclick = () => $('#rqFileCam').click();
+$('#rqGal').onclick = () => $('#rqFileGal').click();
+$('#rqFileCam').addEventListener('change', (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ''; rqAttach(f, 'camera'); });
+$('#rqFileGal').addEventListener('change', (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ''; rqAttach(f, 'gallery'); });
+$('#rqImgDel').onclick = rqClearPhoto;
+$('#rqSend').onclick = rqSubmit;
+$('#rqRid').addEventListener('input', rqWho);
+$('#rqUrg').onclick = () => {
+  RQ.urgent = !RQ.urgent;
+  $('#rqUrg').classList.toggle('on', RQ.urgent);
+  $('#rqUrg').setAttribute('aria-pressed', String(RQ.urgent));
+};
+$('#rqTags').addEventListener('click', (e) => { const b = e.target.closest('.chip'); if (b) b.classList.toggle('on'); });
+$('#rqInc').addEventListener('click', (e) => {
+  const b = e.target.closest('.chip');
+  if (!b) return;
+  const ta = $('#rqTxt'), t = b.dataset.inc;
+  if (ta.value.includes(t)) return;
+  ta.value = (ta.value.trim() ? ta.value.trim() + '\n' : '') + t;
+});
+window.addEventListener('online', flushOutbox);
+setInterval(flushOutbox, 45000);
+
+// ============================ v64: طلباتي / غائبي اليوم / بحث Worker / زونات / سحب للتحديث ============================
+const RID_LS = 'cap_rid', FEED_LS = 'cap_feed', SEEN_LS = 'cap_seen', ZONE_LS = 'cap_zone';
+const DUR_AR = { '24h': '24 ساعة', '3d': '3 أيام', '7d': 'أسبوع', '365d': 'سنة', inv: 'لحين التحقيق (30 يوماً)' };
+const KIND_AR = { susp: 'إيقاف', pw: 'تغيير باسورد', lift: 'فك إيقاف' };
+const HUBZ = { zone: '' };
+try { HUBZ.zone = localStorage.getItem(ZONE_LS) || ''; } catch (_) { /* private mode */ }
+
+// ---------------------------------------------------------------- closed loop: decisions routed by tag
+async function capTag(kind, value) {
+  const d = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('tlb|' + kind + '|' + getKey() + '|' + String(value).trim().toLowerCase())));
+  return Array.from(d, (b) => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
+}
+async function openJsonB64(key, s) {
+  const u = b64(s);
+  let pt = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: u.slice(0, 12) }, key, u.slice(12)));
+  if (pt.length > 2 && pt[0] === 0x1f && pt[1] === 0x8b) pt = await gunzip(pt);
+  return JSON.parse(dec.decode(pt));
+}
+const PWS = new Map();   // decrypted passwords live in memory only (never written to the DOM until Reveal)
+let FEED_BUSY = false;
+async function myFeedPoll(quiet) {
+  if (FEED_BUSY || !liveEnabled() || !navigator.onLine) return;
+  FEED_BUSY = true;
+  try {
+    const tags = [await capTag('E', S.email)];
+    const rid = lsGet(RID_LS, '');
+    if (rid) tags.push(await capTag('R', rid));
+    const key = await reqKey();
+    const have = lsGet(FEED_LS, {});
+    let added = 0;
+    for (const tg of tags) {
+      const j = await bridgeCall({ action: 'sfeed', g: tg });
+      for (const it of j.items || []) {
+        if (have[it.id]) continue;
+        try { have[it.id] = { ...(await openJsonB64(key, it.d)), t: it.t }; added++; } catch (_) { /* not decryptable: ignore */ }
+      }
+    }
+    Object.keys(have).forEach((k) => { if (Date.now() - (have[k].at || have[k].t || 0) > 864e5) delete have[k]; });
+    lsSet(FEED_LS, have);
+    if (added && !quiet) {
+      toast('وصل قرار جديد من المنسق');
+      try { if (window.Notification && Notification.permission === 'granted') new Notification('Talabat Captains Hub', { body: 'وصل قرار جديد من المنسق', icon: 'icons/icon-192.png' }); } catch (_) {}
+    }
+    renderMy();
+  } catch (_) { /* offline / bridge down: keep the cached feed */ }
+  finally { FEED_BUSY = false; }
+}
+const unreadCount = () => { const seen = lsGet(SEEN_LS, 0); return Object.values(lsGet(FEED_LS, {})).filter((x) => (x.t || 0) > seen).length; };
+function markSeen() { lsSet(SEEN_LS, Date.now()); updateMyBadge(); }
+function updateMyBadge() {
+  const b = $('#navMy');
+  if (!b) return;
+  const n = $('#navMy').classList.contains('on') ? 0 : unreadCount();
+  let el = b.querySelector('.nbadge');
+  if (!n) { if (el) el.remove(); return; }
+  if (!el) { el = document.createElement('b'); el.className = 'nbadge'; b.appendChild(el); }
+  el.textContent = String(n);
+}
+function myCard(x) {
+  const ok = x.st === 'approved';
+  let body = '';
+  if (x.kind === 'susp' && ok) body = `<dl><dt>المدة النهائية</dt><dd>${esc(DUR_AR[x.dur] || x.dur)}</dd><dt>يبدأ</dt><dd class="ltr">${esc(fmtDT(x.start))}</dd><dt>ينتهي</dt><dd class="ltr">${esc(fmtDT(x.end))}</dd></dl>`;
+  if (x.kind === 'pw' && ok) { PWS.set(x.id, x.pw || ''); body = `<div class="pwbox"><span class="pwmask" data-pwid="${esc(x.id)}">••••••••</span><button class="btn sm ghost" data-act="pwShow" data-id="${esc(x.id)}">إظهار</button><button class="btn sm" data-act="pwCopy" data-id="${esc(x.id)}">نسخ</button></div>`; }
+  if (!ok && x.reason) body = `<div class="suspnote">سبب الرفض: ${esc(x.reason)}</div>`;
+  return `<div class="card mycard ${ok ? 'okc' : 'badc'}"><div class="ohead"><h3 style="margin:0;font-size:15px">${esc(KIND_AR[x.kind] || x.kind)} - ${esc(x.rn || 'مندوب')} <span class="ltr">${esc(x.rid)}</span></h3>
+    <span class="b ${ok ? 'ok' : 'bad'}">${ok ? 'مؤكد' : 'مرفوض'}</span></div>
+    <div class="hint">${esc(fmtDT(x.at || x.t))}${x.ord ? ' - أوردر <span class="ltr">' + esc(x.ord) + '</span>' : ''}</div>${body}
+    ${x.note ? `<div class="hint" style="margin-top:4px">ملاحظة المنسق: ${esc(x.note)}</div>` : ''}</div>`;
+}
+function renderMy() {
+  const box = $('#myList');
+  if (!box) return;
+  const feed = Object.values(lsGet(FEED_LS, {})).sort((a, b) => (b.at || b.t || 0) - (a.at || a.t || 0));
+  const decided = new Set(feed.map((x) => x.id));
+  const pend = lsGet(RQ_LS, []).filter((x) => !decided.has(x.id) && Date.now() - x.at < 864e5);
+  const html = feed.map(myCard).join('') + pend.map((x) => `<div class="card mycard"><div class="ohead"><h3 style="margin:0;font-size:15px">${esc(x.rn || 'مندوب')} <span class="ltr">${esc(x.rid)}</span></h3><span class="b ${x.st === 'queued' ? 'warn' : ''}">${esc(x.st === 'queued' ? 'بانتظار الاتصال' : x.st === 'failed' ? 'فشل الإرسال' : 'بانتظار قرار المنسق')}</span></div><div class="hint">${esc(fmtDT(x.at))}${x.ord ? ' - أوردر <span class="ltr">' + esc(x.ord) + '</span>' : ''}</div></div>`).join('');
+  box.innerHTML = html || '<div class="empty"><div class="big">' + IC('box') + '</div>لا توجد طلبات أو قرارات خلال آخر 24 ساعة.</div>';
+  updateMyBadge();
+}
+function renderCapCard() {
+  const box = $('#capCard');
+  if (!box) return;
+  const rid = lsGet(RID_LS, '');
+  const r = rid ? S.byId.get(rid) : null;
+  const h = rid && S.hub && S.hub.hc ? S.hub.hc[rid] : null;
+  if (!rid) { box.hidden = false; box.innerHTML = '<div class="hint">أدخل كودك لتظهر لك بياناتك وقراراتك بسرعة (يُحفظ على هذا الجهاز):</div><div class="sbar" style="position:static"><input id="capRidIn" inputmode="numeric" dir="ltr" placeholder="كودك (ID)"><button class="btn" id="capRidGo">حفظ</button></div>'; return; }
+  box.hidden = false;
+  box.innerHTML = `<div class="ohead"><h3 style="margin:0">${r ? esc(r.n) : 'كابتن'} <span class="ltr">${esc(rid)}</span></h3><button class="btn sm ghost" id="capRidOut">تغيير</button></div>
+    <div class="badges">${r ? hubBadges(r) : ''}${r && Array.isArray(r.s) && r.s.length ? '<span class="b">' + esc(r.s.join('، ')) + '</span>' : ''}${r && r.l ? '<span class="b ltr">' + esc(r.l) + '</span>' : ''}${!r && h ? '<span class="b">' + esc(h[0] || '') + '</span>' : ''}</div>`;
+}
+function hubInitCaptain() {
+  const q = new URLSearchParams(location.search).get('id');
+  const id = q ? digitsOf(q) : '';
+  if (/^\d{5,9}$/.test(id)) lsSet(RID_LS, id);   // ?id=<riderId>: quick personalized mode (Google sign-in + access key still required)
+  renderCapCard(); renderMy();
+  myFeedPoll(true);
+}
+
+// ---------------------------------------------------------------- Web Worker index (multi-field, O(1))
+const IDX = { worker: null, local: null, seq: 0, pending: new Map() };
+const idxSource = () => document.getElementById('libSrc').textContent + '\n' + document.getElementById('idxSrc').textContent;
+function idxInit() {
+  if (IDX.worker || IDX.local) return;
+  try {
+    const src = idxSource() + '\nself.onmessage=function(e){var m=e.data;if(m.t==="build"){hubIndex.build(m.riders,m.orders);self.postMessage({t:"built"});}else if(m.t==="search"){var r=hubIndex.search(m.q,m.zone,m.limit);self.postMessage({t:"res",id:m.id,ids:r.ids,orders:r.orders});}};';
+    const w = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
+    w.onmessage = (e) => { const m = e.data; if (m.t === 'res') { const f = IDX.pending.get(m.id); if (f) { IDX.pending.delete(m.id); f(m); } } };
+    w.onerror = () => { IDX.worker = null; IDX.local = new Function(idxSource() + '\nreturn hubIndex;')(); hubReindex(); IDX.pending.forEach((f) => f({ ids: [], orders: [] })); IDX.pending.clear(); };
+    IDX.worker = w;
+  } catch (_) { IDX.local = new Function(idxSource() + '\nreturn hubIndex;')(); }
+}
+const hcOf = (id) => (S.hub && S.hub.hc && S.hub.hc[String(id)]) || null;
+const zoneOf = (r) => { const h = hcOf(r.i); return h ? (h[0] || '') : ''; };
+function hubReindex() {
+  idxInit();
+  const riders = S.riders.map((r) => ({ i: r.i, n: r.n, p: r.p, d: r.d, l: r.l, z: zoneOf(r) }));
+  const orders = [...S.orders.keys()];
+  if (IDX.worker) IDX.worker.postMessage({ t: 'build', riders, orders });
+  else IDX.local.build(riders, orders);
+}
+function hubSearch(q, zone) {
+  idxInit();
+  if (IDX.local) return Promise.resolve(IDX.local.search(q, zone, 600));
+  return new Promise((res) => { const id = ++IDX.seq; IDX.pending.set(id, res); IDX.worker.postMessage({ t: 'search', id, q, zone, limit: 600 }); });
+}
+function hubAfterLoad() {
+  fillZones();
+  hubReindex();
+  $('#navNo').hidden = !(S.hub && S.hub.hc);
+  renderCapCard();
+  if ($('#v-noshow').classList.contains('on')) renderNoShow();
+}
+
+// ---------------------------------------------------------------- zones + fleet badges
+function fillZones() {
+  const sel = $('#zoneSel'), zones = (S.hub && S.hub.availableZones) || [];
+  sel.innerHTML = '<option value="">جميع الزونات</option>' + zones.map((z) => `<option value="${esc(z)}">${esc(z)}</option>`).join('');
+  if (!zones.includes(HUBZ.zone)) HUBZ.zone = '';
+  sel.value = HUBZ.zone;
+  $('#zoneRow').hidden = !zones.length;
+}
+function hubBadges(r) {
+  const h = hcOf(r.i);
+  if (!h) return '';
+  return `<span class="b ${h[2] ? 'blue' : 'mut'}">${h[2] ? 'Hybrid - ' + esc(h[3] || '?') : 'عادي'}</span>${h[0] ? '<span class="b mut">' + esc(h[0]) + '</span>' : ''}`;
+}
+
+// ---------------------------------------------------------------- rider search (debounced 120ms, windowed 45 per batch)
+const WIN = { ids: [], shown: 0 };
+let SEARCH_SEQ = 0;
+function renderMoreRiders() {
+  const out = $('#rOut');
+  const old = out.querySelector('#rMore');
+  if (old) old.remove();
+  const next = WIN.ids.slice(WIN.shown, WIN.shown + 45);
+  const wrap = document.createElement('div');
+  wrap.innerHTML = next.map((id) => S.byId.get(id)).filter(Boolean).map((r) => riderCard(r)).join('');
+  while (wrap.firstChild) out.appendChild(wrap.firstChild);
+  hydratePhotos(out);
+  WIN.shown += next.length;
+  if (WIN.shown < WIN.ids.length) {
+    const b = document.createElement('button');
+    b.className = 'btn ghost'; b.id = 'rMore'; b.style.width = '100%';
+    b.textContent = 'عرض المزيد (' + (WIN.ids.length - WIN.shown) + ')';
+    b.onclick = renderMoreRiders;
+    out.appendChild(b);
+    if ('IntersectionObserver' in window) { const o = new IntersectionObserver((es) => { if (es[0].isIntersecting) { o.disconnect(); renderMoreRiders(); } }, { rootMargin: '400px' }); o.observe(b); }
+  }
+}
+async function doRiderSearch() {
+  const q = $('#rq').value, out = $('#rOut'), info = $('#rInfo'), seq = ++SEARCH_SEQ;
+  if (!q.trim()) { info.textContent = ''; WIN.ids = []; out.innerHTML = '<div class="empty"><div class="big">' + IC('rider') + '</div>اكتب نمرة المكنة أو الاسم أو الموبايل أو الكود أو الرقم القومي أو كود الأوردر</div>'; return; }
+  const res = await hubSearch(q, HUBZ.zone);
+  if (seq !== SEARCH_SEQ) return;   // a newer keystroke already replaced this search
+  const ords = (res.orders || []).map((c) => S.orders.get(c)).filter(Boolean).slice(0, 3);
+  info.textContent = res.ids.length || ords.length ? `النتائج: ${res.ids.length}${ords.length ? ' - أوردر: ' + ords.length : ''} (من ${S.riders.length.toLocaleString('en')} مندوب${HUBZ.zone ? ' - ' + HUBZ.zone : ''})` : '';
+  if (!res.ids.length && !ords.length) { WIN.ids = []; out.innerHTML = '<div class="empty"><div class="big">' + IC('search') + '</div>لا توجد نتائج. تأكد من الرقم أو جرّب جزءاً من الاسم.<br><span class="hint">المناديب غير النشطين قد لا يظهرون.</span></div>'; return; }
+  out.innerHTML = ords.map(orderCardHtml).join('');
+  hydratePhotos(out);
+  WIN.ids = res.ids; WIN.shown = 0;
+  renderMoreRiders();
+}
+
+// ---------------------------------------------------------------- No-Show today (text only)
+const NS = { fleet: 'all', mart: '', ct: '', sel: new Set(), shown: 200, rows: [] };
+function workedToday() {
+  const day = new Date().toLocaleDateString('en-CA', { timeZone: TZ }), set = new Set();
+  S.orders.forEach((o) => {
+    const t = o.t ? new Date(o.t) : null;
+    if (!t || isNaN(t) || t.toLocaleDateString('en-CA', { timeZone: TZ }) !== day) return;
+    (o.r || []).forEach((x) => { if (x && x.i != null) set.add(String(x.i)); });
+  });
+  return set;
+}
+function nsBase() {
+  const hc = (S.hub && S.hub.hc) || {}, worked = workedToday(), rows = [];
+  for (const id of Object.keys(hc)) {
+    const h = hc[id];
+    if (!/active|نشط|working/i.test(h[1] || '') || /inactive|غير|resign|terminat|block/i.test(h[1] || '')) continue;
+    if (HUBZ.zone && h[0] !== HUBZ.zone) continue;
+    if (worked.has(id)) continue;
+    const r = S.byId.get(id), sp = r && Array.isArray(r.s) ? r.s.join('، ') : '';
+    rows.push({ id, n: (r && r.n) || h[6] || '', ph: (r && r.p) || h[5] || '', pt: sp || h[0] || '', hy: !!h[2], mart: h[3] || '', ct: h[4] || '' });
+  }
+  return rows.sort((a, b) => a.n.localeCompare(b.n, 'ar'));
+}
+function nsFiltered() {
+  return NS.rows.filter((r) => (NS.fleet === 'all' || (NS.fleet === 'hybrid') === r.hy) && (!NS.mart || r.mart === NS.mart) && (!NS.ct || r.ct === NS.ct));
+}
+function renderNoShow() {
+  NS.rows = nsBase();
+  const uniq = (k) => [...new Set(NS.rows.map((r) => r[k]).filter(Boolean))].sort();
+  const fill = (id, label, list, cur) => { const s = $(id); s.innerHTML = `<option value="">${label}</option>` + list.map((x) => `<option value="${esc(x)}" ${x === cur ? 'selected' : ''}>${esc(x)}</option>`).join(''); };
+  fill('#nsMart', 'كل الماركت (Hybrid Mart)', uniq('mart'), NS.mart);
+  fill('#nsCt', 'كل الشركات (Contract)', uniq('ct'), NS.ct);
+  $$('#nsFleet .chip').forEach((b) => b.classList.toggle('on', b.dataset.fleet === NS.fleet));
+  const list = nsFiltered();
+  $('#nsCount').textContent = String(list.length);
+  const shown = list.slice(0, NS.shown);
+  $('#nsList').innerHTML = shown.length ? shown.map((r) => {
+    const ph = r.ph ? '+' + intlPhone(r.ph) : '';
+    return `<label class="nsrow"><input type="checkbox" data-nsid="${esc(r.id)}" ${NS.sel.has(r.id) ? 'checked' : ''}><span class="nm">${esc(r.n || '-')}</span><span class="ltr">${esc(r.id)}</span><span class="ltr">${esc(ph || '-')}</span><span class="pt">${esc(r.pt || '-')}</span><span class="b ${r.hy ? 'blue' : 'mut'}">${r.hy ? 'Hybrid - ' + esc(r.mart || '?') : 'عادي'}</span>${ph ? `<a class="btn sm ok" href="tel:${esc(ph)}">اتصال</a><a class="btn sm blue" href="https://wa.me/${esc(intlPhone(r.ph))}" target="_blank" rel="noopener">واتساب</a>` : ''}</label>`;
+  }).join('') + (list.length > shown.length ? `<button class="btn ghost" id="nsMore" style="width:100%">عرض المزيد (${list.length - shown.length})</button>` : '')
+    : '<div class="empty">لا يوجد غائبون بهذا الفلتر.</div>';
+}
+function nsCopyText() {
+  const list = nsFiltered(), pick = NS.sel.size ? list.filter((r) => NS.sel.has(r.id)) : list;
+  return pick.map((r, i) => `${i + 1}. ${r.n || '-'} | كود: ${r.id} | موبايل: ${r.ph ? '+' + intlPhone(r.ph) : '-'} | النقطة: ${r.pt || '-'}`).join('\n');
+}
+
+// ---------------------------------------------------------------- pull-to-refresh + refresh spin
+const _refreshData = window.refreshData;
+window.refreshData = async function (silent) {
+  const b = $('#refreshBtn');
+  if (b) b.classList.add('spinning');
+  try { await _refreshData(silent); myFeedPoll(true); } finally { if (b) b.classList.remove('spinning'); }
+};
+(function ptr() {
+  let sy = 0, dy = 0, on = false;
+  const ind = $('#ptr');
+  window.addEventListener('touchstart', (e) => { if (window.scrollY <= 0 && e.touches && e.touches.length === 1) { sy = e.touches[0].clientY; dy = 0; on = true; } }, { passive: true });
+  window.addEventListener('touchmove', (e) => {
+    if (!on) return;
+    dy = e.touches[0].clientY - sy;
+    if (dy > 8 && window.scrollY <= 0) { ind.hidden = false; ind.style.transform = 'translate(-50%,' + (Math.min(dy, 100) - 56) + 'px)'; ind.classList.toggle('go', dy > 70); }
+    else { ind.hidden = true; }
+  }, { passive: true });
+  window.addEventListener('touchend', () => { if (on && dy > 70) window.refreshData(false); ind.hidden = true; on = false; dy = 0; });
+})();
+
+// ---------------------------------------------------------------- events
+document.addEventListener('click', (e) => {
+  const act = e.target.closest('[data-act]');
+  if (act && (act.dataset.act === 'pwShow' || act.dataset.act === 'pwCopy')) {
+    const id = act.dataset.id, pw = PWS.get(id) || '';
+    if (act.dataset.act === 'pwCopy') { copyText(pw); return; }
+    const m = document.querySelector(`.pwmask[data-pwid="${CSS.escape(id)}"]`);
+    if (m) { const shown = m.dataset.shown === '1'; m.textContent = shown ? '••••••••' : pw; m.dataset.shown = shown ? '0' : '1'; act.textContent = shown ? 'إظهار' : 'إخفاء'; }
+    return;
+  }
+  if (e.target.id === 'capRidGo') { const v = digitsOf($('#capRidIn').value); if (/^\d{5,9}$/.test(v)) { lsSet(RID_LS, v); renderCapCard(); myFeedPoll(); } else toast('اكتب كوداً صحيحاً (من 5 إلى 9 أرقام)'); return; }
+  if (e.target.id === 'capRidOut') { lsSet(RID_LS, ''); renderCapCard(); return; }
+  const chip = e.target.closest('#nsFleet .chip');
+  if (chip) { NS.fleet = chip.dataset.fleet; NS.shown = 200; renderNoShow(); return; }
+  if (e.target.id === 'nsMore') { NS.shown += 200; renderNoShow(); return; }
+  if (e.target.id === 'nsAll') { const l = nsFiltered(); const all = l.every((r) => NS.sel.has(r.id)); l.forEach((r) => (all ? NS.sel.delete(r.id) : NS.sel.add(r.id))); renderNoShow(); return; }
+  if (e.target.id === 'nsCopy') { const t = nsCopyText(); if (!t) toast('لا يوجد غائبون لنسخهم'); else copyText(t); return; }
+  const nav = e.target.closest('nav button');
+  if (nav) {
+    if (nav.dataset.v === 'my') { markSeen(); renderCapCard(); renderMy(); myFeedPoll(); }
+    else if (nav.dataset.v === 'noshow') renderNoShow();
+    updateMyBadge();
+  }
+});
+document.addEventListener('change', (e) => {
+  if (e.target.id === 'zoneSel') { HUBZ.zone = e.target.value; try { localStorage.setItem(ZONE_LS, HUBZ.zone); } catch (_) {} doRiderSearch(); if ($('#v-noshow').classList.contains('on')) renderNoShow(); return; }
+  if (e.target.id === 'nsMart') { NS.mart = e.target.value; renderNoShow(); return; }
+  if (e.target.id === 'nsCt') { NS.ct = e.target.value; renderNoShow(); return; }
+  if (e.target.dataset && e.target.dataset.nsid) { if (e.target.checked) NS.sel.add(e.target.dataset.nsid); else NS.sel.delete(e.target.dataset.nsid); }
+});
+setInterval(() => { if (!document.hidden && liveEnabled()) myFeedPoll(); }, 60000);
+if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', (e) => { if (e.data && e.data.type === 'SW_UPDATED') toast('تحديث جديد للتطبيق - جاري إعادة التحميل...'); });
+
+boot();
+</script>
 </body>
 </html>
