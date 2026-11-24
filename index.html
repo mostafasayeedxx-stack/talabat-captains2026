@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FF5A00"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow">
+  <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png"><link rel="icon" href="icons/icon-192.png">
+  <title>Talabat Captains Hub</title>
+  <link rel="stylesheet" href="styles/pwa.css">
+</head>
+<body class="light">
+  <div id="appleToastHost"></div>
+  <section id="gateScreen" class="workspace" style="max-width:460px;margin:24px auto">
+    <div class="card" style="text-align:center">
+      <div class="brand-badge" style="width:52px;height:52px;border-radius:14px;margin:0 auto 10px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M9.5 4.5V16.8M5 16.8H19M9.5 13.5C11.2 10.8 14 9.5 16.2 10.6C18.2 11.6 18.8 14.3 18.5 16.8" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h2 style="margin:0 0 4px">Talabat Captains Hub</h2>
+      <div class="hint" style="margin-bottom:10px">Enter Access Key or Bridge credentials to unlock field operations.</div>
+      <label class="field"><span>Access Key</span><input id="inAccessKey" dir="ltr" placeholder="Access Key"></label>
+      <label class="field"><span>Apps Script Bridge URL</span><input id="inBridgeUrl" dir="ltr" placeholder="https://script.google.com/macros/s/.../exec"></label>
+      <label class="field"><span>Bridge Secret</span><input id="inBridgeSecret" type="password" dir="ltr" placeholder="Secret"></label>
+      <label class="field"><span>Captain Name / Email</span><input id="inCaptainId" placeholder="Captain Name"></label>
+      <button type="button" class="btn" id="btnUnlockHub" style="width:100%">Continue</button>
+    </div>
+  </section>
+  <div id="appShell" hidden style="display:flex;flex-direction:column;min-height:100vh">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9.5 4.5V16.8M5 16.8H19M9.5 13.5C11.2 10.8 14 9.5 16.2 10.6C18.2 11.6 18.8 14.3 18.5 16.8" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><span class="brand-title">Talabat Captains Hub</span><span class="brand-sub" data-i18n="captainSub">تطبيق الكباتن الموحد</span></div>
+      </div>
+      <div class="header-actions">
+        <select id="hdrZoneSwitch" style="width:auto;padding:4px 8px;font-size:11.5px;font-weight:700"><option value="Rehab">Rehab</option><option value="Tagmoa North">Tagmoa North</option><option value="Tagmoa South">Tagmoa South</option><option value="Golden Square">Golden Square</option></select>
+        <button type="button" class="icon-btn" id="btnPwaLang">EN</button>
+        <button type="button" class="icon-btn" id="btnPwaTheme" title="Theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+        <button type="button" class="icon-btn" id="btnPwaSync">Sync</button>
+      </div>
+    </header>
+    <nav class="main-nav" id="pwaNav">
+      <button type="button" data-ptab="search" class="on" data-i18n="tabSearch">البحث الشامل</button>
+      <button type="button" data-ptab="delays"><span data-i18n="tabDelays">الأوردرات المتأخرة</span> <span class="pill-cnt" id="pCntDelays">0</span></button>
+      <button type="button" data-ptab="noshow"><span data-i18n="tabNoshow">غائبي اليوم</span> <span class="pill-cnt" id="pCntNoshow">0</span></button>
+      <button type="button" data-ptab="submit" data-i18n="tabSubmit">رفع طلب</button>
+      <button type="button" data-ptab="myreq"><span data-i18n="tabMyReq">طلباتي</span> <span class="pill-cnt" id="pCntMyReq">0</span></button>
+    </nav>
+    <main class="workspace" style="max-width:860px;margin:0 auto;width:100%">
+      <div id="zoneStartCard" class="card zone-gate" hidden>
+        <h3 class="card-title" data-i18n="selectZone">اختر زون العمل للشيفت</h3>
+        <div class="zone-pill-grid"><button type="button" class="zone-pill" data-zpick="Rehab">Rehab</button><button type="button" class="zone-pill" data-zpick="Tagmoa North">Tagmoa North</button><button type="button" class="zone-pill" data-zpick="Tagmoa South">Tagmoa South</button><button type="button" class="zone-pill" data-zpick="Golden Square">Golden Square</button></div>
+      </div>
+      <section id="pview-search" class="view on">
+        <div class="search-row"><input id="pwaSearchIn" data-i18n-ph="searchPh"><button type="button" class="btn" id="btnPwaSearch" data-i18n="searchBtn">بحث</button></div>
+        <div id="pwaSearchOut"></div>
+      </section>
+      <section id="pview-delays" class="view"><div id="pwaDelaysOut"></div></section>
+      <section id="pview-noshow" class="view">
+        <div class="seg-tabs" id="pwaNsTabs"><button type="button" data-pnskind="all" class="on" data-i18n="filterAll">الكل</button><button type="button" data-pnskind="regular" data-i18n="filterRegular">عادي</button><button type="button" data-pnskind="hybrid" data-i18n="filterHybrid">Hybrid</button></div>
+        <div class="grid2" style="margin-bottom:8px"><select id="pwaMartFilter" hidden><option value="">All Marts</option></select><select id="pwaContractFilter"><option value="">All Contracts / Agencies</option></select></div>
+        <div class="card" style="padding:8px 10px"><div class="row" style="margin-top:0;justify-content:space-between"><label class="chk-inline"><input type="checkbox" id="pwaNsSelAll"> <span data-i18n="selectAll">تحديد الكل</span></label><button type="button" class="btn sm ok" id="btnPwaCopyNs" data-i18n="copyOfficeWa">نسخ لجروب المكتب (WhatsApp)</button></div></div>
+        <div class="card" id="pwaNoshowOut" style="padding:4px 8px"></div>
+      </section>
+      <section id="pview-submit" class="view">
+        <div class="card">
+          <div class="seg-tabs" id="reqTypeTabs"><button type="button" data-reqtype="suspend" class="on" data-i18n="reqTypeSusp">طلب إيقاف</button><button type="button" data-reqtype="unsuspend" data-i18n="reqTypeUnsusp">طلب فك إيقاف</button><button type="button" data-reqtype="password" data-i18n="reqTypePw">طلب تغيير باسورد</button></div>
+          <div class="grid2"><label class="field"><span>Rider ID</span><input id="reqRiderId" inputmode="numeric" dir="ltr"></label><label class="field"><span>Rider Name</span><input id="reqRiderName"></label></div>
+          <div id="suspFields">
+            <div class="hint" style="font-weight:700;margin-bottom:4px">Duration</div>
+            <div class="tag-row" id="durTags"><button type="button" class="tag-btn on" data-dur="24h" data-i18n="dur24h">24 ساعة</button><button type="button" class="tag-btn" data-dur="3d" data-i18n="dur3d">3 أيام</button><button type="button" class="tag-btn" data-dur="1w" data-i18n="dur1w">أسبوع</button><button type="button" class="tag-btn" data-dur="1y" data-i18n="dur1y">سنة</button><button type="button" class="tag-btn" data-dur="investigation" data-i18n="durInv">إيقاف لحين التحقيق</button></div>
+            <div class="hint" style="font-weight:700;margin:8px 0 4px">Issue Tag</div>
+            <div class="tag-row" id="issueTags"><button type="button" class="tag-btn on" data-tag="تأخير استلام" data-i18n="tagDelay">تأخير استلام</button><button type="button" class="tag-btn" data-tag="سلوك غير لائق" data-i18n="tagBehavior">سلوك غير لائق</button><button type="button" class="tag-btn" data-tag="مخالفة ركنة" data-i18n="tagParking">مخالفة ركنة</button></div>
+            <label class="field" style="margin-top:8px"><span data-i18n="uploadProof">رفع صورة إثبات</span><input id="reqProofFile" type="file" accept="image/*" capture="environment"></label>
+            <div id="proofPreviewBox" class="hint" hidden><img id="proofPreviewImg" alt="Preview" style="max-height:140px;border-radius:10px;border:1px solid var(--border);display:block;margin-bottom:4px"><span id="proofSizeBadge" class="badge ok"></span></div>
+          </div>
+          <div id="pwFields" hidden><label class="field"><span>New Password</span><input id="reqNewPw" dir="ltr" value="Ot1@talabat"></label></div>
+          <label class="field" style="margin-top:6px"><span data-i18n="customNote">ملاحظة إضافية</span><textarea id="reqCustomNote" rows="2"></textarea></label>
+          <button type="button" class="btn" id="btnSubmitReq" style="width:100%" data-i18n="submitReq">إرسال الطلب للمشرف</button>
+        </div>
+      </section>
+      <section id="pview-myreq" class="view">
+        <div class="row" style="margin:0 0 8px;justify-content:space-between">
+          <div class="row" style="margin:0"><span class="badge warn">Pending: <b id="mrPend">0</b></span><span class="badge ok">Approved: <b id="mrApp">0</b></span><span class="badge bad">Rejected: <b id="mrRej">0</b></span></div>
+          <button type="button" class="btn sm ghost" id="btnRefreshMyReq">Refresh</button>
+        </div>
+        <div id="myReqOut"></div>
+      </section>
+    </main>
+    <footer class="app-footer" data-i18n="signature">تطوير: Mustafa ElMohsen</footer>
+  </div>
+  <script src="scripts/i18n.js"></script><script src="scripts/idb.js"></script><script src="scripts/hub-core.js"></script><script src="scripts/ui.js"></script><script src="scripts/crypto-sync.js"></script><script src="scripts/app.js"></script>
+</body>
+</html>
