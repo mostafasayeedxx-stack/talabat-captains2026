@@ -1,135 +1,175 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FF5A00">
+<meta name="theme-color" content="#0f1013">
+<meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex,nofollow">
 <title>Talabat Fleet Cockpit</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FF5A00'/%3E%3Cstop offset='1' stop-color='%23FF8533'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23g)'/%3E%3Cpath d='M20 38a14 14 0 0 1 28 0v6H20z' fill='%23fff'/%3E%3Crect x='32' y='30' width='16' height='6' rx='3' fill='%23FF7A1A'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23fff'/%3E%3Cg fill='none' stroke='%23FF5A00' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='17' cy='44' r='8'/%3E%3Ccircle cx='47' cy='44' r='8'/%3E%3Cpath d='M17 44l11-12h12l7 12'/%3E%3Cpath d='M40 32l4-11h6'/%3E%3C/g%3E%3Crect x='8' y='14' width='18' height='13' rx='3' fill='%23FF5A00'/%3E%3C/svg%3E">
 <style>
-:root{--or:#FF5A00;--or2:#FF8533;--bg:#f3f4f7;--card:#fff;--card2:#eef0f4;--tx:#17181c;--mut:#6a6f7a;--bd:#dfe2e8;--ok:#0f9d58;--bad:#d93025;--warn:#c77700;--blue:#2563eb;--glass:rgba(255,255,255,.72)}
-@media (prefers-color-scheme:dark){:root{--bg:#0f1013;--card:#181a1f;--card2:#21242b;--tx:#f2f3f5;--mut:#9b9fa9;--bd:#2c2f37;--ok:#2fd27f;--bad:#ff5a5f;--warn:#f5a524;--blue:#6ea0ff;--glass:rgba(32,34,40,.72)}}
+:root{--or:#FF5A00;--bg:#0f1013;--card:#181a1f;--card2:#21242b;--tx:#f2f3f5;--mut:#9b9fa9;--bd:#2c2f37;--ok:#2fd27f;--bad:#ff5a5f;--warn:#f5a524;--blue:#6ea0ff;--mono:Consolas,"SF Mono","Courier New",monospace}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;max-width:100%;overflow-x:hidden}
-body{background:var(--bg);color:var(--tx);font:400 15px/1.5 "Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;min-height:100dvh;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+body{background:var(--bg);color:var(--tx);font:400 15px/1.45 "Segoe UI",Roboto,Arial,sans-serif;min-height:100dvh;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 [hidden]{display:none!important}
+button,input,select{font:inherit;color:inherit}
 .ltr{direction:ltr;unicode-bidi:embed;display:inline-block}
-button{font:inherit;color:inherit}
-#login{min-height:100dvh;display:grid;place-items:center;padding:20px}
-.lbox{width:min(380px,100%);background:var(--card);border:1px solid var(--bd);border-radius:24px;padding:26px 20px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.14)}
-.logo{width:68px;height:68px;margin:0 auto 10px;border-radius:20px;background:linear-gradient(135deg,var(--or),var(--or2));display:grid;place-items:center}
-.logo svg{width:44px;height:44px}
-.lbox h1{font-size:20px;margin:6px 0 4px}.lbox p{color:var(--mut);margin:0 0 14px;font-size:14px}
-.lbox input{width:100%;background:var(--card2);color:var(--tx);border:2px solid var(--bd);border-radius:14px;padding:14px;font-size:17px;text-align:center;direction:ltr;outline:none}
-.lbox input:focus{border-color:var(--or)}
-.btn{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:0;border-radius:14px;padding:13px 16px;font-weight:700;cursor:pointer;min-height:46px}
-.btn.ghost{background:var(--card2);color:var(--tx);border:1px solid var(--bd)}
-.btn.sm{min-height:36px;padding:7px 12px;font-size:13px;border-radius:11px}
-.btn.ok{background:var(--ok)}
-.err{color:var(--bad);font-weight:700;font-size:14px;margin-top:10px;min-height:20px}
-#app{max-width:760px;margin:0 auto;padding:0 10px}
-.strip{position:sticky;top:0;z-index:20;margin:0 -10px 10px;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;background:var(--glass);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:2px solid var(--or)}
-.r1,.r2{display:flex;align-items:center;gap:8px;min-width:0}
-.r2{margin-top:6px;flex-wrap:wrap}
-.ini{flex:none;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--or),var(--or2));letter-spacing:.5px}
-.who{flex:1;min-width:0}.who b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.who small{color:var(--mut)}
-.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;border:1px solid var(--bd);background:var(--card2);font-size:12.5px;font-weight:600;white-space:nowrap}
-.pill.ok{color:var(--ok);border-color:var(--ok)}.pill.warn{color:var(--warn);border-color:var(--warn)}.pill.bad{color:var(--bad);border-color:var(--bad)}.pill.blue{color:var(--blue);border-color:var(--blue)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block}
-.dot.pulse{animation:pl 1.8s infinite}@keyframes pl{0%{box-shadow:0 0 0 0 rgba(47,210,127,.6)}70%{box-shadow:0 0 0 7px rgba(47,210,127,0)}100%{box-shadow:0 0 0 0 rgba(47,210,127,0)}}
-.ib{flex:none;background:var(--card2);border:1px solid var(--bd);border-radius:11px;width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
-.ib svg{width:18px;height:18px}.ib.spin svg{animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
-.tele{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px}
-.kpi{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:8px 4px;text-align:center;min-width:0}
-.kpi b{display:block;font-size:20px;line-height:1.1}.kpi span{font-size:11px;color:var(--mut)}
-.kpi.warn b{color:var(--warn)}.kpi.bad b{color:var(--bad)}.kpi.ok b{color:var(--ok)}
-.sec{margin:8px 2px;color:var(--mut);font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;margin-bottom:8px;overflow:hidden}
-.row{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;min-width:0}
-.row .t{flex:1;min-width:0}.row .t b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row .t small{color:var(--mut);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row .r{flex:none;text-align:end;font-weight:700}
-.crit{border-inline-start:5px solid var(--bad)}.late{border-inline-start:5px solid var(--warn)}
-.det{padding:0 12px 12px;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
-.photo{width:64px;height:64px;border-radius:14px;background:var(--card2);overflow:hidden;display:grid;place-items:center;font-weight:800;font-size:22px;color:#fff;background:linear-gradient(135deg,var(--or),var(--or2))}
-.photo img{width:100%;height:100%;object-fit:cover;display:block}
-.f{display:flex;justify-content:space-between;gap:8px;background:var(--card2);border-radius:10px;padding:6px 10px;margin-bottom:4px;min-width:0}
-.f span{color:var(--mut);flex:none}.f b{min-width:0;word-break:break-word;text-align:end}
-.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.mono{font-family:var(--mono)}
+.badge{display:inline-flex;align-items:center;gap:5px;font:700 11px var(--mono);letter-spacing:.4px;padding:3px 8px;border-radius:5px;border:1px solid var(--bd);background:var(--card2);color:var(--mut);white-space:nowrap;text-transform:uppercase}
+.badge.ok{color:var(--ok);border-color:var(--ok)}.badge.warn{color:var(--warn);border-color:var(--warn)}.badge.bad{color:var(--bad);border-color:var(--bad)}.badge.or{color:#fff;background:var(--or);border-color:var(--or)}.badge.blue{color:var(--blue);border-color:var(--blue)}
+.btn{background:var(--or);color:#fff;border:0;border-radius:10px;padding:11px 16px;font:700 13px var(--mono);letter-spacing:.4px;cursor:pointer;min-height:44px;text-transform:uppercase}
+.btn.ghost{background:var(--card2);color:var(--tx);border:1px solid var(--bd)}.btn.sm{min-height:34px;padding:6px 12px;font-size:12px;border-radius:8px}.btn.ok{background:var(--ok);color:#06210f}
 a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+/* gate */
+.gate{min-height:100dvh;display:grid;place-items:center;padding:20px}
+.gbox{width:min(400px,100%);background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:26px 20px;text-align:center}
+.logo{width:64px;height:64px;margin:0 auto 10px;border-radius:18px;background:#fff;display:grid;place-items:center}
+.logo svg{width:44px;height:44px}
+.gbox h1{font-size:20px;margin:6px 0 4px}.gbox p{color:var(--mut);margin:0 0 14px;font-size:14px}
+.gbox input{width:100%;background:var(--card2);border:2px solid var(--bd);border-radius:12px;padding:14px;font-size:16px;text-align:center;direction:ltr;outline:none}
+.gbox input:focus{border-color:var(--or)}
+.err{color:var(--bad);font:700 12px var(--mono);margin-top:10px;min-height:18px}
+.pulse{width:10px;height:10px;border-radius:50%;background:var(--ok);display:inline-block;animation:pl 1.8s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(47,210,127,.6)}70%{box-shadow:0 0 0 8px rgba(47,210,127,0)}100%{box-shadow:0 0 0 0 rgba(47,210,127,0)}}
+/* header */
+#app{max-width:760px;margin:0 auto;padding:0 10px}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);padding:calc(8px + env(safe-area-inset-top,0px)) 0 8px;border-bottom:2px solid var(--or);margin:0 -10px 10px;padding-left:10px;padding-right:10px}
+.r1,.r2{display:flex;align-items:center;gap:8px;min-width:0}.r2{margin-top:8px}
+.who{flex:1;min-width:0}.who b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who small{font:700 11px var(--mono);color:var(--or);letter-spacing:.5px}
+.ini{flex:none;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#fff;background:var(--or)}
+.sel,.search{width:100%;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px;font-size:15px;outline:none;min-width:0}
+.sel:focus,.search:focus{border-color:var(--or)}
+.search{margin-bottom:8px}
+/* lists */
+.sec{display:flex;justify-content:space-between;align-items:center;margin:8px 2px;color:var(--mut);font:700 12px var(--mono);letter-spacing:.5px}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.chip{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:6px 12px;font-weight:600;font-size:13px;cursor:pointer}
+.chip{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:7px 12px;font:700 12px var(--mono);letter-spacing:.3px;cursor:pointer;color:var(--mut)}
 .chip.on{background:var(--or);border-color:var(--or);color:#fff}
-.search{width:100%;background:var(--card);color:var(--tx);border:2px solid var(--bd);border-radius:14px;padding:13px;font-size:16px;outline:none;margin-bottom:8px}
-.search:focus{border-color:var(--or)}
-.empty{text-align:center;color:var(--mut);padding:34px 12px}
-.more{width:100%;margin-top:4px}
-.dock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;gap:4px;padding:6px;border-radius:30px;background:var(--glass);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.22);box-shadow:0 12px 34px rgba(0,0,0,.28);max-width:calc(100vw - 20px)}
-.dock button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:78px;padding:8px 10px;border:0;border-radius:24px;background:transparent;font-size:12px;font-weight:700;color:var(--mut);cursor:pointer}
-.dock button svg{width:22px;height:22px}
-.dock button.on{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff}
-.dock .nb{position:absolute;top:2px;inset-inline-end:8px;min-width:18px;height:18px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;line-height:18px;text-align:center;padding:0 4px}
-.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:9px 18px;border-radius:22px;z-index:60;font-size:14px}
+.card{background:var(--card);border-radius:12px;margin-bottom:8px;overflow:hidden;border-inline-start:4px solid var(--bd)}
+.card.late{border-inline-start-color:var(--warn)}.card.crit{border-inline-start-color:var(--bad)}
+.crow{display:flex;gap:10px;padding:10px 12px;min-width:0}
+.chk{flex:none;width:22px;height:22px;margin-top:2px;accent-color:var(--or)}
+.cbody{flex:1;min-width:0}
+.l1{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.l1 b{font-family:var(--mono)}
+.l2{color:var(--mut);font-size:13px;overflow-wrap:anywhere}
+.l3{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.empty{text-align:center;color:var(--mut);padding:34px 12px;font:700 12px var(--mono)}
+.more{width:100%;margin:4px 0 10px}
+.sk{height:74px;border-radius:12px;margin-bottom:8px;background:linear-gradient(90deg,var(--card) 25%,var(--card2) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.1s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+/* floating action bar + dock (solid surfaces, no blur) */
+.fab{position:fixed;left:10px;right:10px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:35;display:flex;gap:8px;padding:10px;border-radius:14px;background:#262a33;border:1px solid var(--or);max-width:740px;margin:0 auto}
+.fab .btn{flex:1}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:#14161b;border-top:1px solid var(--bd)}
+.dock button{flex:1;max-width:240px;background:transparent;border:0;border-radius:10px;padding:10px 4px;font:700 12px var(--mono);letter-spacing:.4px;color:var(--mut);cursor:pointer;text-transform:uppercase;position:relative}
+.dock button.on{background:var(--or);color:#fff}
+.dock .nb{position:absolute;top:2px;inset-inline-end:6px;min-width:18px;height:18px;border-radius:9px;background:var(--bad);color:#fff;font:700 11px/18px var(--mono);padding:0 4px;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#fff;color:#111;padding:9px 18px;border-radius:8px;z-index:70;font:700 12px var(--mono);letter-spacing:.4px;text-transform:uppercase;max-width:92vw;text-align:center}
+.banner{position:fixed;left:10px;right:10px;top:calc(8px + env(safe-area-inset-top,0px));z-index:80;background:var(--or);color:#fff;border-radius:12px;padding:12px 14px;font:700 13px var(--mono);max-width:740px;margin:0 auto;text-align:center}
+/* sheets */
+.shade{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:55;background:var(--card);border-radius:18px 18px 0 0;padding:16px 14px calc(18px + env(safe-area-inset-bottom,0px));max-height:86dvh;overflow:auto;max-width:760px;margin:0 auto;animation:up .18s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.sheet h3{margin:0 0 8px;font-size:16px}
+.f{display:flex;justify-content:space-between;gap:8px;background:var(--card2);border-radius:8px;padding:6px 10px;margin-bottom:4px;min-width:0}.f span{color:var(--mut);flex:none}.f b{min-width:0;overflow-wrap:anywhere;text-align:end}
+.photo{width:84px;height:84px;border-radius:14px;background:var(--card2);overflow:hidden;display:grid;place-items:center;font-weight:800;font-size:28px;color:#fff;margin:0 auto 10px}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}.photo.load{background:linear-gradient(90deg,var(--card2) 25%,#2c3038 50%,var(--card2) 75%);background-size:200% 100%;animation:sh 1.1s linear infinite;color:transparent}
+.in{width:100%;background:var(--card2);border:2px solid var(--bd);border-radius:10px;padding:12px;font-size:16px;outline:none;margin-bottom:8px;direction:ltr}.in:focus{border-color:var(--or)}
+.tl{border-inline-start:2px solid var(--bd);padding-inline-start:12px;margin:8px 4px}
+.tl .it{margin-bottom:12px;position:relative}.tl .it:before{content:"";position:absolute;inset-inline-start:-18px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--bd)}
+.tl .it.s-SUSPENSION:before{background:var(--bad)}.tl .it.s-REJECTED:before{background:var(--mut)}.tl .it.s-PENDING:before{background:var(--warn)}
+.sig{text-align:center;color:var(--mut);font-weight:300;font-size:11.5px;padding:12px 0 4px}
 html[lang="ar"] .sig .sig-en,html[lang="en"] .sig .sig-ar{display:none}
 </style>
 </head>
 <body>
-<div id="login" hidden>
-  <div class="lbox">
-    <div class="logo"><svg viewBox="0 0 64 64"><path d="M16 40a16 16 0 0 1 32 0v7H16z" fill="#fff"/><rect x="33" y="31" width="18" height="7" rx="3.5" fill="#FF7A1A"/><rect x="5" y="30" width="9" height="3" rx="1.5" fill="#fff"/><rect x="8" y="37" width="6" height="3" rx="1.5" fill="#fff"/></svg></div>
+<div id="gate" class="gate" hidden>
+  <div class="gbox">
+    <div class="logo"><svg viewBox="0 0 64 64"><g fill="none" stroke="#FF5A00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="44" r="8"/><circle cx="47" cy="44" r="8"/><path d="M17 44l11-12h12l7 12"/><path d="M40 32l4-11h6"/></g><rect x="8" y="14" width="18" height="13" rx="3" fill="#FF5A00"/></svg></div>
     <h1>Talabat Fleet Cockpit</h1>
-    <p>اكتب كودك أو إيميلك للدخول</p>
-    <input id="lg" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="الكود أو الإيميل">
-    <div class="acts" style="justify-content:center;margin-top:12px"><button class="btn" id="lgGo" style="width:100%">دخول</button></div>
+    <div id="gMsg"><p>Enter your email to continue</p>
+      <input id="lg" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="name@company.com">
+      <div style="margin-top:12px"><button class="btn" id="lgGo" style="width:100%">Continue</button></div></div>
     <div class="err" id="lgErr"></div>
-    <div id="zonePick" hidden style="margin-top:8px"></div>
   </div>
 </div>
 
 <div id="app" hidden>
-  <div class="strip">
-    <div class="r1"><div class="ini" id="idIni"></div><div class="who"><b id="idName"></b><small id="idSub"></small></div>
-      <button class="ib" id="btnRefresh" aria-label="تحديث"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></button>
-      <button class="ib" id="btnOut" aria-label="خروج"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v9"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg></button></div>
-    <div class="r2"><span class="pill" id="pZone"></span><span class="pill" id="pStamp"><i class="dot pulse"></i><span id="pStampT"></span></span><span class="pill" id="pOff" hidden>غير متصل</span></div>
+  <div class="top">
+    <div class="r1"><div class="ini" id="idIni"></div><div class="who"><b id="idName"></b><small>CAPTAIN RIDER</small></div>
+      <span class="badge ok" id="live"><i class="pulse" style="width:8px;height:8px"></i><span id="liveT">LIVE</span></span>
+      <button class="btn sm ghost" id="btnRefresh">Refresh</button></div>
+    <div class="r2"><select class="sel" id="zoneSel" aria-label="Zone"></select></div>
   </div>
-  <div class="tele" id="tele"></div>
-  <section id="v-riders"><div class="sec"><span>المناديب في الزون</span><span class="pill" id="rCount"></span></div><input class="search" id="rq" placeholder="فلتر سريع بالاسم أو الكود" autocomplete="off"><div id="rList"></div><button class="btn ghost more" id="rMore" hidden>عرض المزيد</button></section>
-  <section id="v-orders" hidden><div class="sec"><span>أوردرات الزون</span><span class="pill" id="oCount"></span></div><div class="chips" id="oChips"></div><div id="oList"></div><button class="btn ghost more" id="oMore" hidden>عرض المزيد</button></section>
-  <section id="v-search" hidden><input class="search" id="sq" placeholder="كود المندوب / الاسم / الموبايل / الرقم القومي / كود الأوردر" autocomplete="off"><div id="sList"></div></section>
-  <div class="dock" id="dock"><button data-v="riders" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17" r="3"/><circle cx="18.5" cy="17" r="3"/><path d="M8.5 17H14l3-7h-4"/><path d="M12 10 10 7H7"/></svg>المناديب</button>
-    <button data-v="orders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8l9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>الأوردرات<span class="nb" id="nbOrders" hidden></span></button>
-    <button data-v="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>بحث</button></div>
+  <input class="search" id="q" placeholder="Search order #, rider ID, name, phone, national ID" autocomplete="off">
+  <div id="results" hidden></div>
+  <section id="v-delay"><div class="chips" id="zoneChips"></div>
+    <div class="chips"><button class="chip" id="hybridBtn">HYBRID ONLY</button><button class="chip" id="selAll">SELECT ALL IN VIEW</button></div>
+    <div class="sec"><span>DELAYED ORDERS</span><span class="badge" id="dCount">0</span></div><div id="dList"></div><button class="btn ghost more" id="dMore" hidden>LOAD MORE</button></section>
+  <section id="v-riders" hidden><div class="chips" id="rChips"></div>
+    <div class="sec"><span>ACTIVE RIDERS</span><span class="badge" id="rCount">0</span></div><div id="rList"></div><button class="btn ghost more" id="rMore" hidden>LOAD MORE</button></section>
+  <section id="v-susp" hidden><div class="sec"><span>SUSPENSION REQUESTS</span><button class="btn sm" id="newReq">NEW REQUEST</button></div><div id="sList" class="tl"></div></section>
+  <footer class="sig"><span class="sig-en">Developed by Mustafa ElMohsen</span><span class="sig-ar">تطوير: Mustafa ElMohsen</span></footer>
+  <div class="dock" id="dock"><button data-v="delay" class="on">DAILY DELAY<span class="nb" id="nbDelay" hidden></span></button><button data-v="riders">RIDERS</button><button data-v="susp">SUSPENSION<span class="nb" id="nbSusp" hidden></span></button></div>
+  <div class="fab" id="fab" hidden><button class="btn" id="fabCopy">COPY SELECTED (0)</button><button class="btn ok" id="fabWa">WHATSAPP OFFICE (0)</button></div>
 </div>
-<footer class="sig" style="text-align:center;color:var(--mut);font-weight:300;font-size:11.5px;padding:10px 0 4px"><span class="sig-en">Developed by Mustafa ElMohsen</span><span class="sig-ar">تطوير: Mustafa ElMohsen</span></footer>
-<div class="toast" id="toast" hidden></div>
+<div id="sheet"></div><div class="toast" id="toast" hidden></div><div class="banner" id="banner" hidden></div>
 
 <script>
 'use strict';
-/* Enterprise Fleet Cockpit - single file, one permanent URL. Key / salt are filled in by the extension when it publishes this page. */
-const KEY = '3EfY4Nz5jFMm7kh2L994KO5R', SALT = 'x1xJhrjbZzXDLYu7IuHXUw==', ITER = Number('20000') || 20000, BUILD = '65.0.0';
+const KEY = '3EfY4Nz5jFMm7kh2L994KO5R', SALT = 'x1xJhrjbZzXDLYu7IuHXUw==', ITER = Number('20000') || 20000, BRIDGE = 'https://script.google.com/macros/s/AKfycbwgACXosl3HOGjxNCA9IDqoLH-wJK5qkqWK9tq0xxXlPQUZEbMDoz2Otvyi_Bd5M_XiNg/exec', BSECRET = '1234';
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const latin = (s) => String(s == null ? '' : s).replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, (d) => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-const lc = (s) => latin(s).toLowerCase();
 const ini = (n) => { const p = String(n || '').trim().split(/\s+/).filter(Boolean); return ((p[0] ? Array.from(p[0])[0] : '') + (p[1] ? Array.from(p[1])[0] : '')).toUpperCase() || '?'; };
+const nameFromEmail = (e) => String(e).split('@')[0].replace(/[0-9]+/g, ' ').split(/[._\-+\s]+/).filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1).toLowerCase()).join(' ') || e;
 const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
-const TZ = 'Africa/Cairo';
-const hm = (t) => (t ? new Date(t).toLocaleTimeString('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit' }) : '-');
-const S = { sess: null, fleet: null, zone: null, meta: null, view: 'riders', open: new Set(), shownR: 50, shownO: 50, ofilter: 'all', online: navigator.onLine, loaded: {} };
-const ls = { get: (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch (_) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) { /* quota: ignore */ } } };
-function toast(m) { const t = $('#toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => { t.hidden = true; }, 2400); }
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const TZ = 'Africa/Cairo', REASONS = ['LATE PICKUP', 'RUDE BEHAVIOR', 'NO SHOW', 'CUSTOMER COMPLAINT', 'OTHER'];
+const S = { me: null, zone: 'ALL', fleet: null, delayed: null, zones: {}, view: 'delay', hybrid: false, sel: new Set(), nD: 25, nR: 25, rf: 'ALL', lastOk: 0, cached: false, reqs: [], busy: false, meta: null, acAbort: null, shownRows: [] };
+const ls = { get: (k) => { try { return localStorage.getItem(k); } catch (_) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (_) {} } };
+function toast(m) { const t = $('#toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => { t.hidden = true; }, 2200); }
+function banner(m) { const b = $('#banner'); b.textContent = m; b.hidden = false; clearTimeout(banner.h); banner.h = setTimeout(() => { b.hidden = true; }, 7000); }
+function chime() {
+  try {
+    const a = chime.a || (chime.a = new (window.AudioContext || window.webkitAudioContext)()), t0 = a.currentTime;
+    [880, 1175].forEach((f, i) => { const o = a.createOscillator(), g = a.createGain(); o.type = 'sine'; o.frequency.value = f; o.connect(g); g.connect(a.destination);
+      g.gain.setValueAtTime(0.0001, t0 + i * 0.16); g.gain.exponentialRampToValueAtTime(0.07, t0 + i * 0.16 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + i * 0.16 + 0.22); o.start(t0 + i * 0.16); o.stop(t0 + i * 0.16 + 0.25); });
+  } catch (_) { /* needs a user gesture first */ }
+}
 
-// ---------------------------------------------------------------- data (encrypted envelopes, cache-busted, offline-first)
+// ---------------------------------------------------------------- IndexedDB cache (orders + photos) with 15 minute garbage collection
+const IDB = (() => {
+  let db = null; const mem = new Map();
+  const open = () => new Promise((res) => {
+    if (db || !window.indexedDB) return res(db);
+    try { const r = indexedDB.open('tc', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv', { keyPath: 'k' }); r.onsuccess = () => { db = r.result; res(db); }; r.onerror = () => res(null); } catch (_) { res(null); }
+  });
+  const tx = async (mode, fn) => { const d = await open(); if (!d) return null; return new Promise((res) => { try { const t = d.transaction('kv', mode), st = t.objectStore('kv'); const r = fn(st); t.oncomplete = () => res(r && r.result !== undefined ? r.result : null); t.onerror = () => res(null); } catch (_) { res(null); } }); };
+  return {
+    async get(k) { const r = await tx('readonly', (st) => st.get(k)); const v = r ? r.v : mem.get(k); return v === undefined ? null : v; },
+    async set(k, v) { mem.set(k, v); await tx('readwrite', (st) => st.put({ k, v, t: Date.now() })); },
+    async gc() {                                              // max 30 cached orders / 50 photos
+      const all = await tx('readonly', (st) => st.getAll()) || [];
+      const photos = all.filter((x) => x.k.startsWith('p:')).sort((a, b) => b.t - a.t);
+      await tx('readwrite', (st) => { photos.slice(50).forEach((x) => st.delete(x.k)); });
+      const o = all.find((x) => x.k === 'orders');
+      if (o && o.v && o.v.length > 30) await this.set('orders', o.v.slice(0, 30));
+    }
+  };
+})();
+
+// ---------------------------------------------------------------- data: encrypted envelopes, cache-busted, stale-while-revalidate
 const keys = new Map();
 async function aesKey(salt, iter) {
-  const id = salt + '|' + iter;
-  if (keys.has(id)) return keys.get(id);
+  const id = salt + '|' + iter; if (keys.has(id)) return keys.get(id);
   const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(KEY), 'PBKDF2', false, ['deriveBits']);
   const bits = new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: b64(salt), iterations: iter, hash: 'SHA-256' }, base, 512));
   const k = await crypto.subtle.importKey('raw', bits.slice(0, 32), 'AES-GCM', false, ['decrypt']);
-  keys.set(id, k);
-  return k;
+  keys.set(id, k); return k;
 }
 async function gunzip(u8) { const ds = new DecompressionStream('gzip'), w = ds.writable.getWriter(); w.write(u8); w.close(); return new Uint8Array(await new Response(ds.readable).arrayBuffer()); }
 async function openEnv(text) {
@@ -138,203 +178,352 @@ async function openEnv(text) {
   if (pt[0] === 0x1f && pt[1] === 0x8b) pt = await gunzip(pt);
   return JSON.parse(new TextDecoder().decode(pt));
 }
-async function getFile(path, cacheKey) {
+async function getFile(path, signal) {
   try {
-    const r = await fetch(path + '?t=' + Date.now(), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
+    const r = await fetch(path + '?t=' + Date.now(), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' }, signal });
     if (!r.ok) throw new Error('http');
-    const j = await openEnv(await r.text());
-    ls.set(cacheKey, j); S.online = true;
-    return { data: j, fresh: true };
-  } catch (_) {
-    S.online = false;
-    const c = ls.get(cacheKey);
-    return { data: c, fresh: false };
-  }
+    return await openEnv(await r.text());
+  } catch (_) { return null; }
+}
+async function bridge(body, ms, signal) {
+  if (!BRIDGE || BRIDGE.indexOf('__OPS') === 0) throw new Error('no-bridge');
+  const ac = new AbortController(), to = setTimeout(() => ac.abort(), ms || 6000);
+  if (signal) signal.addEventListener('abort', () => ac.abort());
+  try {
+    const r = await fetch(BRIDGE, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ secret: BSECRET, ...body }), cache: 'no-store', signal: ac.signal });
+    if (!r.ok) throw new Error('http');
+    return await r.json();
+  } finally { clearTimeout(to); }
 }
 
-// ---------------------------------------------------------------- session
-const normId = (s) => lc(s).trim();
-function resolve(fleet, input) {
-  const q = normId(input), isMail = q.includes('@');
-  const caps = Object.values(fleet.captains || {}).filter((c) => !c.del);
-  const active = caps.filter((c) => c.on !== 0);
-  let cap = active.find((c) => (isMail ? lc(c.email) === q : String(c.code) === q.replace(/\D/g, '')));
-  if (!cap && !caps.length) {   // empty roster: any known rider code may enter
-    const code = q.replace(/\D/g, '');
-    if (!isMail && fleet.riders && fleet.riders[code]) cap = { code, email: '', name: fleet.riders[code].n };
-  }
-  if (!cap) return null;
-  const rider = cap.code && fleet.riders ? fleet.riders[cap.code] : null;
-  return { key: cap.code || lc(cap.email), code: cap.code || '', email: cap.email || '', name: cap.name || (rider && rider.n) || cap.email || cap.code, zone: (cap.z || (rider && rider.z) || '') };
-}
-async function login(input) {
+// ---------------------------------------------------------------- sign in: e-mail only + one-time device approval
+function deviceId() { let d = ls.get('tc_device'); if (!d) { d = 'd' + Array.from(crypto.getRandomValues(new Uint8Array(12)), (b) => b.toString(16).padStart(2, '0')).join(''); ls.set('tc_device', d); } return d; }
+function gate(html) { $('#app').hidden = true; $('#gate').hidden = false; $('#gMsg').innerHTML = html; }
+const loginHtml = '<p>Enter your email to continue</p><input id="lg" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="name@company.com"><div style="margin-top:12px"><button class="btn" id="lgGo" style="width:100%">Continue</button></div>';
+async function signIn(email) {
   $('#lgErr').textContent = '';
-  const { data } = await getFile('fleet_index.json', 'tc_fleet');
-  if (!data) { $('#lgErr').textContent = 'تعذر الاتصال الآن. تحقق من الإنترنت وحاول مرة أخرى.'; return; }
-  const me = resolve(data, input);
-  if (!me) { $('#lgErr').textContent = 'هذا الكود أو الإيميل غير مسجل. تواصل مع مشرفك.'; return; }
-  S.fleet = data;
-  if (!me.zone || !(data.zones || []).some((z) => z.id === me.zone)) {
-    const zs = data.zones || [];
-    if (zs.length === 1) me.zone = zs[0].id;
-    else { $('#zonePick').hidden = false; $('#zonePick').innerHTML = '<div class="sec">اختر الزون الخاص بك</div><div class="chips" style="justify-content:center">' + zs.map((z) => `<button class="chip" data-z="${esc(z.id)}">${esc(z.name)}</button>`).join('') + '</div>'; S.pending = me; return; }
+  email = latin(email).trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('#lgErr').textContent = 'ENTER A VALID EMAIL'; return; }
+  const fleet = await getFile('fleet_index.json');
+  if (fleet) {
+    S.fleet = fleet; IDB.set('fleet', fleet);
+    const caps = Object.values(fleet.captains || {}).filter((c) => !c.del);
+    if (caps.length && !caps.some((c) => c.on !== 0 && String(c.email || '').toLowerCase() === email)) { $('#lgErr').textContent = 'THIS EMAIL IS NOT REGISTERED'; return; }
+    const cap = caps.find((c) => String(c.email || '').toLowerCase() === email);
+    S.me = { email, name: (cap && cap.name) || nameFromEmail(email) };
+  } else if (ls.get('tc_email') === email) S.me = { email, name: nameFromEmail(email) };
+  else { $('#lgErr').textContent = 'NO CONNECTION - TRY AGAIN'; return; }
+  ls.set('tc_email', email);
+  await deviceGate();
+}
+/** remembered, approved device: open instantly from the cache and only verify in the background (a revoked device is signed out) */
+async function silentCheck() {
+  try {
+    const j = await bridge({ action: 'hb', email: S.me.email, device_id: deviceId(), name: S.me.name, zone: S.zone }, 7000);
+    if (j && j.status === 'denied') logout(); else S.cached = false;
+  } catch (_) { S.cached = true; renderStrip(); }
+}
+async function deviceGate() {
+  const me = S.me;
+  for (;;) {
+    let st = '';
+    try { st = (await bridge({ action: 'hb', email: me.email, device_id: deviceId(), name: me.name, zone: S.zone }, 7000)).status; }
+    catch (_) { if (ls.get('tc_appr') === me.email) { st = 'approved'; S.cached = true; } else { $('#lgErr').textContent = 'CANNOT VERIFY THIS DEVICE - CHECK YOUR CONNECTION'; gate(loginHtml); return; } }
+    if (st === 'approved') { ls.set('tc_appr', me.email); start(); return; }
+    if (st === 'denied') { gate('<p><span class="badge bad">ACCESS DENIED</span></p><p>This device was not approved by the coordinator.</p><button class="btn ghost" id="lgBack">Back</button>'); return; }
+    gate('<p><span class="badge warn">WAITING FOR COORDINATOR APPROVAL</span></p><p>' + esc(me.email) + '</p><p class="mono" style="font-size:12px">THIS DEVICE IS NEW. THE COORDINATOR WILL APPROVE IT ONCE.</p>');
+    await sleep(3000);
+    if ($('#gate').hidden) return;
   }
-  start(me);
 }
-function start(me) { S.sess = me; ls.set('tc_sess', me); $('#login').hidden = true; $('#app').hidden = false; boot(); }
-function logout() { ls.set('tc_sess', null); location.reload(); }
 
-// ---------------------------------------------------------------- rendering
-const lateNow = (o, t) => (o.du ? Math.max(0, Math.round((Date.now() - o.du) / 60000)) : (o.late > 0 ? o.late + Math.floor((Date.now() - t) / 60000) : o.late));
-function mask(s, keep) { s = String(s || ''); return s.length > keep ? '*'.repeat(s.length - keep) + s.slice(-keep) : s; }
-function riderDetail(r, m) {
-  m = m || {};
-  const th = m.th, phone = latin(r.p || m.p || '').replace(/\D/g, '');
-  const intl = phone.startsWith('0020') ? phone.slice(2) : phone.startsWith('20') ? phone : phone.startsWith('0') ? '2' + phone : phone ? '20' + phone : '';
-  const f = (k, v) => (v ? `<div class="f"><span>${k}</span><b class="ltr">${esc(v)}</b></div>` : '');
-  return `<div class="det"><div class="photo">${th ? `<img alt="" src="${esc(th)}">` : esc(ini(r.n))}</div><div style="min-width:0">${f('الكود', r.i)}${f('الحالة', r.st || m.st)}${f('الموبايل', r.p || m.p)}${f('الإيميل', m.e)}${f('الرقم القومي', mask(m.d, 4))}${f('بداية الشيفت', r.ss || m.ss)}${f('نهاية الشيفت', r.se || m.se)}${f('الشركة', m.co)}${f('نمرة المكنة', m.l)}
-    <div class="acts">${intl ? `<a class="btn sm ok" href="tel:+${esc(intl)}">اتصال</a><a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/${esc(intl)}">واتساب</a>` : ''}</div></div></div>`;
+// ---------------------------------------------------------------- derived data
+const zoneName = (id) => { const z = ((S.fleet && S.fleet.zones) || []).find((q) => q.zone_id === id); return z ? z.zone_name : id; };
+const zoneOk = (zid) => S.zone === 'ALL' || zid === S.zone;
+function delayedRows() { return ((S.delayed && S.delayed.orders) || []).filter((o) => zoneOk(o.zone_id) && (!S.hybrid || o.is_hybrid)); }
+function riderRows() {
+  const out = [], seen = new Set();
+  Object.values(S.zones).forEach((z) => { if (!zoneOk(z.zone.zone_id)) return; (z.riders || []).forEach((r) => { if (seen.has(r.rider_id)) return; seen.add(r.rider_id); out.push({ ...r, zone_id: z.zone.zone_id, zone: z.zone.zone_name }); }); });
+  return out.filter((r) => S.rf === 'ALL' || r.state === S.rf).sort((a, b) => String(a.rider_name).localeCompare(String(b.rider_name)));
 }
-function renderTele() {
-  const z = S.zone; if (!z) { $('#tele').innerHTML = ''; return; }
-  const L = z.orders.map((o) => lateNow(o, z.t));
-  const k = [['أوردر نشط', z.orders.length, ''], ['متأخر +15', L.filter((x) => x != null && x >= 15).length, 'warn'], ['حرج +30', L.filter((x) => x != null && x >= 30).length, 'bad'], ['بدون مندوب', z.orders.filter((o) => !o.cid).length, ''], ['على الشيفت', z.riders.filter((r) => r.on).length, 'ok']];
-  $('#tele').innerHTML = k.map(([t, v, c]) => `<div class="kpi ${c}"><b>${v}</b><span>${t}</span></div>`).join('');
-  const nb = $('#nbOrders'); nb.hidden = !z.orders.length; nb.textContent = z.orders.length > 99 ? '99+' : z.orders.length;
+const photoOf = (id) => (S.meta && S.meta.riders && S.meta.riders[id] && S.meta.riders[id].photo_base64) || '';
+
+// ---------------------------------------------------------------- rendering (25 cards per batch, search/filters run on the full in-memory data)
+function badgeDelay(m) { return m == null ? '' : `<span class="badge ${m >= 30 ? 'bad' : m >= 15 ? 'warn' : 'ok'}">+${m} MIN</span>`; }
+function orderCard(o, sel) {
+  return `<div class="card ${o.delay_minutes >= 30 ? 'crit' : o.delay_minutes >= 15 ? 'late' : ''}" data-oc="${esc(o.order_code)}"><div class="crow">${sel ? `<input class="chk" type="checkbox" data-sel="${esc(o.order_code)}" ${S.sel.has(o.order_code) ? 'checked' : ''}>` : ''}
+    <div class="cbody"><div class="l1"><b>#${esc(o.order_code)}</b>${badgeDelay(o.delay_minutes)}${o.is_hybrid ? '<span class="badge blue">HYBRID</span>' : ''}<span class="badge">${esc(o.zone || '-')}</span></div>
+    <div class="l2">${esc(o.restaurant_name || '-')}</div>
+    <div class="l2">${o.rider_id || o.rider_name ? esc(o.rider_name || '-') + ' <span class="ltr mono">' + esc(o.rider_id || '-') + '</span> <span class="ltr mono">' + esc(o.rider_phone || '') + '</span>' : '<span class="badge bad">NO RIDER</span>'}</div>
+    <div class="l3"><button class="btn sm ghost" data-det="${esc(o.order_code)}">DETAILS</button></div></div></div></div>`;
 }
-function renderStrip() {
-  const me = S.sess, z = S.zone, fz = (S.fleet.zones || []).find((q) => q.id === me.zone);
-  $('#idIni').textContent = ini(me.name); $('#idName').textContent = me.name || '-';
-  $('#idSub').textContent = [me.code, me.email].filter(Boolean).join(' - ');
-  $('#pZone').textContent = fz ? fz.name : (z && z.zone.name) || '-';
-  const t = z && z.t, age = t ? Math.round((Date.now() - t) / 60000) : null;
-  const st = $('#pStamp'); st.className = 'pill ' + (age == null ? '' : age > 15 ? 'bad' : age > 5 ? 'warn' : 'ok');
-  $('#pStampT').textContent = t ? 'آخر تحديث ' + hm(t) + (age > 0 ? ' (منذ ' + age + ' د)' : '') : 'بانتظار أول تحديث';
-  $('#pOff').hidden = S.online;
+function renderDelay() {
+  const rows = delayedRows(), part = rows.slice(0, S.nD);
+  S.shownRows = rows;
+  $('#dCount').textContent = rows.length; $('#nbDelay').hidden = !rows.length; $('#nbDelay').textContent = rows.length > 99 ? '99+' : rows.length;
+  const zs = (S.fleet && S.fleet.zones) || [];
+  $('#zoneChips').innerHTML = zs.length > 1 ? [['ALL', 'ALL ZONES']].concat(zs.map((z) => [z.zone_id, z.zone_name])).map(([id, n]) => `<button class="chip ${S.zone === id ? 'on' : ''}" data-zc="${esc(id)}">${esc(n)}</button>`).join('') : '';
+  $('#hybridBtn').classList.toggle('on', S.hybrid);
+  $('#dList').innerHTML = S.busy ? '<div class="sk"></div><div class="sk"></div><div class="sk"></div>' : part.map((o) => orderCard(o, true)).join('') || '<div class="empty">NO DELAYED ORDERS</div>';
+  $('#dMore').hidden = part.length >= rows.length; $('#dMore').textContent = 'LOAD MORE (' + (rows.length - part.length) + ')';
+  const n = S.sel.size; $('#fab').hidden = n === 0 || S.view !== 'delay'; $('#fabCopy').textContent = 'COPY SELECTED (' + n + ')'; $('#fabWa').textContent = 'WHATSAPP OFFICE (' + n + ')';
 }
 function renderRiders() {
-  const z = S.zone; if (!z) { $('#rList').innerHTML = '<div class="empty">بانتظار أول بيانات من المشرف...</div>'; $('#rCount').textContent = '0'; return; }
-  const q = lc($('#rq').value).trim();
-  const list = z.riders.filter((r) => !q || lc([r.n, r.i].join(' ')).includes(q)).sort((a, b) => (b.on ? 1 : 0) - (a.on ? 1 : 0) || String(a.n).localeCompare(String(b.n), 'ar'));
-  $('#rCount').textContent = list.length;
-  const part = list.slice(0, S.shownR);
-  $('#rList').innerHTML = part.map((r) => {
-    const open = S.open.has('r' + r.i);
-    return `<div class="card" data-k="r${esc(r.i)}"><div class="row" data-tg="1"><div class="ini">${esc(ini(r.n))}</div><div class="t"><b>${esc(r.n || '-')}</b><small><span class="ltr">${esc(r.i)}</span> - ${esc(r.st || '-')}</small></div><div class="r">${r.on ? '<span class="pill ok">شغال</span>' : '<span class="pill">خارج الشيفت</span>'}</div></div>${open ? riderDetail(r, metaOf(r.i)) : ''}</div>`;
-  }).join('') || '<div class="empty">لا يوجد مناديب مطابقون.</div>';
-  $('#rMore').hidden = part.length >= list.length;
+  const rows = riderRows(), part = rows.slice(0, S.nR);
+  $('#rCount').textContent = rows.length;
+  $('#rChips').innerHTML = ['ALL', 'AVAILABLE', 'ON ORDER', 'BREAK'].map((f) => `<button class="chip ${S.rf === f ? 'on' : ''}" data-rf="${f}">${f}</button>`).join('');
+  $('#rList').innerHTML = part.map((r) => `<div class="card" data-rid="${esc(r.rider_id)}"><div class="crow"><div class="ini" style="width:34px;height:34px;font-size:13px">${esc(ini(r.rider_name))}</div>
+    <div class="cbody" data-open="${esc(r.rider_id)}" style="cursor:pointer"><div class="l1"><b>${esc(r.rider_name || '-')}</b></div><div class="l2"><span class="ltr mono">${esc(r.rider_id)}</span> <span class="badge ${r.state === 'AVAILABLE' ? 'ok' : r.state === 'ON ORDER' ? 'blue' : r.state === 'BREAK' ? 'warn' : ''}">${esc(r.state || 'OFF')}</span>${r.is_hybrid ? ' <span class="badge blue">HYBRID</span>' : ''}</div></div>
+    ${r.rider_phone ? `<a class="btn sm ok" href="tel:${esc(r.rider_phone)}">CALL</a>` : ''}</div></div>`).join('') || '<div class="empty">NO RIDERS</div>';
+  $('#rMore').hidden = part.length >= rows.length; $('#rMore').textContent = 'LOAD MORE (' + (rows.length - part.length) + ')';
 }
-function orderRows() {
-  const z = S.zone; if (!z) return [];
-  const me = S.sess;
-  return z.orders.map((o) => ({ ...o, l: lateNow(o, z.t) })).filter((o) => (S.ofilter === 'mine' ? me.code && o.rid === me.code : S.ofilter === 'late' ? (o.l != null && o.l >= 15) : S.ofilter === 'noRider' ? !o.cid : true))
-    .sort((a, b) => (b.l == null ? -1 : b.l) - (a.l == null ? -1 : a.l));
+function renderZoneSel() {
+  const zs = (S.fleet && S.fleet.zones) || [];
+  $('#zoneSel').innerHTML = [['ALL', 'ALL ZONES']].concat(zs.map((z) => [z.zone_id, z.zone_name])).map(([id, n]) => `<option value="${esc(id)}" ${S.zone === id ? 'selected' : ''}>${esc(n)}</option>`).join('');
 }
-function orderCard(o) {
-  const cls = o.l != null && o.l >= 30 ? 'crit' : o.l != null && o.l >= 15 ? 'late' : '';
-  const rn = o.rid && S.zone.riders.find((r) => r.i === o.rid);
-  return `<div class="card ${cls}"><div class="row" style="cursor:default"><div class="ini">${esc(ini((rn && rn.n) || o.rn))}</div><div class="t"><b><span class="ltr">${esc(o.c)}</span> - ${esc(o.v || '-')}</b><small>${o.cid ? esc((rn && rn.n) || o.rn || 'مندوب') + (o.rid ? ' - ' + esc(o.rid) : '') : 'بدون مندوب'} - ${esc(o.s || '-')}</small></div><div class="r">${o.l != null ? (o.l > 0 ? '<span class="pill ' + (o.l >= 30 ? 'bad' : o.l >= 15 ? 'warn' : '') + '">+' + o.l + 'د</span>' : '<span class="pill ok">في الوقت</span>') : ''}</div></div></div>`;
+function renderStrip() {
+  $('#idIni').textContent = ini(S.me.name); $('#idName').textContent = S.me.name;
+  const age = S.lastOk ? Math.round((Date.now() - S.lastOk) / 1000) : null, live = age != null && age < 90 && !S.cached;
+  const b = $('#live'); b.className = 'badge ' + (live ? 'ok' : 'warn');
+  b.innerHTML = live ? `<i class="pulse" style="width:8px;height:8px"></i><span>LIVE ${age}s</span>` : '<span>CACHED MODE</span>';
 }
-function renderOrders() {
-  const rows = orderRows(), part = rows.slice(0, S.shownO);
-  $('#oCount').textContent = rows.length;
-  const F = [['all', 'كل الزون'], ['mine', 'أوردراتي'], ['late', 'متأخر +15'], ['noRider', 'بدون مندوب']];
-  $('#oChips').innerHTML = F.map(([k, t]) => `<button class="chip ${S.ofilter === k ? 'on' : ''}" data-of="${k}">${t}</button>`).join('');
-  $('#oList').innerHTML = part.map(orderCard).join('') || '<div class="empty">لا توجد أوردرات بهذا الفلتر.</div>';
-  $('#oMore').hidden = part.length >= rows.length;
+function renderAll() { renderStrip(); renderZoneSel(); renderDelay(); if (S.view === 'riders') renderRiders(); }
+
+// ---------------------------------------------------------------- refresh: instant from the cache, silent revalidation every 20s (inputs / scroll are never touched)
+async function loadCache() {
+  const [d, f] = await Promise.all([IDB.get('delayed'), IDB.get('fleet')]);
+  if (f) S.fleet = f; if (d) S.delayed = d;
+  const zid = S.zone !== 'ALL' ? [S.zone] : ((S.fleet && S.fleet.zones) || []).map((z) => z.zone_id);
+  for (const id of zid) { const z = await IDB.get('zone:' + id); if (z) S.zones[id] = z; }
+}
+async function refresh(manual) {
+  if (S.refreshing) return; S.refreshing = true;
+  if (manual) { S.busy = true; renderDelay(); }
+  try {
+    const t0 = Date.now();
+    const [d, f] = await Promise.all([getFile('data/delayed.json'), getFile('fleet_index.json')]);
+    if (f) { S.fleet = f; IDB.set('fleet', f); }
+    const zs = S.zone === 'ALL' ? ((S.fleet && S.fleet.zones) || []).map((z) => z.zone_id) : [S.zone];
+    const zr = await Promise.all(zs.map((id) => getFile('zones/' + String(id).replace(/[^\w-]/g, '_') + '.json')));
+    zr.forEach((z, i) => { if (z) { S.zones[zs[i]] = z; IDB.set('zone:' + zs[i], z); } });
+    if (d) { S.delayed = d; IDB.set('orders', d.orders.slice(0, 30)); IDB.set('delayed', d); }
+    S.cached = !(d || f);
+    if (d || f) S.lastOk = Date.now();
+    if (manual) await sleep(Math.max(0, 350 - (Date.now() - t0)));
+  } finally { S.busy = false; S.refreshing = false; renderAll(); }
 }
 async function loadMeta() {
-  if (S.meta || S.metaBusy) return;
-  S.metaBusy = true;
-  const { data } = await getFile('riders_meta.json', 'tc_meta');
-  S.meta = data || {}; S.metaBusy = false;
-  renderRiders(); if (S.view === 'search') renderSearch();
-}
-const metaOf = (id) => (S.meta && S.meta.riders && S.meta.riders[id]) || (S.fleet && S.fleet.riders && S.fleet.riders[id]) || null;
-async function renderSearch() {
-  const raw = $('#sq').value.trim(), q = lc(raw).replace(/\s+/g, ' ');
-  const box = $('#sList');
-  if (!q) { box.innerHTML = '<div class="empty">اكتب كود المندوب أو الاسم أو الموبايل أو الرقم القومي أو كود الأوردر.</div>'; return; }
-  const digits = q.replace(/\D/g, '').replace(/^hfeg/, '');
-  const riders = Object.entries((S.fleet && S.fleet.riders) || {}).filter(([i, r]) => lc([i, r.n, r.p, r.d, r.e].join(' ')).includes(q) || (digits.length >= 4 && [i, r.p, r.d].some((v) => latin(v).replace(/\D/g, '').endsWith(digits) || latin(v).replace(/\D/g, '') === digits))).slice(0, 40);
-  let orders = [];
-  const pool = Object.values(S.allZones || {}).concat(S.zone ? [S.zone] : []);
-  pool.forEach((z) => (z.orders || []).forEach((o) => { if (lc([o.c, o.v, o.rn].join(' ')).includes(q) || (digits.length >= 6 && o.c === digits)) orders.push({ ...o, l: lateNow(o, z.t), zn: z.zone.name }); }));
-  const seen = new Set(); orders = orders.filter((o) => (seen.has(o.c) ? false : seen.add(o.c))).slice(0, 30);
-  const zn = (id) => { const z = (S.fleet.zones || []).find((q2) => q2.id === id); return z ? z.name : ''; };
-  box.innerHTML = (orders.length ? '<div class="sec">أوردرات</div>' + orders.map(orderCard).join('') : '') + (riders.length ? '<div class="sec">مناديب</div>' + riders.map(([i, r]) => `<div class="card" data-k="s${esc(i)}"><div class="row" data-tg="1"><div class="ini">${esc(ini(r.n))}</div><div class="t"><b>${esc(r.n || '-')}</b><small><span class="ltr">${esc(i)}</span> - ${esc(zn(r.z))}</small></div></div>${S.open.has('s' + i) ? riderDetail({ i, n: r.n, p: r.p, st: r.st }, metaOf(i)) : ''}</div>`).join('') : '')
-    || '<div class="empty">لا توجد نتائج.</div>';
-  if (!orders.length && digits.length >= 6 && !S.allLoaded) loadOtherZones();
-  loadMeta();
-}
-async function loadOtherZones() {
-  S.allLoaded = true; S.allZones = S.allZones || {};
-  for (const z of S.fleet.zones || []) { if (z.id === S.sess.zone) continue; const { data } = await getFile(z.file || 'zones/' + z.id + '.json', 'tc_zone_' + z.id); if (data) S.allZones[z.id] = data; }
-  if (S.view === 'search') renderSearch();
-}
-function show(v) {
-  S.view = v;
-  ['riders', 'orders', 'search'].forEach((x) => { $('#v-' + x).hidden = x !== v; });
-  document.querySelectorAll('#dock button').forEach((b) => b.classList.toggle('on', b.dataset.v === v));
-  if (v === 'orders') renderOrders(); if (v === 'search') { renderSearch(); $('#sq').focus(); } window.scrollTo({ top: 0 });
+  if (S.meta || S.metaBusy) return; S.metaBusy = true;
+  const m = await getFile('riders_meta.json'); if (m) { S.meta = m; IDB.set('meta', m); }
+  S.metaBusy = false;
 }
 
-// ---------------------------------------------------------------- refresh (stale-while-revalidate)
-async function refresh(manual) {
-  const b = $('#btnRefresh'); b.classList.add('spin');
+// ---------------------------------------------------------------- rider photo on demand (meta cache, IndexedDB, then the live bridge)
+async function livePhoto(id) {
+  const r = await liveLookup('R:' + id);
+  return r && r.rider && r.rider.photo_base64 ? r.rider.photo_base64 : '';
+}
+async function photoFor(id) {
+  if (photoOf(id)) return photoOf(id);
+  const c = await IDB.get('p:' + id); if (c) return c;
+  let p = ''; try { p = await livePhoto(id); } catch (_) { p = ''; }
+  if (p) await IDB.set('p:' + id, p);
+  return p;
+}
+function openSheet(html) { $('#sheet').innerHTML = '<div class="shade" data-close="1"></div><div class="sheet">' + html + '</div>'; }
+function closeSheet() { $('#sheet').innerHTML = ''; }
+async function riderSheet(id, extra) {
+  const r = riderRows().find((x) => x.rider_id === id) || Object.values(S.zones).flatMap((z) => z.riders || []).find((x) => x.rider_id === id) || { rider_id: id, rider_name: (S.fleet && S.fleet.riders && S.fleet.riders[id] && S.fleet.riders[id].rider_name) || '' };
+  const m = (S.meta && S.meta.riders && S.meta.riders[id]) || {};
+  const f = (k, v) => (v ? `<div class="f"><span>${k}</span><b class="ltr mono">${esc(v)}</b></div>` : '');
+  openSheet(`<div class="photo load" id="shPhoto">${esc(ini(r.rider_name))}</div><h3 style="text-align:center">${esc(r.rider_name || '-')}</h3>
+    ${f('RIDER ID', id)}${f('STATUS', r.state || r.status)}${f('ZONE', r.zone || zoneName(r.zone_id || ''))}${f('PHONE', r.rider_phone || m.rider_phone)}${f('SHIFT', [r.shift_start, r.shift_end].filter(Boolean).join(' - '))}${extra || ''}
+    <div class="l3" style="margin-top:10px">${(r.rider_phone || m.rider_phone) ? `<a class="btn ok" style="flex:1" href="tel:${esc(r.rider_phone || m.rider_phone)}">CALL</a>` : ''}<button class="btn ghost" style="flex:1" data-close="1">CLOSE</button></div>`);
+  loadMeta();
+  const p = await photoFor(id);
+  const el = $('#shPhoto'); if (!el) return;
+  el.classList.remove('load');
+  el.innerHTML = p ? `<img alt="" src="${p.startsWith('data:') ? p : 'data:image/webp;base64,' + p}">` : esc(ini(r.rider_name));
+}
+function orderSheet(code) {
+  const o = delayedRows().concat(((S.delayed && S.delayed.orders) || [])).find((x) => x.order_code === code) || Object.values(S.zones).flatMap((z) => z.orders || []).find((x) => x.order_code === code);
+  if (!o) return;
+  const f = (k, v) => (v ? `<div class="f"><span>${k}</span><b class="ltr mono">${esc(v)}</b></div>` : '');
+  openSheet(`<h3>#${esc(o.order_code)} ${badgeDelay(o.delay_minutes)}</h3>${f('RESTAURANT', o.restaurant_name)}${f('STATUS', o.status)}${f('ZONE', o.zone)}${f('ORDER ID', o.order_id)}${f('TYPE', o.is_hybrid ? 'HYBRID' : 'MART')}
+    <div class="sec"><span>RIDER</span></div><div id="shRider"></div><button class="btn ghost" style="width:100%" data-close="1">CLOSE</button>`);
+  if (o.rider_id) riderBlock(o); else $('#shRider').innerHTML = '<span class="badge bad">NO RIDER</span>';
+}
+async function riderBlock(o) {
+  const el = $('#shRider'); if (!el) return;
+  el.innerHTML = `<div class="photo load" id="shPhoto">${esc(ini(o.rider_name))}</div><div class="f"><span>NAME</span><b>${esc(o.rider_name)}</b></div><div class="f"><span>ID</span><b class="ltr mono">${esc(o.rider_id)}</b></div>${o.rider_phone ? `<div class="f"><span>PHONE</span><b class="ltr mono">${esc(o.rider_phone)}</b></div><a class="btn ok" style="width:100%;margin-top:6px" href="tel:${esc(o.rider_phone)}">CALL</a>` : ''}`;
+  loadMeta();
+  const p = await photoFor(o.rider_id);
+  const ph = $('#shPhoto'); if (!ph) return;
+  ph.classList.remove('load'); ph.innerHTML = p ? `<img alt="" src="${p.startsWith('data:') ? p : 'data:image/webp;base64,' + p}">` : esc(ini(o.rider_name));
+}
+
+// ---------------------------------------------------------------- live bridge lookup (orders / riders) with a 6s graceful timeout
+async function liveLookup(code, signal) {
+  const c = String(code);
+  const first = await bridge({ action: 'request', code: c }, 5000, signal);
+  let r = first;
+  const end = Date.now() + 6000;
+  while (!(r && r.status === 'ready') && Date.now() < end) {
+    if (signal && signal.aborted) throw new Error('abort');
+    await sleep(500);
+    r = await bridge({ action: 'result', code: c }, 4000, signal);
+    if (r && r.status === 'ready') break;
+  }
+  if (!(r && r.data)) { if (r && r.status === 'ready') r = await bridge({ action: 'result', code: c }, 4000, signal); }
+  if (!(r && r.data)) throw new Error('timeout');
+  const j = JSON.parse(r.data);
+  if (!j.found) throw new Error('nf');
+  return j;
+}
+
+// ---------------------------------------------------------------- dual-track search: local data (instant) and the live bridge race (Promise.any)
+function norm(q) { const t = latin(q).trim().replace(/^#/, '').replace(/^HF[_\s-]?EG/i, ''); return { text: t.toLowerCase().replace(/\s+/g, ' '), digits: t.replace(/\D/g, '') }; }
+function localSearch(n) {
+  const orders = [], riders = [];
+  const pool = new Map();
+  ((S.delayed && S.delayed.orders) || []).forEach((o) => pool.set(o.order_code, o));
+  Object.values(S.zones).forEach((z) => (z.orders || []).forEach((o) => { if (!pool.has(o.order_code)) pool.set(o.order_code, o); }));
+  pool.forEach((o) => { if ((n.digits.length >= 4 && o.order_code.includes(n.digits)) || [o.restaurant_name, o.rider_name].join(' ').toLowerCase().includes(n.text)) orders.push(o); });
+  const fr = (S.fleet && S.fleet.riders) || {};
+  Object.keys(fr).forEach((id) => { const r = fr[id]; if ((n.digits.length >= 3 && (id === n.digits || String(r.rider_phone || '').replace(/\D/g, '').endsWith(n.digits) || String(r.national_id || '') === n.digits)) || String(r.rider_name || '').toLowerCase().includes(n.text) || id === n.text) riders.push({ rider_id: id, rider_name: r.rider_name, rider_phone: r.rider_phone, zone_id: r.zone_id }); });
+  return { orders: orders.slice(0, 20), riders: riders.slice(0, 20) };
+}
+function renderResults(res, pendingLive) {
+  const box = $('#results'); box.hidden = false;
+  const o = (res.orders || []).map((x) => orderCard(x, false)).join('');
+  const r = (res.riders || []).map((x) => `<div class="card"><div class="crow"><div class="ini" style="width:34px;height:34px;font-size:13px">${esc(ini(x.rider_name))}</div><div class="cbody" data-open="${esc(x.rider_id)}" style="cursor:pointer"><div class="l1"><b>${esc(x.rider_name || '-')}</b></div><div class="l2"><span class="ltr mono">${esc(x.rider_id)}</span> <span class="badge">${esc(zoneName(x.zone_id) || '-')}</span></div></div>${x.rider_phone ? `<a class="btn sm ok" href="tel:${esc(x.rider_phone)}">CALL</a>` : ''}</div></div>`).join('');
+  box.innerHTML = (o ? '<div class="sec"><span>ORDERS</span></div>' + o : '') + (r ? '<div class="sec"><span>RIDERS</span></div>' + r : '') + (pendingLive ? '<div class="sk"></div>' : '') + (!o && !r && !pendingLive ? '<div class="empty">NO RESULTS</div>' : '');
+}
+async function runSearch() {
+  const raw = $('#q').value; const n = norm(raw);
+  if (S.acAbort) S.acAbort.abort();
+  if (!raw.trim()) { $('#results').hidden = true; showView(S.view); return; }
+  ['delay', 'riders', 'susp'].forEach((v) => { $('#v-' + v).hidden = true; });
+  const ac = new AbortController(); S.acAbort = ac;
+  const loc = new Promise((res, rej) => { const r = localSearch(n); (r.orders.length || r.riders.length) ? res({ src: 'local', ...r }) : rej(new Error('none')); });
+  const live = n.digits.length >= 6 ? liveLookup(n.digits, ac.signal).then((j) => ({ src: 'live', orders: j.order ? [{ ...j.order, rider_name: (j.rider && j.rider.rider_name) || j.order.rider_name, rider_phone: (j.rider && j.rider.rider_phone) || j.order.rider_phone }] : [], riders: j.rider ? [{ ...j.rider, zone_id: '' }] : [] }))
+    : n.digits.length >= 3 && n.digits.length <= 12 ? liveLookup('R:' + n.digits, ac.signal).then((j) => ({ src: 'live', orders: [], riders: j.rider ? [{ ...j.rider, zone_id: '' }] : [] })) : Promise.reject(new Error('skip'));
+  renderResults({}, true);
+  let first = null;
+  try { first = await Promise.any([loc, live]); } catch (_) { first = null; }
+  if (ac.signal.aborted) return;
+  renderResults(first || {}, !first && n.digits.length >= 3);
+  live.then((l) => { if (ac.signal.aborted) return; const m = { orders: [...(first ? first.orders : []), ...l.orders], riders: [...(first ? first.riders : []), ...l.riders] }; const seenO = new Set(), seenR = new Set(); m.orders = m.orders.filter((x) => !seenO.has(x.order_code) && seenO.add(x.order_code)); m.riders = m.riders.filter((x) => !seenR.has(x.rider_id) && seenR.add(x.rider_id)); renderResults(m, false); })
+    .catch(() => { if (!ac.signal.aborted && !first) renderResults({}, false); });
+}
+let qT = null;
+function onQ() { clearTimeout(qT); qT = setTimeout(runSearch, 250); }   // 250ms debounce; a newer keystroke aborts the older lookups
+
+// ---------------------------------------------------------------- suspension requests (bottom sheet + timeline + chime on PENDING -> decision)
+async function pollReqs() {
   try {
-    const z = await getFile('zones/' + S.sess.zone.replace(/[^\w-]/g, '_') + '.json', 'tc_zone_' + S.sess.zone);
-    if (z.data) S.zone = z.data;
-    const f = await getFile('fleet_index.json', 'tc_fleet');
-    if (f.data) S.fleet = f.data;
-    renderStrip(); renderTele(); renderRiders(); if (S.view === 'orders') renderOrders();
-    if (manual) toast(S.online ? 'تم التحديث' : 'غير متصل - يتم عرض آخر بيانات محفوظة');
-  } finally { b.classList.remove('spin'); }
+    const j = await bridge({ action: 'susp_status', email: S.me.email, device_id: deviceId() }, 5000);
+    if (!j || !j.ok) { if (j && j.error === 'device-not-approved') { ls.set('tc_appr', ''); logout(); } return; }
+    const seen = (() => { try { return JSON.parse(ls.get('tc_req_seen') || '{}'); } catch (_) { return {}; } })();
+    let changed = false;
+    j.items.forEach((q) => { if (seen[q.id] === 'PENDING' && q.status !== 'PENDING') { changed = true; banner('REQUEST UPDATED: ' + q.rider_id + ' - ' + q.status); } seen[q.id] = q.status; });
+    ls.set('tc_req_seen', JSON.stringify(seen));
+    if (changed) chime();
+    S.reqs = j.items; renderReqs();
+  } catch (_) { /* offline: keep the last list */ }
 }
-function boot() {
-  const me = S.sess;
-  S.zone = ls.get('tc_zone_' + me.zone);       // instant render from cache
-  S.fleet = S.fleet || ls.get('tc_fleet') || { zones: [], riders: {}, captains: {} };
-  renderStrip(); renderTele(); renderRiders();
-  refresh(false);
-  loadMeta();
-  setInterval(() => { if (!document.hidden) refresh(false); }, 45000);
-  setInterval(() => { renderStrip(); renderTele(); }, 30000);
+function renderReqs() {
+  const pend = S.reqs.filter((q) => q.status === 'PENDING').length;
+  $('#nbSusp').hidden = !pend; $('#nbSusp').textContent = pend;
+  $('#sList').innerHTML = S.reqs.map((q) => `<div class="it s-${esc(q.status)}"><div class="l1"><b class="ltr mono">${esc(q.rider_id)}</b><span class="badge ${q.status === 'SUSPENSION' ? 'bad' : q.status === 'REJECTED' ? '' : 'warn'}">${esc(q.status)}</span></div>
+    <div class="l2">${esc(q.reason)}${q.note ? ' - ' + esc(q.note) : ''}</div><div class="l2 mono" style="font-size:11px">${new Date(q.t).toLocaleTimeString('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit' })}</div></div>`).join('') || '<div class="empty">NO REQUESTS TODAY</div>';
+}
+function reqSheet() {
+  openSheet(`<h3>NEW SUSPENSION REQUEST</h3><input class="in" id="rqRid" placeholder="Rider ID or name" autocomplete="off"><div id="rqSug"></div>
+    <div class="sec"><span>REASON</span></div><div class="chips" id="rqReasons">${REASONS.map((r) => `<button class="chip" data-reason="${esc(r)}">${esc(r)}</button>`).join('')}</div>
+    <div class="l3"><button class="btn" id="rqGo" style="flex:1">SUBMIT</button><button class="btn ghost" data-close="1">CANCEL</button></div><div class="err" id="rqErr"></div>`);
+}
+async function submitReq() {
+  const rid = latin($('#rqRid').dataset.id || $('#rqRid').value).replace(/\D/g, ''), on = $('#rqReasons .chip.on');
+  if (!/^\d{3,12}$/.test(rid)) { $('#rqErr').textContent = 'ENTER A VALID RIDER ID'; return; }
+  if (!on) { $('#rqErr').textContent = 'CHOOSE A REASON'; return; }
+  const btn = $('#rqGo'); btn.disabled = true;
+  try {
+    const j = await bridge({ action: 'susp_submit', email: S.me.email, device_id: deviceId(), name: S.me.name, zone: S.zone === 'ALL' ? '' : zoneName(S.zone), rider_id: rid, reason: on.dataset.reason }, 7000);
+    if (j.ok) { closeSheet(); toast('REQUEST SENT'); pollReqs(); }
+    else $('#rqErr').textContent = j.error === 'duplicate' ? 'A REQUEST FOR THIS RIDER IS ALREADY PENDING' : j.error === 'device-not-approved' ? 'THIS DEVICE IS NOT APPROVED' : 'COULD NOT SEND - TRY AGAIN';
+  } catch (_) { $('#rqErr').textContent = 'NO CONNECTION - TRY AGAIN'; }
+  btn.disabled = false;
+}
+
+// ---------------------------------------------------------------- batch copy / WhatsApp office message
+function batchText() {
+  const rows = (S.shownRows || []).filter((o) => S.sel.has(o.order_code));
+  const lines = rows.map((o, i) => `${i + 1}. #${o.order_code} | ${o.restaurant_name || '-'} | ${o.rider_name || '-'} (${o.rider_id || '-'}) | ${o.rider_phone || '-'} | ${o.zone || '-'} | +${o.delay_minutes == null ? 0 : o.delay_minutes} min${o.is_hybrid ? ' | HYBRID' : ''}`);
+  return 'DELAYED ORDERS (' + rows.length + ') - PLEASE CLOSE:\n' + lines.join('\n');
+}
+async function copyText(t) { try { await navigator.clipboard.writeText(t); } catch (_) { const x = document.createElement('textarea'); x.value = t; document.body.append(x); x.select(); try { document.execCommand('copy'); } catch (__) {} x.remove(); } }
+
+// ---------------------------------------------------------------- navigation / boot
+function showView(v) {
+  S.view = v;
+  ['delay', 'riders', 'susp'].forEach((x) => { $('#v-' + x).hidden = x !== v || !$('#results').hidden; });
+  document.querySelectorAll('#dock button').forEach((b) => b.classList.toggle('on', b.dataset.v === v));
+  if (v === 'riders') renderRiders(); if (v === 'delay') renderDelay(); if (v === 'susp') pollReqs();
+  $('#fab').hidden = !(v === 'delay' && S.sel.size);
+  window.scrollTo({ top: 0 });
+}
+function logout() { ls.set('tc_appr', ''); ls.set('tc_email', ''); gate(loginHtml); }
+async function start() {
+  $('#gate').hidden = true; $('#app').hidden = false;
+  S.zone = ls.get('tc_zone') || 'ALL';
+  await loadCache();                                   // < 100ms from the cache
+  renderAll(); showView('delay');
+  refresh(false); loadMeta();
+  if (S.timers) return;
+  S.timers = [setInterval(() => { if (!document.hidden) refresh(false); }, 20000), setInterval(renderStrip, 1000), setInterval(() => IDB.gc(), 15 * 60000),
+    setInterval(() => { if (!document.hidden) { bridge({ action: 'hb', email: S.me.email, device_id: deviceId(), name: S.me.name, zone: S.zone }, 5000).then((j) => { if (j && j.status === 'denied') logout(); }).catch(() => {}); pollReqs(); } }, 20000)];
   document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(false); });
-  window.addEventListener('online', () => refresh(false));
-  window.addEventListener('offline', () => { S.online = false; renderStrip(); });
 }
-
-// ---------------------------------------------------------------- events
-$('#lgGo').onclick = () => { const v = $('#lg').value.trim(); if (v) login(v); };
-$('#lg').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#lgGo').click(); });
-$('#zonePick').addEventListener('click', (e) => { const b = e.target.closest('[data-z]'); if (b && S.pending) { S.pending.zone = b.dataset.z; start(S.pending); } });
-$('#btnRefresh').onclick = () => refresh(true);
-$('#btnOut').onclick = logout;
-$('#dock').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) show(b.dataset.v); });
-$('#rq').addEventListener('input', () => { S.shownR = 50; renderRiders(); });
-let sT = null; $('#sq').addEventListener('input', () => { clearTimeout(sT); sT = setTimeout(renderSearch, 120); });
-$('#rMore').onclick = () => { S.shownR += 50; renderRiders(); };
-$('#oMore').onclick = () => { S.shownO += 50; renderOrders(); };
-$('#oChips').addEventListener('click', (e) => { const b = e.target.closest('[data-of]'); if (b) { S.ofilter = b.dataset.of; S.shownO = 50; renderOrders(); } });
 document.addEventListener('click', (e) => {
-  const row = e.target.closest('[data-tg]'); if (!row) return;
-  const k = row.closest('[data-k]').dataset.k;
-  if (S.open.has(k)) S.open.delete(k); else S.open.add(k);
-  loadMeta(); if (S.view === 'search') renderSearch(); else renderRiders();
+  const t = e.target;
+  if (t.id === 'lgGo') return signIn($('#lg').value);
+  if (t.id === 'lgBack') return gate(loginHtml);
+  if (t.closest('[data-close]')) return closeSheet();
+  const d = t.closest('[data-det]'); if (d) return orderSheet(d.dataset.det);
+  const o = t.closest('[data-open]'); if (o) return riderSheet(o.dataset.open);
+  const zc = t.closest('[data-zc]'); if (zc) { S.zone = zc.dataset.zc; ls.set('tc_zone', S.zone); S.nD = 25; refresh(false); renderAll(); return; }
+  const rf = t.closest('[data-rf]'); if (rf) { S.rf = rf.dataset.rf; S.nR = 25; return renderRiders(); }
+  const rs = t.closest('[data-reason]'); if (rs) { document.querySelectorAll('#rqReasons .chip').forEach((c) => c.classList.toggle('on', c === rs)); return; }
+  const sg = t.closest('[data-sug]'); if (sg) { $('#rqRid').value = sg.dataset.sug + ' - ' + sg.dataset.n; $('#rqRid').dataset.id = sg.dataset.sug; $('#rqSug').innerHTML = ''; return; }
+  const dk = t.closest('#dock button'); if (dk) return showView(dk.dataset.v);
+  switch (t.id) {
+    case 'hybridBtn': S.hybrid = !S.hybrid; S.nD = 25; return renderDelay();
+    case 'selAll': { const rows = delayedRows(); const all = rows.every((o) => S.sel.has(o.order_code)); rows.forEach((o) => (all ? S.sel.delete(o.order_code) : S.sel.add(o.order_code))); return renderDelay(); }
+    case 'dMore': S.nD += 25; return renderDelay();
+    case 'rMore': S.nR += 25; return renderRiders();
+    case 'btnRefresh': return refresh(true);
+    case 'fabCopy': return copyText(batchText()).then(() => toast('COPIED'));
+    case 'fabWa': window.open('https://wa.me/?text=' + encodeURIComponent(batchText()), '_blank', 'noopener'); return;
+    case 'newReq': return reqSheet();
+    case 'rqGo': return submitReq();
+  }
 });
-// pull-to-refresh
-(() => { let y0 = 0, on = false; window.addEventListener('touchstart', (e) => { if (window.scrollY <= 0 && e.touches.length === 1) { y0 = e.touches[0].clientY; on = true; } }, { passive: true });
-  window.addEventListener('touchend', (e) => { if (on && e.changedTouches && e.changedTouches[0].clientY - y0 > 90) refresh(true); on = false; }); })();
-
-// ---------------------------------------------------------------- start: remembered session or login (code or email once)
+document.addEventListener('change', (e) => {
+  const t = e.target;
+  if (t.dataset && t.dataset.sel) { if (t.checked) S.sel.add(t.dataset.sel); else S.sel.delete(t.dataset.sel); const n = S.sel.size; $('#fab').hidden = n === 0; $('#fabCopy').textContent = 'COPY SELECTED (' + n + ')'; $('#fabWa').textContent = 'WHATSAPP OFFICE (' + n + ')'; return; }
+  if (t.id === 'zoneSel') { S.zone = t.value; ls.set('tc_zone', S.zone); S.nD = 25; S.nR = 25; refresh(false); renderAll(); }
+});
+document.addEventListener('input', (e) => {
+  if (e.target.id === 'q') onQ();
+  if (e.target.id === 'rqRid') { const v = latin(e.target.value).toLowerCase(); delete e.target.dataset.id; const fr = (S.fleet && S.fleet.riders) || {}; const hits = v.length >= 2 ? Object.keys(fr).filter((id) => id.startsWith(v) || String(fr[id].rider_name || '').toLowerCase().includes(v)).slice(0, 5) : []; $('#rqSug').innerHTML = hits.map((id) => `<button class="chip" data-sug="${esc(id)}" data-n="${esc(fr[id].rider_name)}">${esc(id)} - ${esc(fr[id].rider_name)}</button>`).join(''); }
+});
+$('#lg').addEventListener('keydown', (e) => { if (e.key === 'Enter') signIn($('#lg').value); });
 (function init() {
-  if (!(window.crypto && crypto.subtle)) { $('#login').hidden = false; $('#lgErr').textContent = 'افتح الرابط من متصفح حديث وبشكل آمن (https).'; return; }
-  const me = ls.get('tc_sess');
-  if (me && me.zone) { S.sess = me; $('#app').hidden = false; boot(); }
-  else $('#login').hidden = false;
-  const q = new URLSearchParams(location.search).get('id');
-  if (!me && q) { $('#lg').value = q; $('#lgGo').click(); }
+  if (!(window.crypto && crypto.subtle)) { $('#gate').hidden = false; $('#lgErr').textContent = 'OPEN THIS LINK IN A MODERN BROWSER OVER HTTPS'; return; }
+  const em = ls.get('tc_email');
+  if (em && ls.get('tc_appr') === em) { S.me = { email: em, name: nameFromEmail(em) }; start(); silentCheck(); }
+  else $('#gate').hidden = false;
 })();
 </script>
 </body>
