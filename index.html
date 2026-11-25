@@ -1,89 +1,341 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#FF5A00"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow">
-  <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png"><link rel="icon" href="icons/icon-192.png">
-  <title>Talabat Captains Hub</title>
-  <link rel="stylesheet" href="styles/pwa.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FF5A00">
+<meta name="robots" content="noindex,nofollow">
+<title>Talabat Fleet Cockpit</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FF5A00'/%3E%3Cstop offset='1' stop-color='%23FF8533'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23g)'/%3E%3Cpath d='M20 38a14 14 0 0 1 28 0v6H20z' fill='%23fff'/%3E%3Crect x='32' y='30' width='16' height='6' rx='3' fill='%23FF7A1A'/%3E%3C/svg%3E">
+<style>
+:root{--or:#FF5A00;--or2:#FF8533;--bg:#f3f4f7;--card:#fff;--card2:#eef0f4;--tx:#17181c;--mut:#6a6f7a;--bd:#dfe2e8;--ok:#0f9d58;--bad:#d93025;--warn:#c77700;--blue:#2563eb;--glass:rgba(255,255,255,.72)}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1013;--card:#181a1f;--card2:#21242b;--tx:#f2f3f5;--mut:#9b9fa9;--bd:#2c2f37;--ok:#2fd27f;--bad:#ff5a5f;--warn:#f5a524;--blue:#6ea0ff;--glass:rgba(32,34,40,.72)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;max-width:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--tx);font:400 15px/1.5 "Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;min-height:100dvh;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+.ltr{direction:ltr;unicode-bidi:embed;display:inline-block}
+button{font:inherit;color:inherit}
+#login{min-height:100dvh;display:grid;place-items:center;padding:20px}
+.lbox{width:min(380px,100%);background:var(--card);border:1px solid var(--bd);border-radius:24px;padding:26px 20px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.14)}
+.logo{width:68px;height:68px;margin:0 auto 10px;border-radius:20px;background:linear-gradient(135deg,var(--or),var(--or2));display:grid;place-items:center}
+.logo svg{width:44px;height:44px}
+.lbox h1{font-size:20px;margin:6px 0 4px}.lbox p{color:var(--mut);margin:0 0 14px;font-size:14px}
+.lbox input{width:100%;background:var(--card2);color:var(--tx);border:2px solid var(--bd);border-radius:14px;padding:14px;font-size:17px;text-align:center;direction:ltr;outline:none}
+.lbox input:focus{border-color:var(--or)}
+.btn{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:0;border-radius:14px;padding:13px 16px;font-weight:700;cursor:pointer;min-height:46px}
+.btn.ghost{background:var(--card2);color:var(--tx);border:1px solid var(--bd)}
+.btn.sm{min-height:36px;padding:7px 12px;font-size:13px;border-radius:11px}
+.btn.ok{background:var(--ok)}
+.err{color:var(--bad);font-weight:700;font-size:14px;margin-top:10px;min-height:20px}
+#app{max-width:760px;margin:0 auto;padding:0 10px}
+.strip{position:sticky;top:0;z-index:20;margin:0 -10px 10px;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;background:var(--glass);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:2px solid var(--or)}
+.r1,.r2{display:flex;align-items:center;gap:8px;min-width:0}
+.r2{margin-top:6px;flex-wrap:wrap}
+.ini{flex:none;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--or),var(--or2));letter-spacing:.5px}
+.who{flex:1;min-width:0}.who b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.who small{color:var(--mut)}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;border:1px solid var(--bd);background:var(--card2);font-size:12.5px;font-weight:600;white-space:nowrap}
+.pill.ok{color:var(--ok);border-color:var(--ok)}.pill.warn{color:var(--warn);border-color:var(--warn)}.pill.bad{color:var(--bad);border-color:var(--bad)}.pill.blue{color:var(--blue);border-color:var(--blue)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block}
+.dot.pulse{animation:pl 1.8s infinite}@keyframes pl{0%{box-shadow:0 0 0 0 rgba(47,210,127,.6)}70%{box-shadow:0 0 0 7px rgba(47,210,127,0)}100%{box-shadow:0 0 0 0 rgba(47,210,127,0)}}
+.ib{flex:none;background:var(--card2);border:1px solid var(--bd);border-radius:11px;width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
+.ib svg{width:18px;height:18px}.ib.spin svg{animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.tele{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px}
+.kpi{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:8px 4px;text-align:center;min-width:0}
+.kpi b{display:block;font-size:20px;line-height:1.1}.kpi span{font-size:11px;color:var(--mut)}
+.kpi.warn b{color:var(--warn)}.kpi.bad b{color:var(--bad)}.kpi.ok b{color:var(--ok)}
+.sec{margin:8px 2px;color:var(--mut);font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;margin-bottom:8px;overflow:hidden}
+.row{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;min-width:0}
+.row .t{flex:1;min-width:0}.row .t b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row .t small{color:var(--mut);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .r{flex:none;text-align:end;font-weight:700}
+.crit{border-inline-start:5px solid var(--bad)}.late{border-inline-start:5px solid var(--warn)}
+.det{padding:0 12px 12px;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.photo{width:64px;height:64px;border-radius:14px;background:var(--card2);overflow:hidden;display:grid;place-items:center;font-weight:800;font-size:22px;color:#fff;background:linear-gradient(135deg,var(--or),var(--or2))}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.f{display:flex;justify-content:space-between;gap:8px;background:var(--card2);border-radius:10px;padding:6px 10px;margin-bottom:4px;min-width:0}
+.f span{color:var(--mut);flex:none}.f b{min-width:0;word-break:break-word;text-align:end}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.chip{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:6px 12px;font-weight:600;font-size:13px;cursor:pointer}
+.chip.on{background:var(--or);border-color:var(--or);color:#fff}
+.search{width:100%;background:var(--card);color:var(--tx);border:2px solid var(--bd);border-radius:14px;padding:13px;font-size:16px;outline:none;margin-bottom:8px}
+.search:focus{border-color:var(--or)}
+.empty{text-align:center;color:var(--mut);padding:34px 12px}
+.more{width:100%;margin-top:4px}
+.dock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;gap:4px;padding:6px;border-radius:30px;background:var(--glass);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.22);box-shadow:0 12px 34px rgba(0,0,0,.28);max-width:calc(100vw - 20px)}
+.dock button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:78px;padding:8px 10px;border:0;border-radius:24px;background:transparent;font-size:12px;font-weight:700;color:var(--mut);cursor:pointer}
+.dock button svg{width:22px;height:22px}
+.dock button.on{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff}
+.dock .nb{position:absolute;top:2px;inset-inline-end:8px;min-width:18px;height:18px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;line-height:18px;text-align:center;padding:0 4px}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:9px 18px;border-radius:22px;z-index:60;font-size:14px}
+html[lang="ar"] .sig .sig-en,html[lang="en"] .sig .sig-ar{display:none}
+</style>
 </head>
-<body class="light">
-  <div id="appleToastHost"></div>
-  <section id="gateScreen" class="workspace" style="max-width:460px;margin:24px auto">
-    <div class="card" style="text-align:center">
-      <div class="brand-badge" style="width:52px;height:52px;border-radius:14px;margin:0 auto 10px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M9.5 4.5V16.8M5 16.8H19M9.5 13.5C11.2 10.8 14 9.5 16.2 10.6C18.2 11.6 18.8 14.3 18.5 16.8" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <h2 style="margin:0 0 4px">Talabat Captains Hub</h2>
-      <div class="hint" style="margin-bottom:10px">Enter Access Key or Bridge credentials to unlock field operations.</div>
-      <label class="field"><span>Access Key</span><input id="inAccessKey" dir="ltr" placeholder="Access Key"></label>
-      <label class="field"><span>Apps Script Bridge URL</span><input id="inBridgeUrl" dir="ltr" placeholder="https://script.google.com/macros/s/.../exec"></label>
-      <label class="field"><span>Bridge Secret</span><input id="inBridgeSecret" type="password" dir="ltr" placeholder="Secret"></label>
-      <label class="field"><span>Captain Name / Email</span><input id="inCaptainId" placeholder="Captain Name"></label>
-      <button type="button" class="btn" id="btnUnlockHub" style="width:100%">Continue</button>
-    </div>
-  </section>
-  <div id="appShell" hidden style="display:flex;flex-direction:column;min-height:100vh">
-    <header class="app-header">
-      <div class="brand">
-        <div class="brand-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9.5 4.5V16.8M5 16.8H19M9.5 13.5C11.2 10.8 14 9.5 16.2 10.6C18.2 11.6 18.8 14.3 18.5 16.8" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div><span class="brand-title">Talabat Captains Hub</span><span class="brand-sub" data-i18n="captainSub">تطبيق الكباتن الموحد</span></div>
-      </div>
-      <div class="header-actions">
-        <select id="hdrZoneSwitch" style="width:auto;padding:4px 8px;font-size:11.5px;font-weight:700"><option value="Rehab">Rehab</option><option value="Tagmoa North">Tagmoa North</option><option value="Tagmoa South">Tagmoa South</option><option value="Golden Square">Golden Square</option></select>
-        <button type="button" class="icon-btn" id="btnPwaLang">EN</button>
-        <button type="button" class="icon-btn" id="btnPwaTheme" title="Theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
-        <button type="button" class="icon-btn" id="btnPwaSync">Sync</button>
-      </div>
-    </header>
-    <nav class="main-nav" id="pwaNav">
-      <button type="button" data-ptab="search" class="on" data-i18n="tabSearch">البحث الشامل</button>
-      <button type="button" data-ptab="delays"><span data-i18n="tabDelays">الأوردرات المتأخرة</span> <span class="pill-cnt" id="pCntDelays">0</span></button>
-      <button type="button" data-ptab="noshow"><span data-i18n="tabNoshow">غائبي اليوم</span> <span class="pill-cnt" id="pCntNoshow">0</span></button>
-      <button type="button" data-ptab="submit" data-i18n="tabSubmit">رفع طلب</button>
-      <button type="button" data-ptab="myreq"><span data-i18n="tabMyReq">طلباتي</span> <span class="pill-cnt" id="pCntMyReq">0</span></button>
-    </nav>
-    <main class="workspace" style="max-width:860px;margin:0 auto;width:100%">
-      <div id="zoneStartCard" class="card zone-gate" hidden>
-        <h3 class="card-title" data-i18n="selectZone">اختر زون العمل للشيفت</h3>
-        <div class="zone-pill-grid"><button type="button" class="zone-pill" data-zpick="Rehab">Rehab</button><button type="button" class="zone-pill" data-zpick="Tagmoa North">Tagmoa North</button><button type="button" class="zone-pill" data-zpick="Tagmoa South">Tagmoa South</button><button type="button" class="zone-pill" data-zpick="Golden Square">Golden Square</button></div>
-      </div>
-      <section id="pview-search" class="view on">
-        <div class="search-row"><input id="pwaSearchIn" data-i18n-ph="searchPh"><button type="button" class="btn" id="btnPwaSearch" data-i18n="searchBtn">بحث</button></div>
-        <div id="pwaSearchOut"></div>
-      </section>
-      <section id="pview-delays" class="view"><div id="pwaDelaysOut"></div></section>
-      <section id="pview-noshow" class="view">
-        <div class="seg-tabs" id="pwaNsTabs"><button type="button" data-pnskind="all" class="on" data-i18n="filterAll">الكل</button><button type="button" data-pnskind="regular" data-i18n="filterRegular">عادي</button><button type="button" data-pnskind="hybrid" data-i18n="filterHybrid">Hybrid</button></div>
-        <div class="grid2" style="margin-bottom:8px"><select id="pwaMartFilter" hidden><option value="">All Marts</option></select><select id="pwaContractFilter"><option value="">All Contracts / Agencies</option></select></div>
-        <div class="card" style="padding:8px 10px"><div class="row" style="margin-top:0;justify-content:space-between"><label class="chk-inline"><input type="checkbox" id="pwaNsSelAll"> <span data-i18n="selectAll">تحديد الكل</span></label><button type="button" class="btn sm ok" id="btnPwaCopyNs" data-i18n="copyOfficeWa">نسخ لجروب المكتب (WhatsApp)</button></div></div>
-        <div class="card" id="pwaNoshowOut" style="padding:4px 8px"></div>
-      </section>
-      <section id="pview-submit" class="view">
-        <div class="card">
-          <div class="seg-tabs" id="reqTypeTabs"><button type="button" data-reqtype="suspend" class="on" data-i18n="reqTypeSusp">طلب إيقاف</button><button type="button" data-reqtype="unsuspend" data-i18n="reqTypeUnsusp">طلب فك إيقاف</button><button type="button" data-reqtype="password" data-i18n="reqTypePw">طلب تغيير باسورد</button></div>
-          <div class="grid2"><label class="field"><span>Rider ID</span><input id="reqRiderId" inputmode="numeric" dir="ltr"></label><label class="field"><span>Rider Name</span><input id="reqRiderName"></label></div>
-          <div id="suspFields">
-            <div class="hint" style="font-weight:700;margin-bottom:4px">Duration</div>
-            <div class="tag-row" id="durTags"><button type="button" class="tag-btn on" data-dur="24h" data-i18n="dur24h">24 ساعة</button><button type="button" class="tag-btn" data-dur="3d" data-i18n="dur3d">3 أيام</button><button type="button" class="tag-btn" data-dur="1w" data-i18n="dur1w">أسبوع</button><button type="button" class="tag-btn" data-dur="1y" data-i18n="dur1y">سنة</button><button type="button" class="tag-btn" data-dur="investigation" data-i18n="durInv">إيقاف لحين التحقيق</button></div>
-            <div class="hint" style="font-weight:700;margin:8px 0 4px">Issue Tag</div>
-            <div class="tag-row" id="issueTags"><button type="button" class="tag-btn on" data-tag="تأخير استلام" data-i18n="tagDelay">تأخير استلام</button><button type="button" class="tag-btn" data-tag="سلوك غير لائق" data-i18n="tagBehavior">سلوك غير لائق</button><button type="button" class="tag-btn" data-tag="مخالفة ركنة" data-i18n="tagParking">مخالفة ركنة</button></div>
-            <label class="field" style="margin-top:8px"><span data-i18n="uploadProof">رفع صورة إثبات</span><input id="reqProofFile" type="file" accept="image/*" capture="environment"></label>
-            <div id="proofPreviewBox" class="hint" hidden><img id="proofPreviewImg" alt="Preview" style="max-height:140px;border-radius:10px;border:1px solid var(--border);display:block;margin-bottom:4px"><span id="proofSizeBadge" class="badge ok"></span></div>
-          </div>
-          <div id="pwFields" hidden><label class="field"><span>New Password</span><input id="reqNewPw" dir="ltr" value="Ot1@talabat"></label></div>
-          <label class="field" style="margin-top:6px"><span data-i18n="customNote">ملاحظة إضافية</span><textarea id="reqCustomNote" rows="2"></textarea></label>
-          <button type="button" class="btn" id="btnSubmitReq" style="width:100%" data-i18n="submitReq">إرسال الطلب للمشرف</button>
-        </div>
-      </section>
-      <section id="pview-myreq" class="view">
-        <div class="row" style="margin:0 0 8px;justify-content:space-between">
-          <div class="row" style="margin:0"><span class="badge warn">Pending: <b id="mrPend">0</b></span><span class="badge ok">Approved: <b id="mrApp">0</b></span><span class="badge bad">Rejected: <b id="mrRej">0</b></span></div>
-          <button type="button" class="btn sm ghost" id="btnRefreshMyReq">Refresh</button>
-        </div>
-        <div id="myReqOut"></div>
-      </section>
-    </main>
-    <footer class="app-footer" data-i18n="signature">تطوير: Mustafa ElMohsen</footer>
+<body>
+<div id="login" hidden>
+  <div class="lbox">
+    <div class="logo"><svg viewBox="0 0 64 64"><path d="M16 40a16 16 0 0 1 32 0v7H16z" fill="#fff"/><rect x="33" y="31" width="18" height="7" rx="3.5" fill="#FF7A1A"/><rect x="5" y="30" width="9" height="3" rx="1.5" fill="#fff"/><rect x="8" y="37" width="6" height="3" rx="1.5" fill="#fff"/></svg></div>
+    <h1>Talabat Fleet Cockpit</h1>
+    <p>اكتب كودك أو إيميلك للدخول</p>
+    <input id="lg" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="الكود أو الإيميل">
+    <div class="acts" style="justify-content:center;margin-top:12px"><button class="btn" id="lgGo" style="width:100%">دخول</button></div>
+    <div class="err" id="lgErr"></div>
+    <div id="zonePick" hidden style="margin-top:8px"></div>
   </div>
-  <script src="scripts/i18n.js"></script><script src="scripts/idb.js"></script><script src="scripts/hub-core.js"></script><script src="scripts/ui.js"></script><script src="scripts/crypto-sync.js"></script><script src="scripts/app.js"></script>
+</div>
+
+<div id="app" hidden>
+  <div class="strip">
+    <div class="r1"><div class="ini" id="idIni"></div><div class="who"><b id="idName"></b><small id="idSub"></small></div>
+      <button class="ib" id="btnRefresh" aria-label="تحديث"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></button>
+      <button class="ib" id="btnOut" aria-label="خروج"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v9"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg></button></div>
+    <div class="r2"><span class="pill" id="pZone"></span><span class="pill" id="pStamp"><i class="dot pulse"></i><span id="pStampT"></span></span><span class="pill" id="pOff" hidden>غير متصل</span></div>
+  </div>
+  <div class="tele" id="tele"></div>
+  <section id="v-riders"><div class="sec"><span>المناديب في الزون</span><span class="pill" id="rCount"></span></div><input class="search" id="rq" placeholder="فلتر سريع بالاسم أو الكود" autocomplete="off"><div id="rList"></div><button class="btn ghost more" id="rMore" hidden>عرض المزيد</button></section>
+  <section id="v-orders" hidden><div class="sec"><span>أوردرات الزون</span><span class="pill" id="oCount"></span></div><div class="chips" id="oChips"></div><div id="oList"></div><button class="btn ghost more" id="oMore" hidden>عرض المزيد</button></section>
+  <section id="v-search" hidden><input class="search" id="sq" placeholder="كود المندوب / الاسم / الموبايل / الرقم القومي / كود الأوردر" autocomplete="off"><div id="sList"></div></section>
+  <div class="dock" id="dock"><button data-v="riders" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17" r="3"/><circle cx="18.5" cy="17" r="3"/><path d="M8.5 17H14l3-7h-4"/><path d="M12 10 10 7H7"/></svg>المناديب</button>
+    <button data-v="orders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8l9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>الأوردرات<span class="nb" id="nbOrders" hidden></span></button>
+    <button data-v="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>بحث</button></div>
+</div>
+<footer class="sig" style="text-align:center;color:var(--mut);font-weight:300;font-size:11.5px;padding:10px 0 4px"><span class="sig-en">Developed by Mustafa ElMohsen</span><span class="sig-ar">تطوير: Mustafa ElMohsen</span></footer>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+'use strict';
+/* Enterprise Fleet Cockpit - single file, one permanent URL. Key / salt are filled in by the extension when it publishes this page. */
+const KEY = '3EfY4Nz5jFMm7kh2L994KO5R', SALT = 'x1xJhrjbZzXDLYu7IuHXUw==', ITER = Number('20000') || 20000, BUILD = '65.0.0';
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const latin = (s) => String(s == null ? '' : s).replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, (d) => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+const lc = (s) => latin(s).toLowerCase();
+const ini = (n) => { const p = String(n || '').trim().split(/\s+/).filter(Boolean); return ((p[0] ? Array.from(p[0])[0] : '') + (p[1] ? Array.from(p[1])[0] : '')).toUpperCase() || '?'; };
+const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+const TZ = 'Africa/Cairo';
+const hm = (t) => (t ? new Date(t).toLocaleTimeString('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit' }) : '-');
+const S = { sess: null, fleet: null, zone: null, meta: null, view: 'riders', open: new Set(), shownR: 50, shownO: 50, ofilter: 'all', online: navigator.onLine, loaded: {} };
+const ls = { get: (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch (_) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) { /* quota: ignore */ } } };
+function toast(m) { const t = $('#toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => { t.hidden = true; }, 2400); }
+
+// ---------------------------------------------------------------- data (encrypted envelopes, cache-busted, offline-first)
+const keys = new Map();
+async function aesKey(salt, iter) {
+  const id = salt + '|' + iter;
+  if (keys.has(id)) return keys.get(id);
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(KEY), 'PBKDF2', false, ['deriveBits']);
+  const bits = new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: b64(salt), iterations: iter, hash: 'SHA-256' }, base, 512));
+  const k = await crypto.subtle.importKey('raw', bits.slice(0, 32), 'AES-GCM', false, ['decrypt']);
+  keys.set(id, k);
+  return k;
+}
+async function gunzip(u8) { const ds = new DecompressionStream('gzip'), w = ds.writable.getWriter(); w.write(u8); w.close(); return new Uint8Array(await new Response(ds.readable).arrayBuffer()); }
+async function openEnv(text) {
+  const e = JSON.parse(text), u = b64(e.d);
+  let pt = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: u.slice(0, 12) }, await aesKey(e.s || SALT, e.i || ITER), u.slice(12)));
+  if (pt[0] === 0x1f && pt[1] === 0x8b) pt = await gunzip(pt);
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+async function getFile(path, cacheKey) {
+  try {
+    const r = await fetch(path + '?t=' + Date.now(), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
+    if (!r.ok) throw new Error('http');
+    const j = await openEnv(await r.text());
+    ls.set(cacheKey, j); S.online = true;
+    return { data: j, fresh: true };
+  } catch (_) {
+    S.online = false;
+    const c = ls.get(cacheKey);
+    return { data: c, fresh: false };
+  }
+}
+
+// ---------------------------------------------------------------- session
+const normId = (s) => lc(s).trim();
+function resolve(fleet, input) {
+  const q = normId(input), isMail = q.includes('@');
+  const caps = Object.values(fleet.captains || {}).filter((c) => !c.del);
+  const active = caps.filter((c) => c.on !== 0);
+  let cap = active.find((c) => (isMail ? lc(c.email) === q : String(c.code) === q.replace(/\D/g, '')));
+  if (!cap && !caps.length) {   // empty roster: any known rider code may enter
+    const code = q.replace(/\D/g, '');
+    if (!isMail && fleet.riders && fleet.riders[code]) cap = { code, email: '', name: fleet.riders[code].n };
+  }
+  if (!cap) return null;
+  const rider = cap.code && fleet.riders ? fleet.riders[cap.code] : null;
+  return { key: cap.code || lc(cap.email), code: cap.code || '', email: cap.email || '', name: cap.name || (rider && rider.n) || cap.email || cap.code, zone: (cap.z || (rider && rider.z) || '') };
+}
+async function login(input) {
+  $('#lgErr').textContent = '';
+  const { data } = await getFile('fleet_index.json', 'tc_fleet');
+  if (!data) { $('#lgErr').textContent = 'تعذر الاتصال الآن. تحقق من الإنترنت وحاول مرة أخرى.'; return; }
+  const me = resolve(data, input);
+  if (!me) { $('#lgErr').textContent = 'هذا الكود أو الإيميل غير مسجل. تواصل مع مشرفك.'; return; }
+  S.fleet = data;
+  if (!me.zone || !(data.zones || []).some((z) => z.id === me.zone)) {
+    const zs = data.zones || [];
+    if (zs.length === 1) me.zone = zs[0].id;
+    else { $('#zonePick').hidden = false; $('#zonePick').innerHTML = '<div class="sec">اختر الزون الخاص بك</div><div class="chips" style="justify-content:center">' + zs.map((z) => `<button class="chip" data-z="${esc(z.id)}">${esc(z.name)}</button>`).join('') + '</div>'; S.pending = me; return; }
+  }
+  start(me);
+}
+function start(me) { S.sess = me; ls.set('tc_sess', me); $('#login').hidden = true; $('#app').hidden = false; boot(); }
+function logout() { ls.set('tc_sess', null); location.reload(); }
+
+// ---------------------------------------------------------------- rendering
+const lateNow = (o, t) => (o.du ? Math.max(0, Math.round((Date.now() - o.du) / 60000)) : (o.late > 0 ? o.late + Math.floor((Date.now() - t) / 60000) : o.late));
+function mask(s, keep) { s = String(s || ''); return s.length > keep ? '*'.repeat(s.length - keep) + s.slice(-keep) : s; }
+function riderDetail(r, m) {
+  m = m || {};
+  const th = m.th, phone = latin(r.p || m.p || '').replace(/\D/g, '');
+  const intl = phone.startsWith('0020') ? phone.slice(2) : phone.startsWith('20') ? phone : phone.startsWith('0') ? '2' + phone : phone ? '20' + phone : '';
+  const f = (k, v) => (v ? `<div class="f"><span>${k}</span><b class="ltr">${esc(v)}</b></div>` : '');
+  return `<div class="det"><div class="photo">${th ? `<img alt="" src="${esc(th)}">` : esc(ini(r.n))}</div><div style="min-width:0">${f('الكود', r.i)}${f('الحالة', r.st || m.st)}${f('الموبايل', r.p || m.p)}${f('الإيميل', m.e)}${f('الرقم القومي', mask(m.d, 4))}${f('بداية الشيفت', r.ss || m.ss)}${f('نهاية الشيفت', r.se || m.se)}${f('الشركة', m.co)}${f('نمرة المكنة', m.l)}
+    <div class="acts">${intl ? `<a class="btn sm ok" href="tel:+${esc(intl)}">اتصال</a><a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/${esc(intl)}">واتساب</a>` : ''}</div></div></div>`;
+}
+function renderTele() {
+  const z = S.zone; if (!z) { $('#tele').innerHTML = ''; return; }
+  const L = z.orders.map((o) => lateNow(o, z.t));
+  const k = [['أوردر نشط', z.orders.length, ''], ['متأخر +15', L.filter((x) => x != null && x >= 15).length, 'warn'], ['حرج +30', L.filter((x) => x != null && x >= 30).length, 'bad'], ['بدون مندوب', z.orders.filter((o) => !o.cid).length, ''], ['على الشيفت', z.riders.filter((r) => r.on).length, 'ok']];
+  $('#tele').innerHTML = k.map(([t, v, c]) => `<div class="kpi ${c}"><b>${v}</b><span>${t}</span></div>`).join('');
+  const nb = $('#nbOrders'); nb.hidden = !z.orders.length; nb.textContent = z.orders.length > 99 ? '99+' : z.orders.length;
+}
+function renderStrip() {
+  const me = S.sess, z = S.zone, fz = (S.fleet.zones || []).find((q) => q.id === me.zone);
+  $('#idIni').textContent = ini(me.name); $('#idName').textContent = me.name || '-';
+  $('#idSub').textContent = [me.code, me.email].filter(Boolean).join(' - ');
+  $('#pZone').textContent = fz ? fz.name : (z && z.zone.name) || '-';
+  const t = z && z.t, age = t ? Math.round((Date.now() - t) / 60000) : null;
+  const st = $('#pStamp'); st.className = 'pill ' + (age == null ? '' : age > 15 ? 'bad' : age > 5 ? 'warn' : 'ok');
+  $('#pStampT').textContent = t ? 'آخر تحديث ' + hm(t) + (age > 0 ? ' (منذ ' + age + ' د)' : '') : 'بانتظار أول تحديث';
+  $('#pOff').hidden = S.online;
+}
+function renderRiders() {
+  const z = S.zone; if (!z) { $('#rList').innerHTML = '<div class="empty">بانتظار أول بيانات من المشرف...</div>'; $('#rCount').textContent = '0'; return; }
+  const q = lc($('#rq').value).trim();
+  const list = z.riders.filter((r) => !q || lc([r.n, r.i].join(' ')).includes(q)).sort((a, b) => (b.on ? 1 : 0) - (a.on ? 1 : 0) || String(a.n).localeCompare(String(b.n), 'ar'));
+  $('#rCount').textContent = list.length;
+  const part = list.slice(0, S.shownR);
+  $('#rList').innerHTML = part.map((r) => {
+    const open = S.open.has('r' + r.i);
+    return `<div class="card" data-k="r${esc(r.i)}"><div class="row" data-tg="1"><div class="ini">${esc(ini(r.n))}</div><div class="t"><b>${esc(r.n || '-')}</b><small><span class="ltr">${esc(r.i)}</span> - ${esc(r.st || '-')}</small></div><div class="r">${r.on ? '<span class="pill ok">شغال</span>' : '<span class="pill">خارج الشيفت</span>'}</div></div>${open ? riderDetail(r, metaOf(r.i)) : ''}</div>`;
+  }).join('') || '<div class="empty">لا يوجد مناديب مطابقون.</div>';
+  $('#rMore').hidden = part.length >= list.length;
+}
+function orderRows() {
+  const z = S.zone; if (!z) return [];
+  const me = S.sess;
+  return z.orders.map((o) => ({ ...o, l: lateNow(o, z.t) })).filter((o) => (S.ofilter === 'mine' ? me.code && o.rid === me.code : S.ofilter === 'late' ? (o.l != null && o.l >= 15) : S.ofilter === 'noRider' ? !o.cid : true))
+    .sort((a, b) => (b.l == null ? -1 : b.l) - (a.l == null ? -1 : a.l));
+}
+function orderCard(o) {
+  const cls = o.l != null && o.l >= 30 ? 'crit' : o.l != null && o.l >= 15 ? 'late' : '';
+  const rn = o.rid && S.zone.riders.find((r) => r.i === o.rid);
+  return `<div class="card ${cls}"><div class="row" style="cursor:default"><div class="ini">${esc(ini((rn && rn.n) || o.rn))}</div><div class="t"><b><span class="ltr">${esc(o.c)}</span> - ${esc(o.v || '-')}</b><small>${o.cid ? esc((rn && rn.n) || o.rn || 'مندوب') + (o.rid ? ' - ' + esc(o.rid) : '') : 'بدون مندوب'} - ${esc(o.s || '-')}</small></div><div class="r">${o.l != null ? (o.l > 0 ? '<span class="pill ' + (o.l >= 30 ? 'bad' : o.l >= 15 ? 'warn' : '') + '">+' + o.l + 'د</span>' : '<span class="pill ok">في الوقت</span>') : ''}</div></div></div>`;
+}
+function renderOrders() {
+  const rows = orderRows(), part = rows.slice(0, S.shownO);
+  $('#oCount').textContent = rows.length;
+  const F = [['all', 'كل الزون'], ['mine', 'أوردراتي'], ['late', 'متأخر +15'], ['noRider', 'بدون مندوب']];
+  $('#oChips').innerHTML = F.map(([k, t]) => `<button class="chip ${S.ofilter === k ? 'on' : ''}" data-of="${k}">${t}</button>`).join('');
+  $('#oList').innerHTML = part.map(orderCard).join('') || '<div class="empty">لا توجد أوردرات بهذا الفلتر.</div>';
+  $('#oMore').hidden = part.length >= rows.length;
+}
+async function loadMeta() {
+  if (S.meta || S.metaBusy) return;
+  S.metaBusy = true;
+  const { data } = await getFile('riders_meta.json', 'tc_meta');
+  S.meta = data || {}; S.metaBusy = false;
+  renderRiders(); if (S.view === 'search') renderSearch();
+}
+const metaOf = (id) => (S.meta && S.meta.riders && S.meta.riders[id]) || (S.fleet && S.fleet.riders && S.fleet.riders[id]) || null;
+async function renderSearch() {
+  const raw = $('#sq').value.trim(), q = lc(raw).replace(/\s+/g, ' ');
+  const box = $('#sList');
+  if (!q) { box.innerHTML = '<div class="empty">اكتب كود المندوب أو الاسم أو الموبايل أو الرقم القومي أو كود الأوردر.</div>'; return; }
+  const digits = q.replace(/\D/g, '').replace(/^hfeg/, '');
+  const riders = Object.entries((S.fleet && S.fleet.riders) || {}).filter(([i, r]) => lc([i, r.n, r.p, r.d, r.e].join(' ')).includes(q) || (digits.length >= 4 && [i, r.p, r.d].some((v) => latin(v).replace(/\D/g, '').endsWith(digits) || latin(v).replace(/\D/g, '') === digits))).slice(0, 40);
+  let orders = [];
+  const pool = Object.values(S.allZones || {}).concat(S.zone ? [S.zone] : []);
+  pool.forEach((z) => (z.orders || []).forEach((o) => { if (lc([o.c, o.v, o.rn].join(' ')).includes(q) || (digits.length >= 6 && o.c === digits)) orders.push({ ...o, l: lateNow(o, z.t), zn: z.zone.name }); }));
+  const seen = new Set(); orders = orders.filter((o) => (seen.has(o.c) ? false : seen.add(o.c))).slice(0, 30);
+  const zn = (id) => { const z = (S.fleet.zones || []).find((q2) => q2.id === id); return z ? z.name : ''; };
+  box.innerHTML = (orders.length ? '<div class="sec">أوردرات</div>' + orders.map(orderCard).join('') : '') + (riders.length ? '<div class="sec">مناديب</div>' + riders.map(([i, r]) => `<div class="card" data-k="s${esc(i)}"><div class="row" data-tg="1"><div class="ini">${esc(ini(r.n))}</div><div class="t"><b>${esc(r.n || '-')}</b><small><span class="ltr">${esc(i)}</span> - ${esc(zn(r.z))}</small></div></div>${S.open.has('s' + i) ? riderDetail({ i, n: r.n, p: r.p, st: r.st }, metaOf(i)) : ''}</div>`).join('') : '')
+    || '<div class="empty">لا توجد نتائج.</div>';
+  if (!orders.length && digits.length >= 6 && !S.allLoaded) loadOtherZones();
+  loadMeta();
+}
+async function loadOtherZones() {
+  S.allLoaded = true; S.allZones = S.allZones || {};
+  for (const z of S.fleet.zones || []) { if (z.id === S.sess.zone) continue; const { data } = await getFile(z.file || 'zones/' + z.id + '.json', 'tc_zone_' + z.id); if (data) S.allZones[z.id] = data; }
+  if (S.view === 'search') renderSearch();
+}
+function show(v) {
+  S.view = v;
+  ['riders', 'orders', 'search'].forEach((x) => { $('#v-' + x).hidden = x !== v; });
+  document.querySelectorAll('#dock button').forEach((b) => b.classList.toggle('on', b.dataset.v === v));
+  if (v === 'orders') renderOrders(); if (v === 'search') { renderSearch(); $('#sq').focus(); } window.scrollTo({ top: 0 });
+}
+
+// ---------------------------------------------------------------- refresh (stale-while-revalidate)
+async function refresh(manual) {
+  const b = $('#btnRefresh'); b.classList.add('spin');
+  try {
+    const z = await getFile('zones/' + S.sess.zone.replace(/[^\w-]/g, '_') + '.json', 'tc_zone_' + S.sess.zone);
+    if (z.data) S.zone = z.data;
+    const f = await getFile('fleet_index.json', 'tc_fleet');
+    if (f.data) S.fleet = f.data;
+    renderStrip(); renderTele(); renderRiders(); if (S.view === 'orders') renderOrders();
+    if (manual) toast(S.online ? 'تم التحديث' : 'غير متصل - يتم عرض آخر بيانات محفوظة');
+  } finally { b.classList.remove('spin'); }
+}
+function boot() {
+  const me = S.sess;
+  S.zone = ls.get('tc_zone_' + me.zone);       // instant render from cache
+  S.fleet = S.fleet || ls.get('tc_fleet') || { zones: [], riders: {}, captains: {} };
+  renderStrip(); renderTele(); renderRiders();
+  refresh(false);
+  loadMeta();
+  setInterval(() => { if (!document.hidden) refresh(false); }, 45000);
+  setInterval(() => { renderStrip(); renderTele(); }, 30000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(false); });
+  window.addEventListener('online', () => refresh(false));
+  window.addEventListener('offline', () => { S.online = false; renderStrip(); });
+}
+
+// ---------------------------------------------------------------- events
+$('#lgGo').onclick = () => { const v = $('#lg').value.trim(); if (v) login(v); };
+$('#lg').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#lgGo').click(); });
+$('#zonePick').addEventListener('click', (e) => { const b = e.target.closest('[data-z]'); if (b && S.pending) { S.pending.zone = b.dataset.z; start(S.pending); } });
+$('#btnRefresh').onclick = () => refresh(true);
+$('#btnOut').onclick = logout;
+$('#dock').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) show(b.dataset.v); });
+$('#rq').addEventListener('input', () => { S.shownR = 50; renderRiders(); });
+let sT = null; $('#sq').addEventListener('input', () => { clearTimeout(sT); sT = setTimeout(renderSearch, 120); });
+$('#rMore').onclick = () => { S.shownR += 50; renderRiders(); };
+$('#oMore').onclick = () => { S.shownO += 50; renderOrders(); };
+$('#oChips').addEventListener('click', (e) => { const b = e.target.closest('[data-of]'); if (b) { S.ofilter = b.dataset.of; S.shownO = 50; renderOrders(); } });
+document.addEventListener('click', (e) => {
+  const row = e.target.closest('[data-tg]'); if (!row) return;
+  const k = row.closest('[data-k]').dataset.k;
+  if (S.open.has(k)) S.open.delete(k); else S.open.add(k);
+  loadMeta(); if (S.view === 'search') renderSearch(); else renderRiders();
+});
+// pull-to-refresh
+(() => { let y0 = 0, on = false; window.addEventListener('touchstart', (e) => { if (window.scrollY <= 0 && e.touches.length === 1) { y0 = e.touches[0].clientY; on = true; } }, { passive: true });
+  window.addEventListener('touchend', (e) => { if (on && e.changedTouches && e.changedTouches[0].clientY - y0 > 90) refresh(true); on = false; }); })();
+
+// ---------------------------------------------------------------- start: remembered session or login (code or email once)
+(function init() {
+  if (!(window.crypto && crypto.subtle)) { $('#login').hidden = false; $('#lgErr').textContent = 'افتح الرابط من متصفح حديث وبشكل آمن (https).'; return; }
+  const me = ls.get('tc_sess');
+  if (me && me.zone) { S.sess = me; $('#app').hidden = false; boot(); }
+  else $('#login').hidden = false;
+  const q = new URLSearchParams(location.search).get('id');
+  if (!me && q) { $('#lg').value = q; $('#lgGo').click(); }
+})();
+</script>
 </body>
 </html>
