@@ -7,12 +7,15 @@
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex,nofollow">
 <title>Talabat Fleet Cockpit</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23fff'/%3E%3Cg fill='none' stroke='%23FF5A00' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='17' cy='44' r='8'/%3E%3Ccircle cx='47' cy='44' r='8'/%3E%3Cpath d='M17 44l11-12h12l7 12'/%3E%3Cpath d='M40 32l4-11h6'/%3E%3C/g%3E%3Crect x='8' y='14' width='18' height='13' rx='3' fill='%23FF5A00'/%3E%3C/svg%3E">
 <style>
-:root{--or:#FF5A00;--bg:#0f1013;--card:#181a1f;--card2:#21242b;--tx:#f2f3f5;--mut:#9b9fa9;--bd:#2c2f37;--ok:#2fd27f;--bad:#ff5a5f;--warn:#f5a524;--blue:#6ea0ff;--mono:Consolas,"SF Mono","Courier New",monospace}
+:root{--or:#FF5A00;--bg:#0f1013;--card:#181a1f;--card2:#21242b;--tx:#f2f3f5;--mut:#9b9fa9;--bd:#2c2f37;--ok:#2fd27f;--bad:#ff5a5f;--warn:#f5a524;--blue:#6ea0ff;--mono:Consolas,"SF Mono","Courier New",monospace;--sans:Inter,Cairo,"Segoe UI",Roboto,Arial,sans-serif}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;max-width:100%;overflow-x:hidden}
-body{background:var(--bg);color:var(--tx);font:400 15px/1.45 "Segoe UI",Roboto,Arial,sans-serif;min-height:100dvh;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+body{background:var(--bg);color:var(--tx);font:400 15px/1.45 var(--sans);font-variant-numeric:tabular-nums;min-height:100dvh;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 [hidden]{display:none!important}
 button,input,select{font:inherit;color:inherit}
 .ltr{direction:ltr;unicode-bidi:embed;display:inline-block}
@@ -83,6 +86,15 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .tl{border-inline-start:2px solid var(--bd);padding-inline-start:12px;margin:8px 4px}
 .tl .it{margin-bottom:12px;position:relative}.tl .it:before{content:"";position:absolute;inset-inline-start:-18px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--bd)}
 .tl .it.s-SUSPENSION:before{background:var(--bad)}.tl .it.s-REJECTED:before{background:var(--mut)}.tl .it.s-PENDING:before{background:var(--warn)}
+.kp{display:flex;gap:6px;margin-bottom:8px}
+.kp div{flex:1;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 6px;text-align:center;min-width:0}
+.kp b{display:block;font:700 20px var(--mono)}.kp span{font-size:11.5px;color:var(--mut)}
+.kp .w b{color:var(--warn)}.kp .b b{color:var(--bad)}
+.badge.st-EXECUTED{color:#2fd27f;border-color:#2fd27f}.badge.st-REVIEW{color:#f5a524;border-color:#f5a524}.badge.st-REJECTED{color:#9aa0ad;border-color:#4a4f5c}
+.badge svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.rr{display:flex;align-items:center;gap:8px;margin-top:8px;min-width:0}.rr .rt{flex:1;min-width:0}.rr .rt b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rr .rt small{color:var(--mut);font-family:var(--mono)}
+.mini{background:var(--card2);border:1px solid var(--bd);border-radius:7px;padding:5px 8px;font:700 11px var(--mono);cursor:pointer;color:var(--tx);text-decoration:none;display:inline-flex;align-items:center}
+.acts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
 .sig{text-align:center;color:var(--mut);font-weight:300;font-size:11.5px;padding:12px 0 4px}
 html[lang="ar"] .sig .sig-en,html[lang="en"] .sig .sig-ar{display:none}
 </style>
@@ -102,107 +114,110 @@ html[lang="ar"] .sig .sig-en,html[lang="en"] .sig .sig-ar{display:none}
 <div id="app" hidden>
   <div class="top">
     <div class="r1"><div class="ini" id="idIni"></div><div class="who"><b id="idName"></b><small>CAPTAIN RIDER</small></div>
-      <span class="badge ok" id="live"><i class="pulse" style="width:8px;height:8px"></i><span id="liveT">LIVE</span></span>
+      <span class="badge ok" id="live"><i class="pulse" style="width:8px;height:8px"></i><span id="liveT">LIVE STREAM</span></span>
       <button class="btn sm ghost" id="btnRefresh">Refresh</button></div>
     <div class="r2"><select class="sel" id="zoneSel" aria-label="Zone"></select></div>
   </div>
+  <div class="kp" id="kp"></div>
   <input class="search" id="q" placeholder="Search order #, rider ID, name, phone, national ID" autocomplete="off">
   <div id="results" hidden></div>
-  <section id="v-delay"><div class="chips" id="zoneChips"></div>
-    <div class="chips"><button class="chip" id="hybridBtn">HYBRID ONLY</button><button class="chip" id="selAll">SELECT ALL IN VIEW</button></div>
-    <div class="sec"><span>DELAYED ORDERS</span><span class="badge" id="dCount">0</span></div><div id="dList"></div><button class="btn ghost more" id="dMore" hidden>LOAD MORE</button></section>
+  <section id="v-orders"><div class="chips" id="zoneChips"></div>
+    <div class="chips"><button class="chip" id="delBtn">DELAYED</button><button class="chip" id="hybridBtn">HYBRID ONLY</button><button class="chip" id="selAll">SELECT ALL IN VIEW</button></div>
+    <div class="sec"><span>ORDERS</span><span class="badge" id="dCount">0</span></div><div id="dList"></div><button class="btn ghost more" id="dMore" hidden>LOAD MORE</button></section>
   <section id="v-riders" hidden><div class="chips" id="rChips"></div>
     <div class="sec"><span>ACTIVE RIDERS</span><span class="badge" id="rCount">0</span></div><div id="rList"></div><button class="btn ghost more" id="rMore" hidden>LOAD MORE</button></section>
-  <section id="v-susp" hidden><div class="sec"><span>SUSPENSION REQUESTS</span><button class="btn sm" id="newReq">NEW REQUEST</button></div><div id="sList" class="tl"></div></section>
+  <section id="v-susp" hidden><div class="sec"><span>REQUESTS</span><button class="btn sm" id="newReq">NEW REQUEST</button></div><div id="sList" class="tl"></div></section>
   <footer class="sig"><span class="sig-en">Developed by Mustafa ElMohsen</span><span class="sig-ar">تطوير: Mustafa ElMohsen</span></footer>
-  <div class="dock" id="dock"><button data-v="delay" class="on">DAILY DELAY<span class="nb" id="nbDelay" hidden></span></button><button data-v="riders">RIDERS</button><button data-v="susp">SUSPENSION<span class="nb" id="nbSusp" hidden></span></button></div>
+  <div class="dock" id="dock"><button data-v="orders" class="on">ORDERS<span class="nb" id="nbDelay" hidden></span></button><button data-v="riders">RIDERS</button><button data-v="susp">SUSPENSION<span class="nb" id="nbSusp" hidden></span></button></div>
   <div class="fab" id="fab" hidden><button class="btn" id="fabCopy">COPY SELECTED (0)</button><button class="btn ok" id="fabWa">WHATSAPP OFFICE (0)</button></div>
 </div>
 <div id="sheet"></div><div class="toast" id="toast" hidden></div><div class="banner" id="banner" hidden></div>
 
 <script>
 'use strict';
-const KEY = '3EfY4Nz5jFMm7kh2L994KO5R', SALT = 'x1xJhrjbZzXDLYu7IuHXUw==', ITER = Number('20000') || 20000, BRIDGE = 'https://script.google.com/macros/s/AKfycbwgACXosl3HOGjxNCA9IDqoLH-wJK5qkqWK9tq0xxXlPQUZEbMDoz2Otvyi_Bd5M_XiNg/exec', BSECRET = '1234';
+const KEY = '__OPS_KEY__', SALT = '__OPS_SALT__', ITER = Number('__OPS_ITER__') || 20000, BRIDGE = 'https://script.google.com/macros/s/AKfycbwgACXosl3HOGjxNCA9IDqoLH-wJK5qkqWK9tq0xxXlPQUZEbMDoz2Otvyi_Bd5M_XiNg/exec', BSECRET = '1234', FB = 'https://talabat-live-ops-default-rtdb.europe-west1.firebasedatabase.app';
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const latin = (s) => String(s == null ? '' : s).replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, (d) => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-const ini = (n) => { const p = String(n || '').trim().split(/\s+/).filter(Boolean); return ((p[0] ? Array.from(p[0])[0] : '') + (p[1] ? Array.from(p[1])[0] : '')).toUpperCase() || '?'; };
 const nameFromEmail = (e) => String(e).split('@')[0].replace(/[0-9]+/g, ' ').split(/[._\-+\s]+/).filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1).toLowerCase()).join(' ') || e;
 const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const HELMET = '<svg viewBox="0 0 24 24" fill="none" stroke="#8a90a0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15a8 8 0 0 1 16 0v2H4z"/><path d="M12 7v4M4 15h16"/><path d="M13 11h7"/></svg>';
-const fmtStatus = (s) => { const t = String(s || '').trim(); if (/temp.*not.*work/i.test(t) || /^temp[\s._-]*break$/i.test(t)) return 'TEMP BREAK'; return t ? t.replace(/[_-]+/g, ' ').toUpperCase() : '-'; };
-const photoSrc = (p) => (p ? (String(p).startsWith('data:') ? p : 'data:image/webp;base64,' + p) : '');
-const uniq = (a) => [...new Map((a || []).map((o) => [o.order_code, o])).values()];   // one card per order_code
 const TZ = 'Africa/Cairo', REASONS = ['LATE PICKUP', 'RUDE BEHAVIOR', 'NO SHOW', 'CUSTOMER COMPLAINT', 'OTHER'];
-const S = { me: null, zone: 'ALL', fleet: null, delayed: null, zones: {}, view: 'delay', hybrid: false, sel: new Set(), nD: 25, nR: 25, rf: 'ALL', lastOk: 0, cached: false, reqs: [], busy: false, meta: null, acAbort: null, shownRows: [] };
+const HELMET = '<svg viewBox="0 0 24 24" fill="none" stroke="#8a90a0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15a8 8 0 0 1 16 0v2H4z"/><path d="M12 7v4M4 15h16"/><path d="M13 11h7"/></svg>';
+const ICON = { ok: '<svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>', clock: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg>', x: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>' };
+const fmtStatus = (s) => { const t = String(s || '').trim(); if (/temp.*not.*work/i.test(t) || /^temp[\s._-]*break$/i.test(t)) return 'TEMP BREAK'; return t ? t.replace(/[_-]+/g, ' ').toUpperCase() : '-'; };
+const STAGES = [[/near|inside|at[_ ]?vendor|arrived|waiting[_ ]?at|in[_ ]?store/i, 'داخل المطعم', 'warn'], [/picked|collect|to[_ ]?(the[_ ]?)?(customer|dropoff)|dropoff|delivering|pick[_ ]?up[_ ]?done/i, 'تم الاستلام', 'blue'], [/accept|dispatch|assign|to[_ ]?(the[_ ]?)?(vendor|pickup)|heading|en[_ ]?route/i, 'في الطريق للمطعم', 'ok']];
+const stagePill = (st) => { const x = STAGES.find((q) => q[0].test(String(st || ''))); return x ? `<span class="badge ${x[2]}">${x[1]}</span>` : (st ? `<span class="badge">${esc(fmtStatus(st))}</span>` : ''); };
+const reqPill = (st) => { const k = st === 'IN REVIEW' ? 'REVIEW' : st; return `<span class="badge st-${esc(k)}">${st === 'EXECUTED' ? ICON.ok : st === 'REJECTED' ? ICON.x : ICON.clock}${esc(st)}</span>`; };
+const photoSrc = (p) => (p ? (String(p).startsWith('data:') ? p : 'data:image/jpeg;base64,' + p) : '');
+const intl = (p) => { const d = latin(p).replace(/\D/g, ''); return d.startsWith('0020') ? d.slice(2) : d.startsWith('20') ? d : d.startsWith('0') ? '2' + d : d ? '20' + d : ''; };
+const uniq = (a) => [...new Map((a || []).map((o) => [o.order_code, o])).values()];
+const S = { me: null, zone: 'ALL', live: null, photos: {}, view: 'orders', hybrid: false, delOnly: false, sel: new Set(), nD: 25, nR: 25, rf: 'ALL', lastOk: 0, lastEvt: 0, reqs: [], fleet: null, acAbort: null, rows: [] };
 const ls = { get: (k) => { try { return localStorage.getItem(k); } catch (_) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (_) {} } };
 function toast(m) { const t = $('#toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => { t.hidden = true; }, 2200); }
 function banner(m) { const b = $('#banner'); b.textContent = m; b.hidden = false; clearTimeout(banner.h); banner.h = setTimeout(() => { b.hidden = true; }, 7000); }
-function chime() {
-  try {
-    const a = chime.a || (chime.a = new (window.AudioContext || window.webkitAudioContext)()), t0 = a.currentTime;
-    [880, 1175].forEach((f, i) => { const o = a.createOscillator(), g = a.createGain(); o.type = 'sine'; o.frequency.value = f; o.connect(g); g.connect(a.destination);
-      g.gain.setValueAtTime(0.0001, t0 + i * 0.16); g.gain.exponentialRampToValueAtTime(0.07, t0 + i * 0.16 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + i * 0.16 + 0.22); o.start(t0 + i * 0.16); o.stop(t0 + i * 0.16 + 0.25); });
-  } catch (_) { /* needs a user gesture first */ }
-}
+function chime() { try { const a = chime.a || (chime.a = new (window.AudioContext || window.webkitAudioContext)()), t0 = a.currentTime; [880, 1175].forEach((f, i) => { const o = a.createOscillator(), g = a.createGain(); o.type = 'sine'; o.frequency.value = f; o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(0.0001, t0 + i * 0.16); g.gain.exponentialRampToValueAtTime(0.07, t0 + i * 0.16 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + i * 0.16 + 0.22); o.start(t0 + i * 0.16); o.stop(t0 + i * 0.16 + 0.25); }); } catch (_) {} }
 
-// ---------------------------------------------------------------- IndexedDB cache (orders + photos) with 15 minute garbage collection
+// ---------------------------------------------------------------- caches: localStorage (first paint < 50ms) + IndexedDB (photos, 15 minute GC)
+const LSC = {
+  read() { try { return JSON.parse(localStorage.getItem('tc_cache') || 'null'); } catch (_) { return null; } },
+  write() { try { localStorage.setItem('tc_cache', JSON.stringify({ t: S.lastOk, live: S.live })); } catch (_) { try { localStorage.removeItem('tc_cache'); } catch (__) {} } }
+};
 const IDB = (() => {
   let db = null; const mem = new Map();
-  const open = () => new Promise((res) => {
-    if (db || !window.indexedDB) return res(db);
-    try { const r = indexedDB.open('tc', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv', { keyPath: 'k' }); r.onsuccess = () => { db = r.result; res(db); }; r.onerror = () => res(null); } catch (_) { res(null); }
-  });
+  const open = () => new Promise((res) => { if (db || !window.indexedDB) return res(db); try { const r = indexedDB.open('tc', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv', { keyPath: 'k' }); r.onsuccess = () => { db = r.result; res(db); }; r.onerror = () => res(null); } catch (_) { res(null); } });
   const tx = async (mode, fn) => { const d = await open(); if (!d) return null; return new Promise((res) => { try { const t = d.transaction('kv', mode), st = t.objectStore('kv'); const r = fn(st); t.oncomplete = () => res(r && r.result !== undefined ? r.result : null); t.onerror = () => res(null); } catch (_) { res(null); } }); };
   return {
     async get(k) { const r = await tx('readonly', (st) => st.get(k)); const v = r ? r.v : mem.get(k); return v === undefined ? null : v; },
     async set(k, v) { mem.set(k, v); await tx('readwrite', (st) => st.put({ k, v, t: Date.now() })); },
-    async gc() {                                              // max 30 cached orders / 50 photos
-      const all = await tx('readonly', (st) => st.getAll()) || [];
-      const photos = all.filter((x) => x.k.startsWith('p:')).sort((a, b) => b.t - a.t);
-      await tx('readwrite', (st) => { photos.slice(50).forEach((x) => st.delete(x.k)); });
-      const o = all.find((x) => x.k === 'orders');
-      if (o && o.v && o.v.length > 30) await this.set('orders', o.v.slice(0, 30));
-    }
+    async gc() { const all = await tx('readonly', (st) => st.getAll()) || []; const ph = all.filter((x) => x.k.startsWith('p:')).sort((a, b) => b.t - a.t); await tx('readwrite', (st) => { ph.slice(50).forEach((x) => st.delete(x.k)); }); }
   };
 })();
 
-// ---------------------------------------------------------------- data: encrypted envelopes, cache-busted, stale-while-revalidate
+// ---------------------------------------------------------------- Firebase Realtime Database (REST + EventSource streaming, 5s polling fallback)
+async function fb(path, opts, ms) {
+  const ac = new AbortController(), to = setTimeout(() => ac.abort(), ms || 8000);
+  try { const r = await fetch(FB + path + '.json', { cache: 'no-store', ...(opts || {}), signal: ac.signal }); if (!r.ok) throw new Error('fb'); return await r.json(); } finally { clearTimeout(to); }
+}
+function setPath(root, path, data) {
+  const keys = String(path).split('/').filter(Boolean);
+  if (!keys.length) return data;
+  const out = root && typeof root === 'object' ? root : {};
+  let o = out;
+  for (let i = 0; i < keys.length - 1; i++) { const k = keys[i]; o[k] = o[k] && typeof o[k] === 'object' ? o[k] : {}; o = o[k]; }
+  if (data === null) delete o[keys[keys.length - 1]]; else o[keys[keys.length - 1]] = data;
+  return out;
+}
+let renderT = null;
+const scheduleRender = () => { if (renderT) return; renderT = setTimeout(() => { renderT = null; renderAll(); }, 120); };   // big snapshots never freeze the UI
+function gotLive(live) {
+  if (live && typeof live === 'object') { S.live = live; S.lastOk = Date.now(); S.lastEvt = S.lastOk; if (!gotLive.w || S.lastOk - gotLive.w > 10000) { gotLive.w = S.lastOk; LSC.write(); } scheduleRender(); }
+}
+function startStream() {
+  if (S.es || !window.EventSource || !FB) return;
+  try {
+    const es = new EventSource(FB + '/live_state.json'); S.es = es;
+    es.addEventListener('put', (e) => { try { const m = JSON.parse(e.data); gotLive(m.path === '/' ? m.data : setPath(S.live, m.path, m.data)); } catch (_) {} });
+    es.addEventListener('patch', (e) => { try { const m = JSON.parse(e.data); let cur = S.live; Object.keys(m.data || {}).forEach((k) => { cur = setPath(cur, (m.path === '/' ? '' : m.path) + '/' + k, m.data[k]); }); gotLive(cur); } catch (_) {} });
+    es.onerror = () => { try { es.close(); } catch (_) {} S.es = null; setTimeout(startStream, 15000); };
+  } catch (_) { S.es = null; }
+}
+async function pollLive(force) { if (!force && Date.now() - S.lastEvt < 8000) return; try { gotLive(await fb('/live_state')); } catch (_) { S.cached = true; renderStrip(); } }
+async function loadPhotos() { try { const p = await fb('/rider_photos', null, 15000); if (p && typeof p === 'object') { Object.assign(S.photos, p); scheduleRender(); } } catch (_) {} }
+
+// ---------------------------------------------------------------- encrypted captains roster (fleet_index.json on GitHub Pages)
 const keys = new Map();
-async function aesKey(salt, iter) {
-  const id = salt + '|' + iter; if (keys.has(id)) return keys.get(id);
-  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(KEY), 'PBKDF2', false, ['deriveBits']);
-  const bits = new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: b64(salt), iterations: iter, hash: 'SHA-256' }, base, 512));
-  const k = await crypto.subtle.importKey('raw', bits.slice(0, 32), 'AES-GCM', false, ['decrypt']);
-  keys.set(id, k); return k;
-}
+async function aesKey(salt, iter) { const id = salt + '|' + iter; if (keys.has(id)) return keys.get(id); const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(KEY), 'PBKDF2', false, ['deriveBits']); const bits = new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: b64(salt), iterations: iter, hash: 'SHA-256' }, base, 512)); const k = await crypto.subtle.importKey('raw', bits.slice(0, 32), 'AES-GCM', false, ['decrypt']); keys.set(id, k); return k; }
 async function gunzip(u8) { const ds = new DecompressionStream('gzip'), w = ds.writable.getWriter(); w.write(u8); w.close(); return new Uint8Array(await new Response(ds.readable).arrayBuffer()); }
-async function openEnv(text) {
-  const e = JSON.parse(text), u = b64(e.d);
-  let pt = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: u.slice(0, 12) }, await aesKey(e.s || SALT, e.i || ITER), u.slice(12)));
-  if (pt[0] === 0x1f && pt[1] === 0x8b) pt = await gunzip(pt);
-  return JSON.parse(new TextDecoder().decode(pt));
-}
-async function getFile(path, signal) {
-  try {
-    const r = await fetch(path + '?t=' + Date.now(), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' }, signal });
-    if (!r.ok) throw new Error('http');
-    return await openEnv(await r.text());
-  } catch (_) { return null; }
-}
-async function bridge(body, ms, signal) {
-  if (!BRIDGE || BRIDGE.indexOf('__OPS') === 0) throw new Error('no-bridge');
+async function openEnv(text) { const e = JSON.parse(text), u = b64(e.d); let pt = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: u.slice(0, 12) }, await aesKey(e.s || SALT, e.i || ITER), u.slice(12))); if (pt[0] === 0x1f && pt[1] === 0x8b) pt = await gunzip(pt); return JSON.parse(new TextDecoder().decode(pt)); }
+async function getFleet() { try { const r = await fetch('fleet_index.json?t=' + Date.now(), { cache: 'no-store' }); if (!r.ok) throw new Error('http'); const j = await openEnv(await r.text()); IDB.set('fleet', j); return j; } catch (_) { return null; } }
+async function bridge(body, ms) {
+  if (!BRIDGE) throw new Error('no-bridge');
   const ac = new AbortController(), to = setTimeout(() => ac.abort(), ms || 6000);
-  if (signal) signal.addEventListener('abort', () => ac.abort());
-  try {
-    const r = await fetch(BRIDGE, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ secret: BSECRET, ...body }), cache: 'no-store', signal: ac.signal });
-    if (!r.ok) throw new Error('http');
-    return await r.json();
-  } finally { clearTimeout(to); }
+  try { const r = await fetch(BRIDGE, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ secret: BSECRET, ...body }), cache: 'no-store', signal: ac.signal }); if (!r.ok) throw new Error('http'); return await r.json(); } finally { clearTimeout(to); }
 }
 
-// ---------------------------------------------------------------- sign in: e-mail only + one-time device approval
+// ---------------------------------------------------------------- sign in: e-mail only + one-time device approval (bridge)
 function deviceId() { let d = ls.get('tc_device'); if (!d) { d = 'd' + Array.from(crypto.getRandomValues(new Uint8Array(12)), (b) => b.toString(16).padStart(2, '0')).join(''); ls.set('tc_device', d); } return d; }
 function gate(html) { $('#app').hidden = true; $('#gate').hidden = false; $('#gMsg').innerHTML = html; }
 const loginHtml = '<p>Enter your email to continue</p><input id="lg" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="name@company.com"><div style="margin-top:12px"><button class="btn" id="lgGo" style="width:100%">Continue</button></div>';
@@ -210,9 +225,9 @@ async function signIn(email) {
   $('#lgErr').textContent = '';
   email = latin(email).trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('#lgErr').textContent = 'ENTER A VALID EMAIL'; return; }
-  const fleet = await getFile('fleet_index.json');
+  const fleet = await getFleet();
   if (fleet) {
-    S.fleet = fleet; IDB.set('fleet', fleet);
+    S.fleet = fleet;
     const caps = Object.values(fleet.captains || {}).filter((c) => !c.del);
     if (caps.length && !caps.some((c) => c.on !== 0 && String(c.email || '').toLowerCase() === email)) { $('#lgErr').textContent = 'THIS EMAIL IS NOT REGISTERED'; return; }
     const cap = caps.find((c) => String(c.email || '').toLowerCase() === email);
@@ -222,19 +237,13 @@ async function signIn(email) {
   ls.set('tc_email', email);
   await deviceGate();
 }
-/** remembered, approved device: open instantly from the cache and only verify in the background (a revoked device is signed out) */
-async function silentCheck() {
-  try {
-    const j = await bridge({ action: 'hb', email: S.me.email, device_id: deviceId(), name: S.me.name, zone: S.zone }, 7000);
-    if (j && j.status === 'denied') logout(); else S.cached = false;
-  } catch (_) { S.cached = true; renderStrip(); }
-}
+async function silentCheck() { try { const j = await bridge({ action: 'hb', email: S.me.email, device_id: deviceId(), name: S.me.name, zone: S.zone }, 7000); if (j && j.status === 'denied') logout(); } catch (_) { /* cached mode */ } }
 async function deviceGate() {
   const me = S.me;
   for (;;) {
     let st = '';
     try { st = (await bridge({ action: 'hb', email: me.email, device_id: deviceId(), name: me.name, zone: S.zone }, 7000)).status; }
-    catch (_) { if (ls.get('tc_appr') === me.email) { st = 'approved'; S.cached = true; } else { $('#lgErr').textContent = 'CANNOT VERIFY THIS DEVICE - CHECK YOUR CONNECTION'; gate(loginHtml); return; } }
+    catch (_) { if (ls.get('tc_appr') === me.email) st = 'approved'; else { $('#lgErr').textContent = 'CANNOT VERIFY THIS DEVICE - CHECK YOUR CONNECTION'; gate(loginHtml); return; } }
     if (st === 'approved') { ls.set('tc_appr', me.email); start(); return; }
     if (st === 'denied') { gate('<p><span class="badge bad">ACCESS DENIED</span></p><p>This device was not approved by the coordinator.</p><button class="btn ghost" id="lgBack">Back</button>'); return; }
     gate('<p><span class="badge warn">WAITING FOR COORDINATOR APPROVAL</span></p><p>' + esc(me.email) + '</p><p class="mono" style="font-size:12px">THIS DEVICE IS NEW. THE COORDINATOR WILL APPROVE IT ONCE.</p>');
@@ -243,273 +252,239 @@ async function deviceGate() {
   }
 }
 
-// ---------------------------------------------------------------- derived data
-const zoneName = (id) => { const z = ((S.fleet && S.fleet.zones) || []).find((q) => q.zone_id === id); return z ? z.zone_name : id; };
+// ---------------------------------------------------------------- derived data (everything below works on the in-memory live state)
+const live = () => S.live || {};
 const zoneOk = (zid) => S.zone === 'ALL' || zid === S.zone;
-const avHtml = (photo) => (photo ? `<img class="av" alt="" src="${esc(photoSrc(photo))}">` : `<span class="av">${HELMET}</span>`);
-function delayedRows() { return uniq((S.delayed && S.delayed.orders) || []).filter((o) => zoneOk(o.zone_id) && (!S.hybrid || o.is_hybrid)); }
-function riderRows() {
-  const out = [], seen = new Set();
-  Object.values(S.zones).forEach((z) => { if (!zoneOk(z.zone.zone_id)) return; (z.riders || []).forEach((r) => { if (seen.has(r.rider_id)) return; seen.add(r.rider_id); out.push({ ...r, zone_id: z.zone.zone_id, zone: z.zone.zone_name }); }); });
-  return out.filter((r) => S.rf === 'ALL' || r.state === S.rf).sort((a, b) => String(a.rider_name).localeCompare(String(b.rider_name)));
+const zones = () => live().zones || [];
+function allOrders() { return uniq(((live().active_orders || {}).orders) || ((live().delayed || {}).orders) || []); }
+function orderRows() {
+  return allOrders().filter((o) => zoneOk(o.zone_id) && (!S.hybrid || o.is_hybrid) && (!S.delOnly || (o.delay_minutes != null && o.delay_minutes >= 15)))
+    .sort((a, b) => (b.delay_minutes == null ? -1 : b.delay_minutes) - (a.delay_minutes == null ? -1 : a.delay_minutes));
 }
-const photoOf = (id) => (S.meta && S.meta.riders && S.meta.riders[id] && S.meta.riders[id].photo_base64) || '';
+function doubles() { const m = {}; allOrders().forEach((o) => (o.riders || []).forEach((r) => { if (r.rider_id) m[r.rider_id] = (m[r.rider_id] || 0) + 1; })); return m; }
+const photoOf = (id) => S.photos[id] || '';
+const avHtml = (p) => (p ? `<img class="av" alt="" src="${esc(photoSrc(p))}">` : `<span class="av">${HELMET}</span>`);
+const ridersOf = (o) => (o.riders && o.riders.length ? o.riders : (o.rider_id || o.rider_name ? [{ rider_id: o.rider_id, rider_name: o.rider_name, rider_phone: o.rider_phone }] : []));
 
-// ---------------------------------------------------------------- rendering (25 cards per batch, search/filters run on the full in-memory data)
-function badgeDelay(m) { return m == null ? '' : `<span class="badge ${m >= 30 ? 'bad' : m >= 15 ? 'warn' : 'ok'}">+${m} MIN</span>`; }
-function orderCard(o, sel) {
-  return `<div class="card ${o.delay_minutes >= 30 ? 'crit' : o.delay_minutes >= 15 ? 'late' : ''}" data-oc="${esc(o.order_code)}"><div class="crow">${sel ? `<input class="chk" type="checkbox" data-sel="${esc(o.order_code)}" ${S.sel.has(o.order_code) ? 'checked' : ''}>` : ''}${avHtml(o.photo_base64 || photoOf(o.rider_id))}
-    <div class="cbody"><div class="l1"><b>#${esc(o.order_code)}</b>${badgeDelay(o.delay_minutes)}${o.is_hybrid ? '<span class="badge blue">HYBRID</span>' : ''}<span class="badge">${esc(o.zone || '-')}</span></div>
-    <div class="l2">${esc(o.restaurant_name || '-')}</div>
-    <div class="l2">${o.rider_id || o.rider_name ? esc(o.rider_name || '-') + ' <span class="ltr mono">' + esc(o.rider_id || '-') + '</span> <span class="ltr mono">' + esc(o.rider_phone || '') + '</span>' : '<span class="badge bad">NO RIDER</span>'}</div>
+function riderBlock(r, dbl) {
+  const ph = intl(r.rider_phone);
+  return `<div class="rr">${avHtml(photoOf(r.rider_id))}<div class="rt"><b>${esc(r.rider_name || '-')}</b><small>${esc(r.rider_id || '-')}${r.rider_phone ? ' - ' + esc(r.rider_phone) : ''}</small></div></div>
+    <div class="acts">${r.rider_id ? `<button class="mini" data-cp="${esc(r.rider_id)}">COPY ID</button>` : ''}${r.rider_phone ? `<button class="mini" data-cp="${esc(r.rider_phone)}">COPY PHONE</button><a class="mini" href="tel:${esc(r.rider_phone)}">CALL</a>${ph ? `<a class="mini" target="_blank" rel="noopener" href="https://wa.me/${esc(ph)}">WHATSAPP</a>` : ''}` : ''}</div>`;
+}
+function orderCard(o, sel, dbl) {
+  const rs = ridersOf(o), isDbl = rs.some((r) => dbl[r.rider_id] > 1);
+  return `<div class="card ${o.delay_minutes >= 30 ? 'crit' : o.delay_minutes >= 15 ? 'late' : ''}" data-oc="${esc(o.order_code)}"><div class="crow">${sel ? `<input class="chk" type="checkbox" data-sel="${esc(o.order_code)}" ${S.sel.has(o.order_code) ? 'checked' : ''}>` : ''}
+    <div class="cbody"><div class="l1"><b>#${esc(o.order_code)}</b>${o.delay_minutes != null && o.delay_minutes > 0 ? `<span class="badge ${o.delay_minutes >= 30 ? 'bad' : o.delay_minutes >= 15 ? 'warn' : 'ok'}">+${o.delay_minutes} MIN</span>` : ''}${stagePill(o.status)}<span class="badge ${o.is_hybrid ? 'blue' : ''}">${o.is_hybrid ? 'HYBRID' : 'MART'}</span>${isDbl ? '<span class="badge warn">دبل أوردر</span>' : ''}<span class="badge">${esc(o.zone || '-')}</span></div>
+    <div class="l2">${esc(o.vendor || o.restaurant_name || '-')}</div>${rs.map((r) => riderBlock(r)).join('')}
     <div class="l3"><button class="btn sm ghost" data-det="${esc(o.order_code)}">DETAILS</button></div></div></div></div>`;
 }
-function renderDelay() {
-  const rows = delayedRows(), part = rows.slice(0, S.nD);
-  S.shownRows = rows;
-  $('#dCount').textContent = rows.length; $('#nbDelay').hidden = !rows.length; $('#nbDelay').textContent = rows.length > 99 ? '99+' : rows.length;
-  const zs = (S.fleet && S.fleet.zones) || [];
-  $('#zoneChips').innerHTML = zs.length > 1 ? [['ALL', 'ALL ZONES']].concat(zs.map((z) => [z.zone_id, z.zone_name])).map(([id, n]) => `<button class="chip ${S.zone === id ? 'on' : ''}" data-zc="${esc(id)}">${esc(n)}</button>`).join('') : '';
-  $('#hybridBtn').classList.toggle('on', S.hybrid);
-  $('#dList').innerHTML = S.busy ? '<div class="sk"></div><div class="sk"></div><div class="sk"></div>' : part.map((o) => orderCard(o, true)).join('') || '<div class="empty">NO DELAYED ORDERS</div>';
+
+// ---------------------------------------------------------------- rendering (25 cards per batch)
+function renderKpi() {
+  const L = allOrders().filter((o) => zoneOk(o.zone_id) && o.delay_minutes != null);
+  const n = (m) => L.filter((o) => o.delay_minutes >= m).length;
+  $('#kp').innerHTML = `<div><b>${n(1)}</b><span>إجمالي المتأخر</span></div><div class="w"><b>${n(15)}</b><span>تأخير +15د</span></div><div class="b"><b>${n(30)}</b><span>تأخير +30د</span></div>`;
+}
+function renderOrders() {
+  const rows = orderRows(), part = rows.slice(0, S.nD), dbl = doubles();
+  S.rows = rows;
+  $('#dCount').textContent = rows.length;
+  const nDel = allOrders().filter((o) => o.delay_minutes != null && o.delay_minutes >= 15).length; $('#nbDelay').hidden = !nDel; $('#nbDelay').textContent = nDel > 99 ? '99+' : nDel;
+  $('#zoneChips').innerHTML = zones().length > 1 ? [{ zone_id: 'ALL', zone_name: 'ALL ZONES' }].concat(zones()).map((z) => `<button class="chip ${S.zone === z.zone_id ? 'on' : ''}" data-zc="${esc(z.zone_id)}">${esc(z.zone_name)}</button>`).join('') : '';
+  $('#hybridBtn').classList.toggle('on', S.hybrid); $('#delBtn').classList.toggle('on', S.delOnly);
+  $('#dList').innerHTML = !S.live ? '<div class="sk"></div><div class="sk"></div><div class="sk"></div>' : (part.map((o) => orderCard(o, true, dbl)).join('') || '<div class="empty">NO ORDERS</div>');
   $('#dMore').hidden = part.length >= rows.length; $('#dMore').textContent = 'LOAD MORE (' + (rows.length - part.length) + ')';
-  const n = S.sel.size; $('#fab').hidden = n === 0 || S.view !== 'delay'; $('#fabCopy').textContent = 'COPY SELECTED (' + n + ')'; $('#fabWa').textContent = 'WHATSAPP OFFICE (' + n + ')';
+  const k = S.sel.size; $('#fab').hidden = k === 0 || S.view !== 'orders'; $('#fabCopy').textContent = 'COPY SELECTED (' + k + ')'; $('#fabWa').textContent = 'WHATSAPP OFFICE (' + k + ')';
+}
+function riderRows() {
+  const dbl = doubles(), m = live().riders || {};
+  return Object.values(m).map((r) => ({ ...r, dbl: dbl[r.rider_id] > 1 })).filter((r) => S.rf === 'ALL' || (S.rf === 'ON ORDER' && r.state === 'ON ORDER') || (S.rf === 'DOUBLE' && r.dbl) || (S.rf === 'BREAK' && /temp|break/i.test(r.status || ''))).sort((a, b) => String(a.rider_name).localeCompare(String(b.rider_name)));
 }
 function renderRiders() {
   const rows = riderRows(), part = rows.slice(0, S.nR);
   $('#rCount').textContent = rows.length;
-  $('#rChips').innerHTML = ['ALL', 'AVAILABLE', 'ON ORDER', 'BREAK'].map((f) => `<button class="chip ${S.rf === f ? 'on' : ''}" data-rf="${f}">${f}</button>`).join('');
-  $('#rList').innerHTML = part.map((r) => `<div class="card" data-rid="${esc(r.rider_id)}"><div class="crow">${avHtml(photoOf(r.rider_id))}
-    <div class="cbody" data-open="${esc(r.rider_id)}" style="cursor:pointer"><div class="l1"><b>${esc(r.rider_name || '-')}</b></div><div class="l2"><span class="ltr mono">${esc(r.rider_id)}</span> <span class="badge ${r.state === 'AVAILABLE' ? 'ok' : r.state === 'ON ORDER' ? 'blue' : r.state === 'BREAK' ? 'warn' : ''}">${esc(fmtStatus(r.state || 'OFF'))}</span>${r.is_hybrid ? ' <span class="badge blue">HYBRID</span>' : ''}</div></div>
-    ${r.rider_phone ? `<a class="btn sm ok" href="tel:${esc(r.rider_phone)}">CALL</a>` : ''}</div></div>`).join('') || '<div class="empty">NO RIDERS</div>';
+  $('#rChips').innerHTML = [['ALL', 'ALL'], ['ON ORDER', 'ON ORDER'], ['DOUBLE', 'دبل أوردر'], ['BREAK', 'BREAK']].map(([k, t]) => `<button class="chip ${S.rf === k ? 'on' : ''}" data-rf="${k}">${t}</button>`).join('');
+  $('#rList').innerHTML = part.map((r) => `<div class="card"><div class="crow"><div class="cbody"><div class="rr" data-open="${esc(r.rider_id)}" style="cursor:pointer">${avHtml(photoOf(r.rider_id))}<div class="rt"><b>${esc(r.rider_name || '-')}</b><small>${esc(r.rider_id)}</small></div><span class="badge blue">${esc(fmtStatus(r.state || r.status))}</span>${r.dbl ? '<span class="badge warn">دبل أوردر</span>' : ''}</div>
+    <div class="acts">${r.rider_phone ? `<button class="mini" data-cp="${esc(r.rider_phone)}">COPY PHONE</button><a class="mini" href="tel:${esc(r.rider_phone)}">CALL</a>` : ''}<button class="mini" data-cp="${esc(r.rider_id)}">COPY ID</button></div></div></div></div>`).join('') || '<div class="empty">NO RIDERS</div>';
   $('#rMore').hidden = part.length >= rows.length; $('#rMore').textContent = 'LOAD MORE (' + (rows.length - part.length) + ')';
 }
-function renderZoneSel() {
-  const zs = (S.fleet && S.fleet.zones) || [];
-  $('#zoneSel').innerHTML = [['ALL', 'ALL ZONES']].concat(zs.map((z) => [z.zone_id, z.zone_name])).map(([id, n]) => `<option value="${esc(id)}" ${S.zone === id ? 'selected' : ''}>${esc(n)}</option>`).join('');
-}
+function renderZoneSel() { const z = zones(); $('#zoneSel').innerHTML = [{ zone_id: 'ALL', zone_name: 'ALL ZONES' }].concat(z).map((q) => `<option value="${esc(q.zone_id)}" ${S.zone === q.zone_id ? 'selected' : ''}>${esc(q.zone_name)}</option>`).join(''); }
 function renderStrip() {
   $('#idIni').innerHTML = HELMET; $('#idName').textContent = S.me.name;
-  const age = S.lastOk ? Math.round((Date.now() - S.lastOk) / 1000) : null, live = age != null && age < 90 && !S.cached;
-  const b = $('#live'); b.className = 'badge ' + (live ? 'ok' : 'warn');
-  b.innerHTML = live ? `<i class="pulse" style="width:8px;height:8px"></i><span>LIVE ${age}s</span>` : '<span>CACHED MODE</span>';
+  const age = S.lastOk ? Math.round((Date.now() - S.lastOk) / 1000) : null, up = age != null && age < 20;
+  const b = $('#live'); b.className = 'badge ' + (up ? 'ok' : 'warn');
+  b.innerHTML = up ? `<i class="pulse" style="width:8px;height:8px"></i><span>LIVE STREAM ${age}s</span>` : '<span>CACHED MODE</span>';
 }
-function renderAll() { renderStrip(); renderZoneSel(); renderDelay(); if (S.view === 'riders') renderRiders(); }
+function renderAll() { renderStrip(); renderZoneSel(); renderKpi(); renderOrders(); if (S.view === 'riders') renderRiders(); }
 
-// ---------------------------------------------------------------- refresh: instant from the cache, silent revalidation every 20s (inputs / scroll are never touched)
-async function loadCache() {
-  const [d, f] = await Promise.all([IDB.get('delayed'), IDB.get('fleet')]);
-  if (f) S.fleet = f; if (d) S.delayed = d;
-  const zid = S.zone !== 'ALL' ? [S.zone] : ((S.fleet && S.fleet.zones) || []).map((z) => z.zone_id);
-  for (const id of zid) { const z = await IDB.get('zone:' + id); if (z) S.zones[id] = z; }
-}
-async function refresh(manual) {
-  if (S.refreshing) return; S.refreshing = true;
-  if (manual) { S.busy = true; renderDelay(); }
-  try {
-    const t0 = Date.now();
-    const [d, f] = await Promise.all([getFile('data/delayed.json'), getFile('fleet_index.json')]);
-    if (f) { S.fleet = f; IDB.set('fleet', f); }
-    const zs = S.zone === 'ALL' ? ((S.fleet && S.fleet.zones) || []).map((z) => z.zone_id) : [S.zone];
-    const zr = await Promise.all(zs.map((id) => getFile('zones/' + String(id).replace(/[^\w-]/g, '_') + '.json')));
-    zr.forEach((z, i) => { if (z) { S.zones[zs[i]] = z; IDB.set('zone:' + zs[i], z); } });
-    if (d) { S.delayed = d; IDB.set('orders', d.orders.slice(0, 30)); IDB.set('delayed', d); }
-    S.cached = !(d || f);
-    if (d || f) S.lastOk = Date.now();
-    if (manual) await sleep(Math.max(0, 350 - (Date.now() - t0)));
-  } finally { S.busy = false; S.refreshing = false; renderAll(); }
-}
-async function loadMeta() {
-  if (S.meta || S.metaBusy) return; S.metaBusy = true;
-  const m = await getFile('riders_meta.json'); if (m) { S.meta = m; IDB.set('meta', m); }
-  S.metaBusy = false;
-}
-
-// ---------------------------------------------------------------- rider photo on demand (meta cache, IndexedDB, then the live bridge)
-async function livePhoto(id) {
-  const r = await liveLookup('R:' + id);
-  return r && r.rider && r.rider.photo_base64 ? r.rider.photo_base64 : '';
-}
+// ---------------------------------------------------------------- details / rider photo on demand
+function openSheet(html) { $('#sheet').innerHTML = '<div class="shade" data-close="1"></div><div class="sheet">' + html + '</div>'; }
+function closeSheet() { $('#sheet').innerHTML = ''; }
 async function photoFor(id) {
   if (photoOf(id)) return photoOf(id);
   const c = await IDB.get('p:' + id); if (c) return c;
-  let p = ''; try { p = await livePhoto(id); } catch (_) { p = ''; }
-  if (p) await IDB.set('p:' + id, p);
+  let p = ''; try { const j = await liveLookup('R:' + id); p = (j.rider && j.rider.photo_base64) || ''; } catch (_) { p = ''; }
+  if (p) { S.photos[id] = p; await IDB.set('p:' + id, p); }
   return p;
 }
-function openSheet(html) { $('#sheet').innerHTML = '<div class="shade" data-close="1"></div><div class="sheet">' + html + '</div>'; }
-function closeSheet() { $('#sheet').innerHTML = ''; }
-async function riderSheet(id, extra) {
-  const r = riderRows().find((x) => x.rider_id === id) || Object.values(S.zones).flatMap((z) => z.riders || []).find((x) => x.rider_id === id) || { rider_id: id, rider_name: (S.fleet && S.fleet.riders && S.fleet.riders[id] && S.fleet.riders[id].rider_name) || '' };
-  const m = (S.meta && S.meta.riders && S.meta.riders[id]) || {};
+async function riderSheet(id) {
+  const r = (live().riders || {})[id] || { rider_id: id };
   const f = (k, v) => (v ? `<div class="f"><span>${k}</span><b class="ltr mono">${esc(v)}</b></div>` : '');
-  openSheet(`<div class="photo load" id="shPhoto">${HELMET}</div><h3 style="text-align:center">${esc(r.rider_name || '-')}</h3>
-    ${f('RIDER ID', id)}${f('STATUS', fmtStatus(r.state || r.status))}${f('ZONE', r.zone || zoneName(r.zone_id || ''))}${f('PHONE', r.rider_phone || m.rider_phone)}${f('SHIFT', [r.shift_start, r.shift_end].filter(Boolean).join(' - '))}${extra || ''}
-    <div class="l3" style="margin-top:10px">${(r.rider_phone || m.rider_phone) ? `<a class="btn ok" style="flex:1" href="tel:${esc(r.rider_phone || m.rider_phone)}">CALL</a>` : ''}<button class="btn ghost" style="flex:1" data-close="1">CLOSE</button></div>`);
-  loadMeta();
-  const p = await photoFor(id);
-  const el = $('#shPhoto'); if (!el) return;
-  el.classList.remove('load');
-  el.innerHTML = p ? `<img alt="" src="${photoSrc(p)}">` : HELMET;
+  openSheet(`<div class="photo load" id="shPhoto">${HELMET}</div><h3 style="text-align:center">${esc(r.rider_name || '-')}</h3>${f('RIDER ID', id)}${f('STATUS', fmtStatus(r.state || r.status))}${f('PHONE', r.rider_phone)}
+    <div class="l3" style="margin-top:10px">${r.rider_phone ? `<a class="btn ok" style="flex:1" href="tel:${esc(r.rider_phone)}">CALL</a>` : ''}<button class="btn ghost" style="flex:1" data-close="1">CLOSE</button></div>`);
+  const p = await photoFor(id); const el = $('#shPhoto'); if (!el) return;
+  el.classList.remove('load'); el.innerHTML = p ? `<img alt="" src="${esc(photoSrc(p))}">` : HELMET;
 }
 function orderSheet(code) {
-  const o = delayedRows().concat(((S.delayed && S.delayed.orders) || [])).find((x) => x.order_code === code) || Object.values(S.zones).flatMap((z) => z.orders || []).find((x) => x.order_code === code);
-  if (!o) return;
+  const o = allOrders().find((x) => x.order_code === code); if (!o) return;
   const f = (k, v) => (v ? `<div class="f"><span>${k}</span><b class="ltr mono">${esc(v)}</b></div>` : '');
-  openSheet(`<h3>#${esc(o.order_code)} ${badgeDelay(o.delay_minutes)}</h3>${f('RESTAURANT', o.restaurant_name)}${f('STATUS', fmtStatus(o.status))}${f('ZONE', o.zone)}${f('ORDER ID', o.order_id)}${f('TYPE', o.is_hybrid ? 'HYBRID' : 'MART')}
-    <div class="sec"><span>RIDER</span></div><div id="shRider"></div><button class="btn ghost" style="width:100%" data-close="1">CLOSE</button>`);
-  if (o.rider_id) riderBlock(o); else $('#shRider').innerHTML = '<span class="badge bad">NO RIDER</span>';
-}
-async function riderBlock(o) {
-  const el = $('#shRider'); if (!el) return;
-  el.innerHTML = `<div class="photo load" id="shPhoto">${HELMET}</div><div class="f"><span>NAME</span><b>${esc(o.rider_name)}</b></div><div class="f"><span>ID</span><b class="ltr mono">${esc(o.rider_id)}</b></div>${o.rider_phone ? `<div class="f"><span>PHONE</span><b class="ltr mono">${esc(o.rider_phone)}</b></div><a class="btn ok" style="width:100%;margin-top:6px" href="tel:${esc(o.rider_phone)}">CALL</a>` : ''}`;
-  loadMeta();
-  const p = await photoFor(o.rider_id);
-  const ph = $('#shPhoto'); if (!ph) return;
-  ph.classList.remove('load'); ph.innerHTML = p ? `<img alt="" src="${photoSrc(p)}">` : HELMET;
+  openSheet(`<h3>#${esc(o.order_code)} ${stagePill(o.status)}</h3>${f('RESTAURANT', o.vendor || o.restaurant_name)}${f('ZONE', o.zone)}${f('TYPE', o.is_hybrid ? 'HYBRID' : 'MART')}${f('DELAY', o.delay_minutes != null ? '+' + o.delay_minutes + ' MIN' : '')}
+    <div class="sec"><span>RIDERS</span></div>${ridersOf(o).map((r) => `<div data-open="${esc(r.rider_id)}" style="cursor:pointer">${riderBlock(r)}</div>`).join('') || '<div class="empty">NO RIDER</div>'}<button class="btn ghost" style="width:100%;margin-top:8px" data-close="1">CLOSE</button>`);
 }
 
-// ---------------------------------------------------------------- live bridge lookup (orders / riders) with a 6s graceful timeout
+// ---------------------------------------------------------------- live lookups: Firebase RPC (/rpc/{id} -> /rpc/{id}/res), bridge as the fallback, 6s graceful timeout
 async function liveLookup(code, signal) {
-  const c = String(code);
-  const first = await bridge({ action: 'request', code: c }, 5000, signal);
+  const c = String(code), id = 'q' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), end = Date.now() + 6000;
+  try {
+    await fb('/rpc/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: c, t: Date.now() }) }, 4000);
+    while (Date.now() < end) {
+      if (signal && signal.aborted) throw new Error('abort');
+      await sleep(350);
+      const r = await fb('/rpc/' + id + '/res', null, 3000);
+      if (r) { fb('/rpc/' + id, { method: 'DELETE' }, 3000).catch(() => {}); if (!r.found) throw new Error('nf'); return r; }
+    }
+  } catch (e) { if (e.message === 'nf' || e.message === 'abort') throw e; }
+  const first = await bridge({ action: 'request', code: c }, 5000);       // fallback: the Apps Script relay
   let r = first;
-  const end = Date.now() + 6000;
-  while (!(r && r.status === 'ready') && Date.now() < end) {
-    if (signal && signal.aborted) throw new Error('abort');
-    await sleep(500);
-    r = await bridge({ action: 'result', code: c }, 4000, signal);
-    if (r && r.status === 'ready') break;
-  }
-  if (!(r && r.data)) { if (r && r.status === 'ready') r = await bridge({ action: 'result', code: c }, 4000, signal); }
+  while (!(r && r.status === 'ready') && Date.now() < end + 3000) { if (signal && signal.aborted) throw new Error('abort'); await sleep(500); r = await bridge({ action: 'result', code: c }, 4000); }
   if (!(r && r.data)) throw new Error('timeout');
-  const j = JSON.parse(r.data);
-  if (!j.found) throw new Error('nf');
-  return j;
+  const j = JSON.parse(r.data); if (!j.found) throw new Error('nf'); return j;
 }
 
-// ---------------------------------------------------------------- dual-track search: local data (instant) and the live bridge race (Promise.any)
+// ---------------------------------------------------------------- dual-track search (250ms debounce, AbortController, Promise.any)
 function norm(q) { const t = latin(q).trim().replace(/^#/, '').replace(/^HF[_\s-]?EG/i, ''); return { text: t.toLowerCase().replace(/\s+/g, ' '), digits: t.replace(/\D/g, '') }; }
 function localSearch(n) {
-  const orders = [], riders = [];
-  const pool = new Map();
-  ((S.delayed && S.delayed.orders) || []).forEach((o) => pool.set(o.order_code, o));
-  Object.values(S.zones).forEach((z) => (z.orders || []).forEach((o) => { if (!pool.has(o.order_code)) pool.set(o.order_code, o); }));
-  pool.forEach((o) => { if ((n.digits.length >= 4 && o.order_code.includes(n.digits)) || [o.restaurant_name, o.rider_name].join(' ').toLowerCase().includes(n.text)) orders.push(o); });
-  const fr = (S.fleet && S.fleet.riders) || {};
-  Object.keys(fr).forEach((id) => { const r = fr[id]; if ((n.digits.length >= 3 && (id === n.digits || String(r.rider_phone || '').replace(/\D/g, '').endsWith(n.digits) || String(r.national_id || '') === n.digits)) || String(r.rider_name || '').toLowerCase().includes(n.text) || id === n.text) riders.push({ rider_id: id, rider_name: r.rider_name, rider_phone: r.rider_phone, zone_id: r.zone_id }); });
-  return { orders: orders.slice(0, 20), riders: riders.slice(0, 20) };
+  const orders = allOrders().filter((o) => (n.digits.length >= 4 && o.order_code.includes(n.digits)) || [o.vendor, o.restaurant_name, o.rider_name, ...ridersOf(o).map((r) => r.rider_name)].join(' ').toLowerCase().includes(n.text) || ridersOf(o).some((r) => n.digits.length >= 3 && (r.rider_id === n.digits || String(r.rider_phone || '').replace(/\D/g, '').endsWith(n.digits)))).slice(0, 20);
+  const riders = Object.values(live().riders || {}).filter((r) => (n.digits.length >= 3 && (r.rider_id === n.digits || String(r.rider_phone || '').replace(/\D/g, '').endsWith(n.digits))) || String(r.rider_name || '').toLowerCase().includes(n.text)).slice(0, 20);
+  return { orders, riders };
 }
-function renderResults(res, pendingLive) {
-  const box = $('#results'); box.hidden = false;
-  const o = (res.orders || []).map((x) => orderCard(x, false)).join('');
-  const r = (res.riders || []).map((x) => `<div class="card"><div class="crow">${avHtml(x.photo_base64 || photoOf(x.rider_id))}<div class="cbody" data-open="${esc(x.rider_id)}" style="cursor:pointer"><div class="l1"><b>${esc(x.rider_name || '-')}</b></div><div class="l2"><span class="ltr mono">${esc(x.rider_id)}</span> <span class="badge">${esc(zoneName(x.zone_id) || '-')}</span></div></div>${x.rider_phone ? `<a class="btn sm ok" href="tel:${esc(x.rider_phone)}">CALL</a>` : ''}</div></div>`).join('');
-  box.innerHTML = (o ? '<div class="sec"><span>ORDERS</span></div>' + o : '') + (r ? '<div class="sec"><span>RIDERS</span></div>' + r : '') + (pendingLive ? '<div class="sk"></div>' : '') + (!o && !r && !pendingLive ? '<div class="empty">NO RESULTS</div>' : '');
+function renderResults(res, pending) {
+  const box = $('#results'); box.hidden = false; const dbl = doubles();
+  const o = (res.orders || []).map((x) => orderCard(x, false, dbl)).join('');
+  const r = (res.riders || []).map((x) => `<div class="card"><div class="crow"><div class="cbody"><div class="rr" data-open="${esc(x.rider_id)}" style="cursor:pointer">${avHtml(x.photo_base64 || photoOf(x.rider_id))}<div class="rt"><b>${esc(x.rider_name || '-')}</b><small>${esc(x.rider_id)}</small></div></div></div></div></div>`).join('');
+  box.innerHTML = (o ? '<div class="sec"><span>ORDERS</span></div>' + o : '') + (r ? '<div class="sec"><span>RIDERS</span></div>' + r : '') + (pending ? '<div class="sk"></div>' : '') + (!o && !r && !pending ? '<div class="empty">NO RESULTS</div>' : '');
 }
 async function runSearch() {
-  const raw = $('#q').value; const n = norm(raw);
+  const raw = $('#q').value, n = norm(raw);
   if (S.acAbort) S.acAbort.abort();
   if (!raw.trim()) { $('#results').hidden = true; showView(S.view); return; }
-  ['delay', 'riders', 'susp'].forEach((v) => { $('#v-' + v).hidden = true; });
+  ['orders', 'riders', 'susp'].forEach((v) => { $('#v-' + v).hidden = true; });
   const ac = new AbortController(); S.acAbort = ac;
-  const loc = new Promise((res, rej) => { const r = localSearch(n); (r.orders.length || r.riders.length) ? res({ src: 'local', ...r }) : rej(new Error('none')); });
-  const live = n.digits.length >= 6 ? liveLookup(n.digits, ac.signal).then((j) => ({ src: 'live', orders: j.order ? [{ ...j.order, rider_name: (j.rider && j.rider.rider_name) || j.order.rider_name, rider_phone: (j.rider && j.rider.rider_phone) || j.order.rider_phone }] : [], riders: j.rider ? [{ ...j.rider, zone_id: '' }] : [] }))
-    : n.digits.length >= 3 && n.digits.length <= 12 ? liveLookup('R:' + n.digits, ac.signal).then((j) => ({ src: 'live', orders: [], riders: j.rider ? [{ ...j.rider, zone_id: '' }] : [] })) : Promise.reject(new Error('skip'));
+  const loc = new Promise((res, rej) => { const r = localSearch(n); (r.orders.length || r.riders.length) ? res({ ...r }) : rej(new Error('none')); });
+  const liveP = n.digits.length >= 6 ? liveLookup(n.digits, ac.signal).then((j) => ({ orders: j.order ? [{ ...j.order, riders: j.order.riders && j.order.riders.length ? j.order.riders : (j.rider ? [j.rider] : []) }] : [], riders: j.rider ? [j.rider] : [] }))
+    : n.digits.length >= 3 && n.digits.length <= 12 ? liveLookup('R:' + n.digits, ac.signal).then((j) => ({ orders: [], riders: j.rider ? [j.rider] : [] })) : Promise.reject(new Error('skip'));
   renderResults({}, true);
   let first = null;
-  try { first = await Promise.any([loc, live]); } catch (_) { first = null; }
+  try { first = await Promise.any([loc, liveP]); } catch (_) { first = null; }
   if (ac.signal.aborted) return;
   renderResults(first || {}, !first && n.digits.length >= 3);
-  live.then((l) => { if (ac.signal.aborted) return; const m = { orders: [...(first ? first.orders : []), ...l.orders], riders: [...(first ? first.riders : []), ...l.riders] }; const seenO = new Set(), seenR = new Set(); m.orders = m.orders.filter((x) => !seenO.has(x.order_code) && seenO.add(x.order_code)); m.riders = m.riders.filter((x) => !seenR.has(x.rider_id) && seenR.add(x.rider_id)); renderResults(m, false); })
+  liveP.then((l) => { if (ac.signal.aborted) return; (l.riders || []).forEach((r) => { if (r.photo_base64) S.photos[r.rider_id] = r.photo_base64; }); const so = new Set(), sr = new Set(); const m = { orders: [...(first ? first.orders : []), ...l.orders].filter((x) => !so.has(x.order_code) && so.add(x.order_code)), riders: [...(first ? first.riders : []), ...l.riders].filter((x) => !sr.has(x.rider_id) && sr.add(x.rider_id)) }; renderResults(m, false); })
     .catch(() => { if (!ac.signal.aborted && !first) renderResults({}, false); });
 }
 let qT = null;
-function onQ() { clearTimeout(qT); qT = setTimeout(runSearch, 250); }   // 250ms debounce; a newer keystroke aborts the older lookups
+const onQ = () => { clearTimeout(qT); qT = setTimeout(runSearch, 250); };
 
-// ---------------------------------------------------------------- suspension requests (bottom sheet + timeline + chime on PENDING -> decision)
+// ---------------------------------------------------------------- requests: Suspend / Unsuspend / Password Reset -> Firebase /captain_requests, live status
+const TYPES = [['SUSPEND', 'SUSPEND'], ['UNSUSPEND', 'UNSUSPEND'], ['PASSWORD_RESET', 'PASSWORD RESET']];
 async function pollReqs() {
   try {
-    const j = await bridge({ action: 'susp_status', email: S.me.email, device_id: deviceId() }, 5000);
-    if (!j || !j.ok) { if (j && j.error === 'device-not-approved') { ls.set('tc_appr', ''); logout(); } return; }
+    const all = (await fb('/captain_requests', null, 6000)) || {};
     const seen = (() => { try { return JSON.parse(ls.get('tc_req_seen') || '{}'); } catch (_) { return {}; } })();
+    const mine = Object.entries(all).filter(([, q]) => q && String(q.captain_email || '').toLowerCase() === S.me.email && Date.now() - (Number(q.t) || 0) < 24 * 3600000).map(([id, q]) => ({ id, ...q })).sort((a, b) => b.t - a.t);
     let changed = false;
-    j.items.forEach((q) => { if (seen[q.id] === 'PENDING' && q.status !== 'PENDING') { changed = true; banner('REQUEST UPDATED: ' + q.rider_id + ' - ' + q.status); } seen[q.id] = q.status; });
+    mine.forEach((q) => { if (seen[q.id] === 'IN REVIEW' && q.status !== 'IN REVIEW') { changed = true; banner('REQUEST UPDATED: ' + q.rider_id + ' - ' + q.status); } seen[q.id] = q.status; });
     ls.set('tc_req_seen', JSON.stringify(seen));
     if (changed) chime();
-    S.reqs = j.items; renderReqs();
-  } catch (_) { /* offline: keep the last list */ }
+    S.reqs = mine; renderReqs();
+  } catch (_) { /* keep the last list */ }
 }
 function renderReqs() {
-  const pend = S.reqs.filter((q) => q.status === 'PENDING').length;
+  const pend = S.reqs.filter((q) => q.status === 'IN REVIEW').length;
   $('#nbSusp').hidden = !pend; $('#nbSusp').textContent = pend;
-  $('#sList').innerHTML = S.reqs.map((q) => `<div class="it s-${esc(q.status)}"><div class="l1"><b class="ltr mono">${esc(q.rider_id)}</b><span class="badge ${q.status === 'SUSPENSION' ? 'bad' : q.status === 'REJECTED' ? '' : 'warn'}">${esc(q.status)}</span></div>
-    <div class="l2">${esc(q.reason)}${q.note ? ' - ' + esc(q.note) : ''}</div><div class="l2 mono" style="font-size:11px">${new Date(q.t).toLocaleTimeString('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit' })}</div></div>`).join('') || '<div class="empty">NO REQUESTS TODAY</div>';
+  $('#sList').innerHTML = S.reqs.map((q) => `<div class="it s-${q.status === 'IN REVIEW' ? 'PENDING' : q.status === 'EXECUTED' ? 'SUSPENSION' : 'REJECTED'}"><div class="l1"><b class="ltr mono">${esc(q.rider_id)}</b><span class="badge">${esc(String(q.type || '').replace('_', ' '))}</span>${reqPill(q.status)}</div>
+    <div class="l2">${esc(q.reason || '')}${q.note ? ' - ' + esc(q.note) : ''}</div><div class="l2 mono" style="font-size:11px">${new Date(q.t).toLocaleTimeString('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit' })}</div></div>`).join('') || '<div class="empty">NO REQUESTS TODAY</div>';
 }
 function reqSheet() {
-  openSheet(`<h3>NEW SUSPENSION REQUEST</h3><input class="in" id="rqRid" placeholder="Rider ID or name" autocomplete="off"><div id="rqSug"></div>
+  openSheet(`<h3>NEW REQUEST</h3><div class="chips" id="rqTypes">${TYPES.map(([k, t], i) => `<button class="chip ${i === 0 ? 'on' : ''}" data-type="${k}">${t}</button>`).join('')}</div>
+    <input class="in" id="rqRid" placeholder="Rider ID or name" autocomplete="off"><div id="rqSug"></div>
     <div class="sec"><span>REASON</span></div><div class="chips" id="rqReasons">${REASONS.map((r) => `<button class="chip" data-reason="${esc(r)}">${esc(r)}</button>`).join('')}</div>
     <div class="l3"><button class="btn" id="rqGo" style="flex:1">SUBMIT</button><button class="btn ghost" data-close="1">CANCEL</button></div><div class="err" id="rqErr"></div>`);
 }
 async function submitReq() {
-  const rid = latin($('#rqRid').dataset.id || $('#rqRid').value).replace(/\D/g, ''), on = $('#rqReasons .chip.on');
+  const rid = latin($('#rqRid').dataset.id || $('#rqRid').value).replace(/\D/g, ''), on = $('#rqReasons .chip.on'), type = ($('#rqTypes .chip.on') || {}).dataset.type || 'SUSPEND';
   if (!/^\d{3,12}$/.test(rid)) { $('#rqErr').textContent = 'ENTER A VALID RIDER ID'; return; }
   if (!on) { $('#rqErr').textContent = 'CHOOSE A REASON'; return; }
+  if (S.reqs.some((q) => q.rider_id === rid && q.type === type && q.status === 'IN REVIEW')) { $('#rqErr').textContent = 'A REQUEST FOR THIS RIDER IS ALREADY IN REVIEW'; return; }
   const btn = $('#rqGo'); btn.disabled = true;
+  const id = 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  const rider = (live().riders || {})[rid] || {};
   try {
-    const j = await bridge({ action: 'susp_submit', email: S.me.email, device_id: deviceId(), name: S.me.name, zone: S.zone === 'ALL' ? '' : zoneName(S.zone), rider_id: rid, reason: on.dataset.reason }, 7000);
-    if (j.ok) { closeSheet(); toast('REQUEST SENT'); pollReqs(); }
-    else $('#rqErr').textContent = j.error === 'duplicate' ? 'A REQUEST FOR THIS RIDER IS ALREADY PENDING' : j.error === 'device-not-approved' ? 'THIS DEVICE IS NOT APPROVED' : 'COULD NOT SEND - TRY AGAIN';
+    await fb('/captain_requests/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, type, rider_id: rid, rider_name: rider.rider_name || '', reason: on.dataset.reason, captain_email: S.me.email, captain_name: S.me.name, zone: S.zone === 'ALL' ? '' : (zones().find((z) => z.zone_id === S.zone) || {}).zone_name || '', t: Date.now(), status: 'IN REVIEW' }) }, 7000);
+    closeSheet(); toast('REQUEST SENT'); pollReqs();
   } catch (_) { $('#rqErr').textContent = 'NO CONNECTION - TRY AGAIN'; }
   btn.disabled = false;
 }
 
-// ---------------------------------------------------------------- batch copy / WhatsApp office message
+// ---------------------------------------------------------------- batch copy / WhatsApp office
 function batchText() {
-  const rows = (S.shownRows || []).filter((o) => S.sel.has(o.order_code));
-  const lines = rows.map((o, i) => `${i + 1}. #${o.order_code} | ${o.restaurant_name || '-'} | ${o.rider_name || '-'} (${o.rider_id || '-'}) | ${o.rider_phone || '-'} | ${o.zone || '-'} | +${o.delay_minutes == null ? 0 : o.delay_minutes} min${o.is_hybrid ? ' | HYBRID' : ''}`);
-  return 'DELAYED ORDERS (' + rows.length + ') - PLEASE CLOSE:\n' + lines.join('\n');
+  const rows = (S.rows || []).filter((o) => S.sel.has(o.order_code));
+  return 'DELAYED ORDERS (' + rows.length + ') - PLEASE CLOSE:\n' + rows.map((o, i) => { const r = ridersOf(o)[0] || {}; return `${i + 1}. #${o.order_code} | ${o.vendor || o.restaurant_name || '-'} | ${r.rider_name || '-'} (${r.rider_id || '-'}) | ${r.rider_phone || '-'} | ${o.zone || '-'} | +${o.delay_minutes == null ? 0 : o.delay_minutes} min${o.is_hybrid ? ' | HYBRID' : ''}`; }).join('\n');
 }
 async function copyText(t) { try { await navigator.clipboard.writeText(t); } catch (_) { const x = document.createElement('textarea'); x.value = t; document.body.append(x); x.select(); try { document.execCommand('copy'); } catch (__) {} x.remove(); } }
 
 // ---------------------------------------------------------------- navigation / boot
 function showView(v) {
   S.view = v;
-  ['delay', 'riders', 'susp'].forEach((x) => { $('#v-' + x).hidden = x !== v || !$('#results').hidden; });
+  ['orders', 'riders', 'susp'].forEach((x) => { $('#v-' + x).hidden = x !== v || !$('#results').hidden; });
   document.querySelectorAll('#dock button').forEach((b) => b.classList.toggle('on', b.dataset.v === v));
-  if (v === 'riders') renderRiders(); if (v === 'delay') renderDelay(); if (v === 'susp') pollReqs();
-  $('#fab').hidden = !(v === 'delay' && S.sel.size);
+  if (v === 'riders') renderRiders(); if (v === 'orders') renderOrders(); if (v === 'susp') pollReqs();
+  $('#fab').hidden = !(v === 'orders' && S.sel.size);
   window.scrollTo({ top: 0 });
 }
 function logout() { ls.set('tc_appr', ''); ls.set('tc_email', ''); gate(loginHtml); }
 async function start() {
   $('#gate').hidden = true; $('#app').hidden = false;
   S.zone = ls.get('tc_zone') || 'ALL';
-  await loadCache();                                   // < 100ms from the cache
-  renderAll(); showView('delay');
-  refresh(false); loadMeta();
+  const c0 = LSC.read();                                   // synchronous first paint from localStorage (< 50ms)
+  if (c0 && c0.live) { S.live = c0.live; S.lastOk = c0.t || 0; }
+  renderAll(); showView('orders');
+  startStream(); pollLive(true); loadPhotos();
   if (S.timers) return;
-  S.timers = [setInterval(() => { if (!document.hidden) refresh(false); }, 20000), setInterval(renderStrip, 1000), setInterval(() => IDB.gc(), 15 * 60000),
+  S.timers = [setInterval(() => { if (!document.hidden) pollLive(false); }, 5000), setInterval(renderStrip, 1000), setInterval(loadPhotos, 60000), setInterval(() => IDB.gc(), 15 * 60000),
     setInterval(() => { if (!document.hidden) { bridge({ action: 'hb', email: S.me.email, device_id: deviceId(), name: S.me.name, zone: S.zone }, 5000).then((j) => { if (j && j.status === 'denied') logout(); }).catch(() => {}); pollReqs(); } }, 20000)];
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(false); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) pollLive(true); });
 }
 document.addEventListener('click', (e) => {
   const t = e.target;
   if (t.id === 'lgGo') return signIn($('#lg').value);
   if (t.id === 'lgBack') return gate(loginHtml);
   if (t.closest('[data-close]')) return closeSheet();
+  const cp = t.closest('[data-cp]'); if (cp) { copyText(cp.dataset.cp).then(() => toast('COPIED')); return; }
   const d = t.closest('[data-det]'); if (d) return orderSheet(d.dataset.det);
-  const o = t.closest('[data-open]'); if (o) return riderSheet(o.dataset.open);
-  const zc = t.closest('[data-zc]'); if (zc) { S.zone = zc.dataset.zc; ls.set('tc_zone', S.zone); S.nD = 25; refresh(false); renderAll(); return; }
+  const o = t.closest('[data-open]'); if (o && o.dataset.open) return riderSheet(o.dataset.open);
+  const zc = t.closest('[data-zc]'); if (zc) { S.zone = zc.dataset.zc; ls.set('tc_zone', S.zone); S.nD = 25; return renderAll(); }
   const rf = t.closest('[data-rf]'); if (rf) { S.rf = rf.dataset.rf; S.nR = 25; return renderRiders(); }
+  const ty = t.closest('[data-type]'); if (ty) { document.querySelectorAll('#rqTypes .chip').forEach((c) => c.classList.toggle('on', c === ty)); return; }
   const rs = t.closest('[data-reason]'); if (rs) { document.querySelectorAll('#rqReasons .chip').forEach((c) => c.classList.toggle('on', c === rs)); return; }
   const sg = t.closest('[data-sug]'); if (sg) { $('#rqRid').value = sg.dataset.sug + ' - ' + sg.dataset.n; $('#rqRid').dataset.id = sg.dataset.sug; $('#rqSug').innerHTML = ''; return; }
   const dk = t.closest('#dock button'); if (dk) return showView(dk.dataset.v);
   switch (t.id) {
-    case 'hybridBtn': S.hybrid = !S.hybrid; S.nD = 25; return renderDelay();
-    case 'selAll': { const rows = delayedRows(); const all = rows.every((o) => S.sel.has(o.order_code)); rows.forEach((o) => (all ? S.sel.delete(o.order_code) : S.sel.add(o.order_code))); return renderDelay(); }
-    case 'dMore': S.nD += 25; return renderDelay();
+    case 'hybridBtn': S.hybrid = !S.hybrid; S.nD = 25; return renderOrders();
+    case 'delBtn': S.delOnly = !S.delOnly; S.nD = 25; return renderOrders();
+    case 'selAll': { const rows = orderRows(), all = rows.every((o) => S.sel.has(o.order_code)); rows.forEach((o) => (all ? S.sel.delete(o.order_code) : S.sel.add(o.order_code))); return renderOrders(); }
+    case 'dMore': S.nD += 25; return renderOrders();
     case 'rMore': S.nR += 25; return renderRiders();
-    case 'btnRefresh': return refresh(true);
+    case 'btnRefresh': S.live = S.live || null; return pollLive(true).then(() => toast('REFRESHED'));
     case 'fabCopy': return copyText(batchText()).then(() => toast('COPIED'));
     case 'fabWa': window.open('https://wa.me/?text=' + encodeURIComponent(batchText()), '_blank', 'noopener'); return;
     case 'newReq': return reqSheet();
@@ -519,11 +494,11 @@ document.addEventListener('click', (e) => {
 document.addEventListener('change', (e) => {
   const t = e.target;
   if (t.dataset && t.dataset.sel) { if (t.checked) S.sel.add(t.dataset.sel); else S.sel.delete(t.dataset.sel); const n = S.sel.size; $('#fab').hidden = n === 0; $('#fabCopy').textContent = 'COPY SELECTED (' + n + ')'; $('#fabWa').textContent = 'WHATSAPP OFFICE (' + n + ')'; return; }
-  if (t.id === 'zoneSel') { S.zone = t.value; ls.set('tc_zone', S.zone); S.nD = 25; S.nR = 25; refresh(false); renderAll(); }
+  if (t.id === 'zoneSel') { S.zone = t.value; ls.set('tc_zone', S.zone); S.nD = 25; S.nR = 25; renderAll(); }
 });
 document.addEventListener('input', (e) => {
   if (e.target.id === 'q') onQ();
-  if (e.target.id === 'rqRid') { const v = latin(e.target.value).toLowerCase(); delete e.target.dataset.id; const fr = (S.fleet && S.fleet.riders) || {}; const hits = v.length >= 2 ? Object.keys(fr).filter((id) => id.startsWith(v) || String(fr[id].rider_name || '').toLowerCase().includes(v)).slice(0, 5) : []; $('#rqSug').innerHTML = hits.map((id) => `<button class="chip" data-sug="${esc(id)}" data-n="${esc(fr[id].rider_name)}">${esc(id)} - ${esc(fr[id].rider_name)}</button>`).join(''); }
+  if (e.target.id === 'rqRid') { const v = latin(e.target.value).toLowerCase(); delete e.target.dataset.id; const rs = Object.values(live().riders || {}); const hits = v.length >= 2 ? rs.filter((r) => r.rider_id.startsWith(v) || String(r.rider_name || '').toLowerCase().includes(v)).slice(0, 5) : []; $('#rqSug').innerHTML = hits.map((r) => `<button class="chip" data-sug="${esc(r.rider_id)}" data-n="${esc(r.rider_name)}">${esc(r.rider_id)} - ${esc(r.rider_name)}</button>`).join(''); }
 });
 $('#lg').addEventListener('keydown', (e) => { if (e.key === 'Enter') signIn($('#lg').value); });
 (function init() {
