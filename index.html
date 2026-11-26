@@ -135,7 +135,7 @@ html[lang="ar"] .sig .sig-en,html[lang="en"] .sig .sig-ar{display:none}
 
 <script>
 'use strict';
-const KEY = '__OPS_KEY__', SALT = '__OPS_SALT__', ITER = Number('__OPS_ITER__') || 20000, BRIDGE = 'https://script.google.com/macros/s/AKfycbwgACXosl3HOGjxNCA9IDqoLH-wJK5qkqWK9tq0xxXlPQUZEbMDoz2Otvyi_Bd5M_XiNg/exec', BSECRET = '1234', FB = 'https://talabat-live-ops-default-rtdb.europe-west1.firebasedatabase.app';
+const KEY = 'bfV0bqb1LKkcKTdULwzFyIOY', SALT = 'vGmNO+ZzR6qOZ6BvxBB7Ug==', ITER = Number('20000') || 20000, BRIDGE = 'https://script.google.com/macros/s/AKfycbwgACXosl3HOGjxNCA9IDqoLH-wJK5qkqWK9tq0xxXlPQUZEbMDoz2Otvyi_Bd5M_XiNg/exec', BSECRET = '1234', FB = 'https://talabat-live-ops-default-rtdb.europe-west1.firebasedatabase.app';
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const latin = (s) => String(s == null ? '' : s).replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, (d) => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
